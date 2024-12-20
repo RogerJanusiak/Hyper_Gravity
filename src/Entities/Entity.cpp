@@ -77,6 +77,13 @@ bool Entity::move(float dt,const std::list<Platform> &platforms, int* amountFall
     if(amountFallen != nullptr) {
         *amountFallen = startY - entityRect.y;
     }
+
+    if(getRect().x >= WINDOW_WIDTH) {
+        setPosition(scale(10),getRect().y);
+    } else if(getRect().x <= 0) {
+        setPosition(WINDOW_WIDTH-scale(10), getRect().y);
+    }
+
     return offPlatform;
 }
 

@@ -7,21 +7,14 @@ Enemy::Enemy(Entity *_entity) {
 void Enemy::move(GlobalGameState& ggs, const std::list<Platform> &platforms, Level& level) {
 	if(entity->justSpawned) {
 		entity->justSpawned = false;
-		if(entity->getRect().x <=scale(400)) {
+		int direction = rand() % 2;
+		if(direction == 0) {
 			entity->setXVelocity(getXVelocity());
 		} else {
 			entity->setXVelocity(-getXVelocity());
 		}
-	}
-	entity->move(ggs.dt,platforms);
-	if(entity->getRect().y >= level.getMap().size()*TILE_SIZE_SCALED) {
-		entity->despawn();
-	}
-
-	if(entity->getRect().x >= WINDOW_WIDTH) {
-		entity->setPosition(scale(10),entity->getRect().y);
-	} else if(entity->getRect().x <= 0) {
-		entity->setPosition(WINDOW_WIDTH-scale(10), entity->getRect().y);
+	} else {
+		entity->move(ggs.dt,platforms);
 	}
 }
 

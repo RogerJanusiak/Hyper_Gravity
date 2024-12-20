@@ -83,10 +83,6 @@ int Player::move(GlobalGameState& ggs, const std::list<Platform> &platforms, std
     double speedIncrease = ggs.playerLevels[speed] == 0 ? 0 : defaultXSpeed*ggs.playerProperties[speed][ggs.playerLevels[speed]-1][1]/100;
     getEntity()->setXVelocity(xNormalVelocity*(defaultXSpeed+speedIncrease));
 
-    if(c4Placed) {
-        c4Entity.move(ggs.dt,platforms);
-    }
-
     int amountFallen = 0;
     if(!playerEntity->move(ggs.dt,platforms,&amountFallen,&wheelRect) && invincible && !invicibleFromDeath) {
         invincible = false;
@@ -99,12 +95,6 @@ int Player::move(GlobalGameState& ggs, const std::list<Platform> &platforms, std
         weaponRect.x = playerEntity->getRect().x-scale(27);
     }
     weaponRect.y = playerEntity->getRect().y+scale(20);
-
-    if(playerEntity->getRect().x >= WINDOW_WIDTH) {
-        playerEntity->setPosition(-scale(40),playerEntity->getRect().y);
-    } else if(playerEntity->getRect().x < -scale(40)) {
-        playerEntity->setPosition(WINDOW_WIDTH, playerEntity->getRect().y);
-    }
 
     if(playerEntity->getRect().y > WINDOW_HEIGHT) {
         playerEntity->forceSpawn();
