@@ -17,6 +17,8 @@ public:
     void setup(int w, int h,SDL_Renderer *renderer);
     void setup(SDL_Renderer *renderer);
 
+	void setDimensions(const int w, const int h) { mWidth = w; mHeight = h; };
+
     bool loadFromFile(const std::string& filePath);
     bool loadFromRenderedText(const std::string &textureText, const SDL_Color &textColor,TTF_Font * font);
 

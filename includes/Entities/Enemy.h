@@ -22,7 +22,7 @@ public:
 	virtual int getDifficulty() { return 1; }
 	virtual ENEMY_TYPE getType() { return robor; }
 
-	void render() const { entity->render(entity->getHP()-1,0,true); }
+	void render() const;
 	[[nodiscard]] Entity* getEntity() const { return entity; }
 
 	static int findEdgeRight(int startX, int startY,  Level& level);
@@ -35,6 +35,9 @@ public:
 
 protected:
 	Entity* entity;
+	double spawnTimer = 0;
+	double spawnDisplayTime = 0;
+	bool firstSpawnLoop = true;
 
 };
 

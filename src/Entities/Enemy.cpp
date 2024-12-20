@@ -4,14 +4,30 @@ Enemy::Enemy(Entity *_entity) {
 	entity = _entity;
 }
 
+void Enemy::render() const {
+	if(!firstSpawnLoop || !entity->justSpawned) {
+		entity->render(entity->getHP()-1,0,true,false,spawnDisplayTime);
+	}
+}
+
 void Enemy::move(GlobalGameState& ggs, const std::list<Platform> &platforms, Level& level) {
 	if(entity->justSpawned) {
-		entity->justSpawned = false;
-		int direction = rand() % 2;
-		if(direction == 0) {
-			entity->setXVelocity(getXVelocity());
-		} else {
-			entity->setXVelocity(-getXVelocity());
+		if(firstSpawnLoop) {
+			spawnTimer = 0;
+			firstSpawnLoop = false;
+		}
+		spawnTimer += ggs.dt;
+		int cutOff = spawnTimer*10;
+		spawnDisplayTime = static_cast<double>(cutOff)/10;
+		if(spawnTimer > 1) {
+			entity->justSpawned = false;
+			int direction = rand() % 2;
+			if(direction == 0) {
+				entity->setXVelocity(getXVelocity());
+			} else {
+				entity->setXVelocity(-getXVelocity());
+			}
+			firstSpawnLoop = true;
 		}
 	} else {
 		entity->move(ggs.dt,platforms);

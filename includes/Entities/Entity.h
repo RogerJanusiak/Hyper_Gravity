@@ -17,7 +17,7 @@ public:
     Entity(std::vector<Spawn>* spawn, SDL_Renderer* renderer, const int hp) : hp(hp), spawns(spawn), gameRender(renderer) {}
     Entity(int x, int y, int Vx, int Vy,SDL_Renderer *tempGameRenderer);
 
-    void render(int spriteX, int spriteY, bool faceVelocity = false, bool direction = false) const;
+    void render(int spriteX, int spriteY, bool faceVelocity = false, bool direction = false, double texturePercentage = 1);
 
     void setSpawns(std::vector<Spawn>* spawn) { spawns = spawn; }
 
@@ -39,7 +39,7 @@ public:
     [[nodiscard]] bool isSpawned() const { return spawned; }
     void spawn(bool spawnOnScreen = false);
     void forceSpawn();
-    void despawn() { spawned = false;justSpawned = true;entityRect.x = -1000,entityRect.y = -1000; }
+    void despawn();
 
     bool move(float dt,const std::list<Platform> &platforms, int* amountFallen = nullptr, SDL_Rect* movementHitBox = nullptr);
 

@@ -17,19 +17,29 @@ Entity::Entity(const int x,const int y,const int Vx,const int Vy,SDL_Renderer *t
     gameRender = tempGameRenderer;
 }
 
-void Entity::render(int spriteX, int spriteY, bool faceVelocity, bool direction) const {
-    SDL_Rect sourceRect = {spriteX*srcWidth,spriteY*srcHeight,srcWidth,srcHeight};
+void Entity::render(int spriteX, int spriteY, bool faceVelocity, bool direction, double texturePercentage) {
+    double hideTop = 1 - texturePercentage;
+
+    int sourceHeight = std::round(srcHeight*texturePercentage);
+    int displayHeight = std::round(entityRect.h*texturePercentage);
+
+    int sourceY = std::round(spriteY*srcHeight+srcHeight*hideTop);
+    int displayY = std::round(entityRect.y+entityRect.h*hideTop);
+
+    entityTexture.setDimensions(entityRect.w,displayHeight);
+    SDL_Rect sourceRect = {spriteX*srcWidth,sourceY,srcWidth,sourceHeight};
+
     if(faceVelocity) {
         if(xVelocity < 0) {
-            entityTexture.render(entityRect.x,entityRect.y,SDL_FLIP_HORIZONTAL,&sourceRect);
+            entityTexture.render(entityRect.x,displayY,SDL_FLIP_HORIZONTAL,&sourceRect);
         } else {
-            entityTexture.render(entityRect.x,entityRect.y,SDL_FLIP_NONE,&sourceRect);
+            entityTexture.render(entityRect.x,displayY,SDL_FLIP_NONE,&sourceRect);
         }
     } else {
         if(direction) {
-            entityTexture.render(entityRect.x,entityRect.y,SDL_FLIP_NONE,&sourceRect);
+            entityTexture.render(entityRect.x,displayY,SDL_FLIP_NONE,&sourceRect);
         } else {
-            entityTexture.render(entityRect.x,entityRect.y,SDL_FLIP_HORIZONTAL,&sourceRect);
+            entityTexture.render(entityRect.x,displayY,SDL_FLIP_HORIZONTAL,&sourceRect);
         }
     }
 
@@ -95,6 +105,7 @@ void Entity::spawn(bool spawnOnScreen) {
     if(!currentSpawnIt->getOccupied() && (!spawnOnScreen || currentSpawnIt->isOnScreen())) {
         offPlatform = false;
         spawned = true;
+        justSpawned = true;
         setPosition(currentSpawnIt->getX(),currentSpawnIt->getY()+currentSpawnIt->getRect().h-entityRect.h);
         setYVelocity(0);
         currentSpawnIt->setOccupied(true);
@@ -130,6 +141,13 @@ bool Entity::damage(int damageAmount) {
         return true;
     }
     return false;
+}
+
+void Entity::despawn() {
+    spawned = false;
+    justSpawned = true;
+    entityRect.x = -1000;
+    entityRect.y = -1000;
 }
 
 

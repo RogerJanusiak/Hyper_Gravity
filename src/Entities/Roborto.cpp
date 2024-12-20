@@ -114,55 +114,62 @@ void Roborto::pathFind(int x, int y, int& leftWeight, int& rightWeight, GlobalGa
 }
 
 void Roborto::move(GlobalGameState& ggs, const std::list<Platform>& platforms, Level& level) {
-    if(!entity->move(ggs.dt,platforms)) {
-        if(!justHitPlatform) {
-            int tileX = entity->getRect().x/TILE_SIZE_SCALED;
-            int tileY = entity->getRect().y/TILE_SIZE_SCALED;
-            if(tileY < level.getMap().size() && level.getMap()[tileY][tileX] != -1) {
-                int leftWeight;
-                int rightWeight;
-                pathFind(tileX,tileY,leftWeight,rightWeight,ggs, level, true);
-                if(leftWeight >= 1000 && rightWeight >= 1000) {
-                    int numberTilesRight = findEdgeRight(tileX,tileY,level);
-                    int numberTilesLeft = findEdgeLeft(tileX,tileY,level);
-
-                    numberTilesRight = numberTilesRight > 0 ? numberTilesRight : 1000;
-                    numberTilesLeft = numberTilesLeft > 0 ? numberTilesLeft : 1000;
-
-                    if(numberTilesLeft > numberTilesRight) {
-                        entity->setXVelocity(getXVelocity());
-                    } else if(numberTilesLeft < numberTilesRight) {
-                        entity->setXVelocity(getXVelocity()*-1);
-                    } else if(entity->getXVelocity() == 0) {
-                        entity->setXVelocity(getXVelocity());
-                    }
-                } else {
-                    if(leftWeight > rightWeight) {
-                        entity->setXVelocity(getXVelocity());
-                    } else if(leftWeight < rightWeight) {
-                        entity->setXVelocity(-getXVelocity());
-                    } else if(entity->getXVelocity() == 0) {
-                        entity->setXVelocity(getXVelocity());
-                    }
-                }
+    if(entity->justSpawned) {
+        if(firstSpawnLoop) {
+            spawnTimer = 0;
+            firstSpawnLoop = false;
+        }
+        spawnTimer += ggs.dt;
+        int cutOff = spawnTimer*10;
+        spawnDisplayTime = static_cast<double>(cutOff)/10;
+        if(spawnTimer > 1) {
+            entity->justSpawned = false;
+            int direction = rand() % 2;
+            if(direction == 0) {
+                entity->setXVelocity(getXVelocity());
+            } else {
+                entity->setXVelocity(-getXVelocity());
             }
-
-            justHitPlatform = true;
+            firstSpawnLoop = true;
         }
     } else {
-        justHitPlatform = false;
+        if(!entity->move(ggs.dt,platforms)) {
+            if(!justHitPlatform) {
+                int tileX = entity->getRect().x/TILE_SIZE_SCALED;
+                int tileY = entity->getRect().y/TILE_SIZE_SCALED;
+                if(tileY < level.getMap().size() && level.getMap()[tileY][tileX] != -1) {
+                    int leftWeight;
+                    int rightWeight;
+                    pathFind(tileX,tileY,leftWeight,rightWeight,ggs, level, true);
+                    if(leftWeight >= 1000 && rightWeight >= 1000) {
+                        int numberTilesRight = findEdgeRight(tileX,tileY,level);
+                        int numberTilesLeft = findEdgeLeft(tileX,tileY,level);
+
+                        numberTilesRight = numberTilesRight > 0 ? numberTilesRight : 1000;
+                        numberTilesLeft = numberTilesLeft > 0 ? numberTilesLeft : 1000;
+
+                        if(numberTilesLeft > numberTilesRight) {
+                            entity->setXVelocity(getXVelocity());
+                        } else if(numberTilesLeft < numberTilesRight) {
+                            entity->setXVelocity(getXVelocity()*-1);
+                        } else if(entity->getXVelocity() == 0) {
+                            entity->setXVelocity(getXVelocity());
+                        }
+                    } else {
+                        if(leftWeight > rightWeight) {
+                            entity->setXVelocity(getXVelocity());
+                        } else if(leftWeight < rightWeight) {
+                            entity->setXVelocity(-getXVelocity());
+                        } else if(entity->getXVelocity() == 0) {
+                            entity->setXVelocity(getXVelocity());
+                        }
+                    }
+                }
+
+                justHitPlatform = true;
+            }
+        } else {
+            justHitPlatform = false;
+        }
     }
-
-    if(entity->getRect().y >= level.getMap().size()*TILE_SIZE_SCALED) {
-        entity->despawn();
-    }
-
-    //TODO: Move to entity
-    if(entity->getRect().x >= WINDOW_WIDTH) {
-        entity->setPosition(scale(10),entity->getRect().y);
-    } else if(entity->getRect().x <= 0) {
-        entity->setPosition(WINDOW_WIDTH-scale(10), entity->getRect().y);
-    }
-
-
 }

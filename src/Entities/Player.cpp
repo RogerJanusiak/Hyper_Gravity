@@ -48,10 +48,6 @@ Player::Player(Entity* entity, GlobalGameState& ggs) : ggs(ggs), revolver(ggs, W
 }
 
 void Player::render() const {
-    if(c4Placed) {
-        c4Entity.render(0,0);
-    }
-
     if(isInvincible()) {
         SDL_SetTextureColorMod(getEntity()->getTexture()->getTexture(),0,150,255);
     } else {
@@ -60,15 +56,7 @@ void Player::render() const {
 
     playerEntity->render(0,0, false, playerDirection);
 
-    if(!c4Placed) {
-        currentWeapon->render(playerEntity->getRect().x,playerEntity->getRect().y,playerDirection);
-    } else {
-        if(playerDirection) {
-            detinatorTexture.render(playerEntity->getRect().x+scale(35),playerEntity->getRect().y+scale(12));
-        } else {
-            detinatorTexture.render(playerEntity->getRect().x-scale(17),playerEntity->getRect().y+scale(12),SDL_FLIP_HORIZONTAL);
-        }
-    }
+    currentWeapon->render(playerEntity->getRect().x,playerEntity->getRect().y,playerDirection);
 }
 
 int Player::move(GlobalGameState& ggs, const std::list<Platform> &platforms, std::vector<SDL_Rect>& teleports) {
