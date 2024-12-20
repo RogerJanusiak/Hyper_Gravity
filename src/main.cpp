@@ -94,14 +94,17 @@ int main( int argc, char* args[] ) {
 	std::unique_ptr<WaveController> waveController;
 
 	float lastUpdate = 0;
-	const int targetFPS = 60;
-	const int frameDelay = 1000 / targetFPS;
+	constexpr int targetFPS = 60;
+	constexpr int frameDelay = 1000 / targetFPS;
+
+	ggs.inMainMenu = false;
+	ggs.level = 4;
 
 	while(!ggs.quit) {
 		Uint32 frameStart = SDL_GetTicks();
 		Uint64 start = SDL_GetPerformanceCounter();
 		Uint32 current = SDL_GetTicks();
-		ggs.dt = ((current - lastUpdate) / 1000.0f)*1.1;
+		ggs.dt = (current - lastUpdate) / 1000.0f*1.05;
 		lastUpdate = current;
 
 		SDL_RenderClear(ggs.renderer);

@@ -52,14 +52,17 @@ bool Wave::runWave() {
         waveStarted = true;
     }
 
-    for(auto bit = bullets.begin(); bit != bullets.end();) {
-        if(bit->move(ggs.dt,level.getPlatforms(),ggs.developerMode)) {
-            eBullets.erase(bit->getIterator());
-            bit = bullets.erase(bit);
+    /*for(auto& bullet : bullets) {
+        bullet.move(ggs.dt, level.getPlatforms(), ggs.developerMode);
+    }*/
+
+    for (auto it = bullets.begin(); it != bullets.end();) {
+        if(it->move(ggs.dt,level.getPlatforms(),ggs.developerMode)) {
+            eBullets.erase(it->getIterator());
+            it = bullets.erase(it);
         } else {
-            ++bit;
+            ++it;
         }
-        break;
     }
 
     level.updateSpawns(allCharacterEntities);

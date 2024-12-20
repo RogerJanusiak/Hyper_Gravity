@@ -32,9 +32,7 @@ bool Bullet::move(float dt, const std::list<Platform> &platforms, bool developer
             if(platformStatus == 0) {
                 platformStatus = 1;
             } else if(platformStatus == 2) {
-                SDL_Log("platformStatus %i: ", platformStatus);
                 if(durability == 1) {
-                    SDL_Log("Test");
                     return true;
                 }
                 platformStatus = 1;
