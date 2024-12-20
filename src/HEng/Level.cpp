@@ -66,6 +66,7 @@ void Level::loadFromCSV(int level) {
 
     for (int i = 0; i < row; i++) {
         std::vector<int> mapRow;
+        platforms.emplace_back(-TILE_SIZE,i*TILE_SIZE+(TILE_SIZE-17),ggs.renderer);
         for(int j = 0; j < MAX_COLS; j++) {
             int multiplier = j;
             if(std::stoi(data[i][j]) == 0) {
@@ -88,6 +89,7 @@ void Level::loadFromCSV(int level) {
                 mapRow.push_back(-1);
             }
         }
+        platforms.emplace_back(TILE_SIZE*MAX_COLS,i*TILE_SIZE+(TILE_SIZE-17),ggs.renderer);
         levelMap.push_back(mapRow);
     }
 }
