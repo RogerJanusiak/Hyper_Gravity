@@ -35,7 +35,7 @@ private:
     const int lazerHeight = scale(4);
 
     int durability;
-    int damage = 0; //TODO: Add this with the damage system
+    int damage = 0;
     int strength;
 
     int platformStatus = 0;

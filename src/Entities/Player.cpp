@@ -131,9 +131,6 @@ void Player::setDirection(bool direction) {
 
 void Player::killEnemy() {
     combo++;
-    double mutiplier = ggs.playerLevels[PlayerUpgrades::shield] == 0 ? 1 : ggs.playerProperties[PlayerUpgrades::shield][ggs.playerLevels[PlayerUpgrades::shield]-1][1];
-    shield += combo*mutiplier;
-    shield = shield >= maxShield ? maxShield : shield;
 }
 
 int Player::charge() {
@@ -167,17 +164,16 @@ bool Player::damage() {
     invicibleFromDeath = true;
     postDamageInvincibleTime = 0;
 
-    shield -= ggs.playerLevels[armor] == 0 ? 50 : 50 - 50*ggs.playerProperties[armor][ggs.playerLevels[armor]-1][1]/100;
     if(shield <= 0) {
-        health += shield;
-        if (health <= 0) {
-            health = maxHealth;
-            combo = 0;
-            c4Placed = false;
-            return true;
-        }
         shield = 0;
+        health -= 50;
+    } else {
+        shield -= ggs.playerLevels[armor] == 0 ? 50 : 50 - 50*ggs.playerProperties[armor][ggs.playerLevels[armor]-1][1]/100;
+        if(shield <= 0) {
+            shield = 0;
+        }
     }
+
     damageSound.play();
     return false;
 }

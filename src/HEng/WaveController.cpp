@@ -89,13 +89,16 @@ void WaveController::updateTimeToShoot(const double width) {
 }
 
 void WaveController::startLevel() const {
+    player.getEntity()->setSpawns(run.getLevel().getPlayerSpawns());
     player.getEntity()->forceSpawn();
 }
 
 void WaveController::startWave() {
 	inWave = true;
 	currentWave = std::make_unique<Wave>(ggs,run.getPlayer(), run.getLevel(), run.getWaveNumber());
-	player.getEntity()->setSpawns(run.getLevel().getPlayerSpawns());
+	if(run.getWaveNumber() > 1) {
+	    player.increaseShield(10);
+	}
 }
 
 void WaveController::readInput() {

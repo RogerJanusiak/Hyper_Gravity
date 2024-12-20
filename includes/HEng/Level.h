@@ -41,7 +41,6 @@ private:
 	std::vector<Spawn> enemySpawns;
 	std::vector<Spawn*> allSpawns;
 
-	//TODO: See if I can use vector, must wait to change until version is working
 	std::list<Platform> platforms;
 
 	std::vector<SDL_Rect> teleports;

@@ -53,6 +53,7 @@ public:
 
     void fullHealth() { health = maxHealth; }
     void fillShield() { shield = maxShield; }
+    void increaseShield(const int increaseAmount) {shield += increaseAmount;}
 
     void killEnemy();
     void zeroCombo() { combo = 0;}

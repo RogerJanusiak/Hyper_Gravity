@@ -42,8 +42,6 @@ private:
 
 	std::list<Explosion> explosions;
 
-	// TODO: See if any lists can be vectors and vectors arrays
-
 };
 
 #endif
