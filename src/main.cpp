@@ -104,6 +104,7 @@ int main( int argc, char* args[] ) {
 
 		SDL_RenderClear(ggs.renderer);
 
+		// TODO: Maybe there is a better way to do this?
 		if(ggs.toPauseMenu) {
 			mainMenu.changeMenu(pause);
 			ggs.inPauseMenu = true;

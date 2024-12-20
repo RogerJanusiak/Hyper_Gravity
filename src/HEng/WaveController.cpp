@@ -127,14 +127,11 @@ void WaveController::readInput() {
             } else if(e.key.keysym.sym == SDLK_r) {
                 player.getWeapon()->forceReload();
             }
-            // From Refactor: Had a state variable for resetShooting, not sure how it was used, removed it.
             if(e.key.keysym.sym == SDLK_SPACE) {
                 if(shootingReset && currentWave != nullptr) {
                     player.getWeapon()->shoot(currentWave->getBulletEntities(),currentWave->getBullets(),player.getDirection(),player.getEntity()->getRect().x,player.getEntity()->getRect().y);
                     shootingReset = false;
                 }
-            } else if(e.key.keysym.sym == SDLK_e) {
-                //player.useAbility(state);
             }
         } else if(e.type == SDL_KEYUP) {
             if(e.key.keysym.sym == SDLK_d)
@@ -153,18 +150,22 @@ void WaveController::readInput() {
                 shootingReset = true;
             }
         } else if( e.type == SDL_JOYAXISMOTION) {
-            /*if(SDL_GameControllerGetAxis(ggs.controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > JOYSTICK_DEAD_ZONE) {
-                if(shootingReset && !state.teleportSelection && !state.c4Placed) {
-                    if(player.getWeapon()->shoot(&eBullets,&bullets,state,player.getDirection(),player.getEntity()->getRect().x,player.getEntity()->getRect().y)) {
-                        SDL_GameControllerRumble( controller, 0xFFFF * 3 / 4, 0xFFFF * 3 / 4, 150 );
-                    } else {
-                        SDL_GameControllerRumble( controller, 0xFFFF * 3 / 4, 0xFFFF * 3 / 4, 75 );
-                    }
+            if(SDL_GameControllerGetAxis(ggs.controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > JOYSTICK_DEAD_ZONE) {
+                if(shootingReset && currentWave != nullptr) {
+                    player.getWeapon()->shoot(currentWave->getBulletEntities(),currentWave->getBullets(),player.getDirection(),player.getEntity()->getRect().x,player.getEntity()->getRect().y);
                     shootingReset = false;
                 }
             } else {
                 shootingReset = true;
-            }*/
+            }
+
+            if(SDL_GameControllerGetAxis(ggs.controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_LEFTX) > JOYSTICK_DEAD_ZONE) {
+                player.setXNormalV(1);
+            } else if (SDL_GameControllerGetAxis(ggs.controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_LEFTX) < -JOYSTICK_DEAD_ZONE) {
+                player.setXNormalV(-1);
+            } else {
+                player.setXNormalV(0);
+            }
 
             // TODO: Move wave input to an function that is called by an enum so that code doesn't have to be replcated. Look at the menu code for example.
             if(SDL_GameControllerGetAxis(ggs.controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_RIGHTX) > JOYSTICK_DEAD_ZONE) {
@@ -177,15 +178,13 @@ void WaveController::readInput() {
         } else if (e.type == SDL_JOYDEVICEREMOVED) {
             ggs.controller = nullptr;
         } else if( e.type == SDL_JOYBUTTONDOWN ) {
-            /*if(SDL_GameControllerGetButton(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_Y) == 1) {
+            if(SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_Y) == 1) {
                 player.changeWeapon();
-            } else if(SDL_GameControllerGetButton(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_B) == 1) {
-                player.useAbility(state);
-            } else if(SDL_GameControllerGetButton(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_START) == 1) {
-                state.menu = pause;
-            } else if(SDL_GameControllerGetButton(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_X) == 1) {
+            } else if(SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_START) == 1) {
+                ggs.toPauseMenu = true;
+            } else if(SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_X) == 1) {
                 player.getWeapon()->forceReload();
-            }*/
+            }
         }
     }
 }
