@@ -19,6 +19,27 @@ void Wave::render() {
 	level.render();
     for (auto & bullet : bullets) {
         bullet.render();
+        if(ggs.developerMode) {
+            SDL_SetRenderDrawColor(ggs.renderer,0,0,255,255);
+            SDL_Rect temp = bullet.getTrailingRect();
+            SDL_RenderFillRect(ggs.renderer, &temp);
+        }
+    }
+
+    for (const auto & enemy : enemies) {
+        if(enemy->getEntity()->isAlive() && enemy->getEntity()->isSpawned()) {
+            enemy->render();
+        }
+    }
+
+    for(auto it = explosions.begin();it != explosions.end();) {
+        if(it->finished()) {
+            it = explosions.erase(it);
+        } else {
+            it->render();
+            it->advance();
+            ++it;
+        }
     }
 }
 
@@ -55,7 +76,6 @@ bool Wave::runWave() {
             if(!firstLoop && !ggs.pauseEnemies) {
                 enemy->move(ggs, level.getPlatforms(),level);
             }
-            enemy->render();
             if( Entity::isColliding(enemy->getEntity()->getRect(),player.getHitRect())) {
                 if(player.getEntity()->getRect().y + (player.getEntity()->getRect().h-enemy->getEntity()->getRect().h) < enemy->getEntity()->getRect().y
                     && player.getAbility() == Ability::bounce && player.isCharged()) {
@@ -76,12 +96,6 @@ bool Wave::runWave() {
                 }
             }
             for(auto bit = bullets.begin(); bit != bullets.end();) {
-                if(ggs.developerMode) {
-                    // TODO: See if I can seperate the rendering of developer mode stuff and the controller
-                    SDL_SetRenderDrawColor(ggs.renderer,0,0,255,255);
-                    SDL_Rect temp = bit->getTrailingRect();
-                    SDL_RenderFillRect(ggs.renderer, &temp);
-                }
                 if(Entity::isColliding(enemy->getEntity()->getRect(),bit->getTrailingRect())) {
                     if(bit->decreaseStrength()) {
                         eBullets.erase(bit->getIterator());
@@ -116,16 +130,6 @@ bool Wave::runWave() {
         }
         if(enemy->getEntity()->isAlive()) {
             enemiesAlive++;
-        }
-    }
-
-    for(auto it = explosions.begin();it != explosions.end();) {
-        if(it->finished()) {
-            it = explosions.erase(it);
-        } else {
-            it->render();
-            it->advance();
-            ++it;
         }
     }
 

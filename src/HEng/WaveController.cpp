@@ -63,6 +63,7 @@ WaveController::WaveController(GlobalGameState& ggs, Run& run) : ggs(ggs), run(r
 void WaveController::operate() {
 	if(currentWave != nullptr) {
 		currentWave->render();
+	    operatePlayer();
 	    renderPlayerUI();
 	    renderWaveText();
 		if(!currentWave->runWave()) {
@@ -74,7 +75,7 @@ void WaveController::operate() {
         updatePlayerUIText();
         ggs.updateText = false;
     }
-    operatePlayer();
+
 }
 
 void WaveController::operatePlayer() {
@@ -249,15 +250,15 @@ void WaveController::renderPlayerUI() {
 
 void WaveController::updateWaveText() {
     comboNumberText.loadFromRenderedText("Combo: " + std::to_string(player.getCombo()), ggs.white, ggs.buttonFont);
-    waveNumberText.loadFromRenderedText("Wave: " + std::to_string(run.getWaveNumber()), ggs.white, ggs.buttonFont);
+    waveNumberText.loadFromRenderedText("" + std::to_string(run.getWaveNumber()), ggs.white, ggs.title);
     waveNumberTitle.loadFromRenderedText("Wave " + std::to_string(run.getWaveNumber()) + " Start!", ggs.white, ggs.title);
     playerXPText.loadFromRenderedText("XP: " + std::to_string(player.getXP()), ggs.white, ggs.buttonFont);
 }
 
 void WaveController::renderWaveText() {
     waveNumberText.render(scaleUI(10),scaleUI(5));
-    comboNumberText.render(scaleUI(10),scaleUI(30));
-    playerXPText.render(scaleUI(10),scaleUI(55));
+    //comboNumberText.render(scaleUI(10),scaleUI(30));
+    //playerXPText.render(scaleUI(10),scaleUI(55));
     if(ggs.developerMode) {
         fpsText.loadFromRenderedText("FPS: " + std::to_string(ggs.fps), ggs.white, ggs.buttonFont);
         fpsText.render(scaleUI(10),scaleUI(80));

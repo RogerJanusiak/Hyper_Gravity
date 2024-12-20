@@ -101,7 +101,7 @@ int main( int argc, char* args[] ) {
 		Uint32 frameStart = SDL_GetTicks();
 		Uint64 start = SDL_GetPerformanceCounter();
 		Uint32 current = SDL_GetTicks();
-		ggs.dt = (current - lastUpdate) / 1000.0f;
+		ggs.dt = ((current - lastUpdate) / 1000.0f)*1.1;
 		lastUpdate = current;
 
 		SDL_RenderClear(ggs.renderer);
