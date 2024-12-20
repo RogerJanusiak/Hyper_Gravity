@@ -6,6 +6,8 @@
 #include <SDL_video.h>
 #include <SDL_ttf.h>
 
+#include "../TEng/Sound.h"
+
 enum Menu {
     head,
     level,
@@ -52,7 +54,7 @@ struct GlobalGameState {
 
     TTF_Font *buttonFont{};
     TTF_Font *verySmall{};
-    TTF_Font *title{};
+    TTF_Font *title;
 
     // Weapon Options
     const double weaponProperties[5][5][6] = {

@@ -78,7 +78,6 @@ bool Wave::runWave() {
                     SDL_RenderFillRect(ggs.renderer, &temp);
                 }
                 if(Entity::isColliding(enemy->getEntity()->getRect(),bit->getTrailingRect())) {
-                    //explosion.play();
                     if(bit->decreaseStrength()) {
                         eBullets.erase(bit->getIterator());
                         bit = bullets.erase(bit);

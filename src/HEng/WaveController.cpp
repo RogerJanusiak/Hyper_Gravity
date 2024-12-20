@@ -81,6 +81,7 @@ void WaveController::operatePlayer() {
     player.move(ggs, run.getLevel().getPlatforms(), run.getLevel().getTeleports());
     player.tickInvicibilty(ggs.dt);
     updateTimeToShoot(scalePlayerUI(player.getWeapon()->reload(ggs.dt)));
+    player.getWeapon()->wasJustReloaded();
     player.render();
 }
 

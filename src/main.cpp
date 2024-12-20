@@ -94,9 +94,11 @@ int main( int argc, char* args[] ) {
 	std::unique_ptr<WaveController> waveController;
 
 	float lastUpdate = 0;
+	const int targetFPS = 60;
+	const int frameDelay = 1000 / targetFPS;
 
 	while(!ggs.quit) {
-
+		Uint32 frameStart = SDL_GetTicks();
 		Uint64 start = SDL_GetPerformanceCounter();
 		Uint32 current = SDL_GetTicks();
 		ggs.dt = (current - lastUpdate) / 1000.0f;
@@ -131,13 +133,18 @@ int main( int argc, char* args[] ) {
 			waveController->operate();
 		}
 
+		SDL_SetRenderDrawColor(ggs.renderer, 26, 26, 26, 255);
+		SDL_RenderPresent(ggs.renderer);
+
+		Uint32 frameTime = SDL_GetTicks() - frameStart;
+		if (frameTime < frameDelay) {
+			SDL_Delay(frameDelay - frameTime);
+		}
+
 		Uint64 end = SDL_GetPerformanceCounter();
 
 		float elapsed = (end - start) / (float)SDL_GetPerformanceFrequency();
 		ggs.fps = (1.0f / elapsed);
-
-		SDL_SetRenderDrawColor(ggs.renderer, 26, 26, 26, 255);
-		SDL_RenderPresent(ggs.renderer);
 
 	}
 

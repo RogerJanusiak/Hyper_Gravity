@@ -13,7 +13,7 @@ Explosion::Explosion(const int _x, const int _y, SDL_Renderer* renderer) {
  Explosion::~Explosion() {
   texture.free();
 }
-
+// TODO: Explosions are tied to framerate not time
 void Explosion::render() const {
   int scaledExplosionFrame = frame/2;
   SDL_Rect sprite = {27*scaledExplosionFrame,0,27,27};
