@@ -31,8 +31,14 @@ bool Wave::runWave() {
         waveStarted = true;
     }
 
-    for(auto& bullet : bullets) {
-        bullet.move(ggs.dt, level.getPlatforms(), ggs.developerMode);
+    for(auto bit = bullets.begin(); bit != bullets.end();) {
+        if(bit->move(ggs.dt,level.getPlatforms(),ggs.developerMode)) {
+            eBullets.erase(bit->getIterator());
+            bit = bullets.erase(bit);
+        } else {
+            ++bit;
+        }
+        break;
     }
 
     level.updateSpawns(allCharacterEntities);
@@ -71,7 +77,6 @@ bool Wave::runWave() {
             }
             for(auto bit = bullets.begin(); bit != bullets.end();) {
                 if(ggs.developerMode) {
-                    // TODO: Add back in developer mode features
                     // TODO: See if I can seperate the rendering of developer mode stuff and the controller
                     SDL_SetRenderDrawColor(ggs.renderer,0,0,255,255);
                     SDL_Rect temp = bit->getTrailingRect();
@@ -132,7 +137,7 @@ bool Wave::runWave() {
 }
 
 void Wave::createEnemies() {
-	int totalDifficulty = 0;
+	int totalDifficulty = -5;
     int (*weights)[5] = level.getSpawnWeights();
     std::vector<Spawn>* spawns = level.getEnemySpawns();
     while(totalDifficulty < waveNumber) {
