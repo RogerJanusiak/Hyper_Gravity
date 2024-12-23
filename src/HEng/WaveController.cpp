@@ -208,13 +208,6 @@ void WaveController::renderPlayerUI() {
     SDL_SetRenderDrawColor(ggs.renderer, 255, 0, 0, 255);
     SDL_RenderFillRect(ggs.renderer,&timeToShoot);
 
-    if(player.getAbility() != none) {
-        SDL_SetRenderDrawColor(ggs.renderer, 150, 150, 150, 255);
-        SDL_RenderFillRect(ggs.renderer,&timeToAbilityBack);
-        SDL_SetRenderDrawColor(ggs.renderer, 0, 0, 255, 255);
-        SDL_RenderFillRect(ggs.renderer,&timeToAbility);
-    }
-
     healthRect.w = scalePlayerUI(player.getHealthPercentage()*75);
 
     shieldRect.w = scalePlayerUI(player.getShieldPercentage()*75);

@@ -82,13 +82,7 @@ bool Wave::runWave() {
                 enemy->move(ggs, level.getPlatforms(),level);
             }
             if( Entity::isColliding(enemy->getEntity()->getRect(),player.getHitRect())) {
-                if(player.getEntity()->getRect().y + (player.getEntity()->getRect().h-enemy->getEntity()->getRect().h) < enemy->getEntity()->getRect().y
-                    && player.getAbility() == Ability::bounce && player.isCharged()) {
-                    player.getEntity()->setYVelocity(-1800);
-                    enemy->getEntity()->damage(5);
-                    player.setInvincible(true);
-                    abilityDamgage = true;
-                } else if(!player.isInvincible()) {
+                if(!player.isInvincible()) {
                     int randomNumber = rand() % 100;
                     if(player.damage()) {
                         //playerAlive = false;
@@ -118,10 +112,6 @@ bool Wave::runWave() {
                 if(!playerDamaged) {
                     player.changeXP(enemy->getDifficulty());
                     player.killEnemy();
-                    if(!abilityDamgage) {
-                        if(player.getAbilityKills() < ggs.abilityProperties[player.getAbility()][ggs.abilityLevels[player.getAbility()]][1] && player.getAbility() != none && !player.isCharged())
-                            player.abilitiesKills++;
-                    }
                 }
                 ggs.updateText = true;
             } else {

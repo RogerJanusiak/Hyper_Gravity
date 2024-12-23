@@ -35,7 +35,6 @@ public:
   [[nodiscard]] int getClipSize() const { return clipSize; }
   [[nodiscard]] int getDamage() const { return bulletDamage; }
 
-  void upgrade();
   void reset();
 
 private:

@@ -63,11 +63,6 @@ public:
     void setXP(int _xp ) { xp = _xp; }
     int getXP() const { return xp; }
 
-    int charge();
-    [[nodiscard]] bool isCharged() const { return charged;}
-    Ability getAbility() { return currentAbility; }
-    void setAbility(Ability ability) { currentAbility = ability; }
-
     [[nodiscard]] bool isInvincible() const { return invincible; }
     void setInvincible(bool _invincible) { invincible = _invincible; }
     void tickInvicibilty(float dt);

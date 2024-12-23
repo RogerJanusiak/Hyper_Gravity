@@ -18,6 +18,12 @@ Weapon::Weapon(GlobalGameState& ggs, const Weapon_Type type, SDL_Renderer* rende
           bulletRelXLeft = 0;
           bulletRelY = scale(19);
 
+          clipSize = 4;
+          reloadSpeed = 3;
+          bulletDurability = 1;
+          bulletStrength = 1;
+          bulletDamage = 1;
+
           fireSound.init("resources/sounds/revolver-shoot.wav",0,-1);
           reloadSound.init("resources/sounds/revolver-reload.wav", 0,-1);
           emptySound.init("resources/sounds/revolver-empty.wav", 0,-1);
@@ -35,6 +41,12 @@ Weapon::Weapon(GlobalGameState& ggs, const Weapon_Type type, SDL_Renderer* rende
           bulletRelXRight = scale(19);
           bulletRelXLeft = 0;
           bulletRelY = scale(19);
+
+          clipSize = 2;
+          reloadSpeed = 3;
+          bulletDurability = 1;
+          bulletStrength = 1;
+          bulletDamage = 2;
 
           //TODO: Add unique sounds
           fireSound.init("resources/sounds/revolver-shoot.wav",0,-1);
@@ -54,6 +66,12 @@ Weapon::Weapon(GlobalGameState& ggs, const Weapon_Type type, SDL_Renderer* rende
           bulletRelXRight = scale(19);
           bulletRelXLeft = 0;
           bulletRelY = scale(19);
+
+          clipSize = 1;
+          reloadSpeed = 2;
+          bulletDurability = 1;
+          bulletStrength = 1;
+          bulletDamage = 3;
 
           //TODO: Add unique sounds
           fireSound.init("resources/sounds/revolver-shoot.wav",0,-1);
@@ -75,6 +93,11 @@ Weapon::Weapon(GlobalGameState& ggs, const Weapon_Type type, SDL_Renderer* rende
           bulletRelY = scale(17);
           bulletType = laser;
 
+          clipSize = 2;
+          reloadSpeed = 3;
+          coolFireRate = 0.5;
+          bulletsInClip = 0;
+
           reloadSpeed = 3;
           timeSinceShot = reloadSpeed;
           fireSound.init("resources/sounds/laserPistol-shoot.wav",0,-1);
@@ -82,7 +105,6 @@ Weapon::Weapon(GlobalGameState& ggs, const Weapon_Type type, SDL_Renderer* rende
           emptySound.init("resources/sounds/laserPistol-empty.wav", 0,-1);
       } break;
   }
-  upgrade();
   reset();
 }
 
@@ -165,37 +187,6 @@ bool Weapon::shoot(std::list<Entity>& eBullets, std::list<Bullet>& bullets, bool
   }
   emptySound.play();
   return false;
-}
-
-void Weapon::upgrade() {
-    if(type == revolver) {
-        int level = ggs.weaponLevels[revolver] == 0 ? 0 : ggs.weaponLevels[revolver] - 1;
-        clipSize = ggs.weaponProperties[revolver][level][1];
-        reloadSpeed = ggs.weaponProperties[revolver][level][2];
-        bulletDurability = ggs.weaponProperties[revolver][level][3];
-        bulletStrength = ggs.weaponProperties[revolver][level][4];
-        bulletDamage = ggs.weaponProperties[revolver][level][5];
-    } else if(type == rifle) {
-      int level = ggs.weaponLevels[rifle] == 0 ? 0 : ggs.weaponLevels[rifle] - 1;
-      clipSize = ggs.weaponProperties[rifle][level][1];
-      reloadSpeed = ggs.weaponProperties[rifle][level][2];
-      bulletDurability = ggs.weaponProperties[rifle][level][3];
-      bulletStrength = ggs.weaponProperties[rifle][level][4];
-      bulletDamage = ggs.weaponProperties[rifle][level][5];
-    } else if(type == shotgun) {
-      int level = ggs.weaponLevels[shotgun] == 0 ? 0 : ggs.weaponLevels[shotgun] - 1;
-      clipSize = ggs.weaponProperties[shotgun][level][1];
-      reloadSpeed = ggs.weaponProperties[shotgun][level][2];
-      bulletDurability = ggs.weaponProperties[shotgun][level][3];
-      bulletDamage = ggs.weaponProperties[shotgun][level][4];
-      bulletsPerShot = ggs.weaponProperties[shotgun][level][5];
-    } else if(type == laserPistol) {
-      int level = ggs.weaponLevels[laserPistol] == 0 ? 0 : ggs.weaponLevels[laserPistol] - 1;
-      clipSize = ggs.weaponProperties[laserPistol][level][2];
-      reloadSpeed = ggs.weaponProperties[laserPistol][level][2];
-      coolFireRate = ggs.weaponProperties[laserPistol][level][1];
-      bulletsInClip = 0;
-    }
 }
 
 void Weapon::reset() {

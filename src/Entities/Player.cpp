@@ -55,8 +55,7 @@ int Player::move(GlobalGameState& ggs, const std::list<Platform> &platforms, std
         }
     }
 
-    double speedIncrease = ggs.playerLevels[speed] == 0 ? 0 : defaultXSpeed*ggs.playerProperties[speed][ggs.playerLevels[speed]-1][1]/100;
-    getEntity()->setXVelocity(xNormalVelocity*(defaultXSpeed+speedIncrease));
+    getEntity()->setXVelocity(xNormalVelocity*defaultXSpeed);
 
     int amountFallen = 0;
     if(!playerEntity->move(ggs.dt,platforms,&amountFallen,&wheelRect) && invincible && !invicibleFromDeath) {
@@ -98,21 +97,6 @@ void Player::killEnemy() {
     combo++;
 }
 
-int Player::charge() {
-    int abilityLevel = ggs.abilityLevels[currentAbility] == 0 ? 0 : ggs.abilityLevels[currentAbility] - 1;
-    int abilityReloadSpeed = ggs.abilityProperties[currentAbility][abilityLevel][1];
-    if (abilitiesKills >= abilityReloadSpeed) {
-        abilitiesKills = 0;
-        charged = true;
-        justCharged = true;
-        return 75;
-    }
-    if(!charged) {
-        return 75*abilitiesKills/abilityReloadSpeed;
-    }
-    return 75;
-}
-
 void Player::tickInvicibilty(float dt) {
     postDamageInvincibleTime += dt;
     if(postDamageInvincibleTime > 3 && invicibleFromDeath) {
@@ -124,7 +108,6 @@ void Player::tickInvicibilty(float dt) {
 bool Player::damage() {
 
     zeroCombo();
-    charge();
     setInvincible(true);
     invicibleFromDeath = true;
     postDamageInvincibleTime = 0;
@@ -136,7 +119,7 @@ bool Player::damage() {
            ggs.currentRunState = RunState::deathScreen;
         }
     } else {
-        shield -= ggs.playerLevels[armor] == 0 ? 50 : 50 - 50*ggs.playerProperties[armor][ggs.playerLevels[armor]-1][1]/100;
+        shield -= 50;
         if(shield <= 0) {
             shield = 0;
         }
