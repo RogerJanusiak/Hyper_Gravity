@@ -15,12 +15,12 @@ void Sound::init(const std::string& filePath, int _loop, int _channel) {
     }
 }
 
-
 Sound::Sound(std::string filePath, int loop, int channel) : loop(loop), channel(channel) {
 
     init(filePath, loop, channel);
 
 }
+
 Sound::~Sound() {
     Mix_FreeChunk(sound);
     sound = nullptr;

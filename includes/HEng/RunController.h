@@ -2,6 +2,7 @@
 #define RUNCONTROLLER_H
 #include "Run.h"
 #include "State.h"
+#include "UpgradeMenu.h"
 #include "WaveController.h"
 #include "../TEng/Menu.h"
 
@@ -36,7 +37,7 @@ private:
 
 	UI_Menu inventoryMenu = UI_Menu(4);
 
-	UI_Menu revolverUpgradeMenu = UI_Menu(6);
+	UpgradeMenu upgradeMenu = UpgradeMenu(ggs);
 
 	Texture inventoryMenuTitle;
 

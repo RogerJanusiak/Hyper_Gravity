@@ -53,7 +53,9 @@ void RunController::run() {
 			currentMenu = &inventoryMenu;
 		} break;
 		case RunState::upgradeScreen: {
+			upgradeMenu.render();
 			readInput();
+			currentMenu = upgradeMenu.getMenu();
 		} break;
 	}
 }
