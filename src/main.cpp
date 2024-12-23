@@ -3,11 +3,10 @@
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
 
-#include "../includes/HEng/WaveController.h"
+#include "../includes/HEng/RunController.h"
 #include "../includes/Utils/GlobalConstants.h"
 #include "../includes/HEng/MainMenu.h"
 #include "../includes/HEng/State.h"
-#include "../includes/HEng/Run.h"
 
 bool init(GlobalGameState& ggs) {
 	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC | SDL_INIT_GAMECONTROLLER | SDL_INIT_AUDIO ) < 0 ) {
@@ -90,15 +89,14 @@ int main( int argc, char* args[] ) {
 	MainMenu mainMenu(ggs);
 	setCurrentMainMenu(&mainMenu);
 
-	std::unique_ptr<Run> run;
-	std::unique_ptr<WaveController> waveController;
-
 	float lastUpdate = 0;
 	constexpr int targetFPS = 60;
 	constexpr int frameDelay = 1000 / targetFPS;
 
-	ggs.inMainMenu = false;
-	ggs.level = 4;
+	std::unique_ptr<RunController> rc;
+
+	//ggs.inMainMenu = true;
+	//ggs.level = 4;
 
 	while(!ggs.quit) {
 		Uint32 frameStart = SDL_GetTicks();
@@ -126,14 +124,12 @@ int main( int argc, char* args[] ) {
 			mainMenu.readInput();
 			mainMenu.render();
 		} else if(!ggs.inRun) {
-			run = std::make_unique<Run>(ggs,ggs.level);
-			waveController = std::make_unique<WaveController>(ggs, *run);
+			rc = std::make_unique<RunController>(ggs);
 			ggs.inRun = true;
 		}
 
 		if(ggs.inRun && !ggs.inPauseMenu) {
-			waveController->readInput();
-			waveController->operate();
+			rc->run();
 		}
 
 		SDL_SetRenderDrawColor(ggs.renderer, 26, 26, 26, 255);

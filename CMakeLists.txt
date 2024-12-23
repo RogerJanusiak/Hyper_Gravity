@@ -124,7 +124,9 @@ if(APPLE)
 			src/HEng/Level.cpp
 			includes/HEng/Level.h
             includes/HEng/WaveController.h
-            src/HEng/WaveController.cpp)
+            src/HEng/WaveController.cpp
+            src/HEng/RunController.cpp
+            includes/HEng/RunController.h)
 
     Message("")
     Message( STATUS "SOURCE entry point : " ${SOURCE_FILES} )

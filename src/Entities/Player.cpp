@@ -146,7 +146,7 @@ bool Player::damage() {
         shield = 0;
         health -= 50;
         if(health <= 0) {
-            ggs.inRun = false;
+           ggs.playerDeath = true;
         }
     } else {
         shield -= ggs.playerLevels[armor] == 0 ? 50 : 50 - 50*ggs.playerProperties[armor][ggs.playerLevels[armor]-1][1]/100;

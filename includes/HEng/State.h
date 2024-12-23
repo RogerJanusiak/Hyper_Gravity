@@ -32,6 +32,8 @@ struct GlobalGameState {
     bool toPauseMenu = false;
     bool inRun = false;
 
+    bool playerDeath = false;
+
     int level = 0;
     bool controllerStickReset = false;
 
@@ -54,7 +56,7 @@ struct GlobalGameState {
 
     TTF_Font *buttonFont{};
     TTF_Font *verySmall{};
-    TTF_Font *title;
+    TTF_Font *title{};
 
     // Weapon Options
     const double weaponProperties[5][5][6] = {

@@ -41,6 +41,8 @@ void Wave::render() {
             ++it;
         }
     }
+
+    //wes->render();
 }
 
 bool Wave::runWave() {
@@ -172,4 +174,3 @@ void Wave::createEnemies() {
         }
     }
 }
-
