@@ -25,23 +25,10 @@ Player::Player(Entity* entity, GlobalGameState& ggs) : ggs(ggs), revolver(ggs, W
     playerEntity->setDimensions(playerWidth,playerHeight);
     playerTexture.setup(playerWidth,playerHeight,playerEntity->getRenderer());
 
-    c4Texture.setup(scale(32),scale(32),playerEntity->getRenderer());
-    detinatorTexture.setup(scale(32),scale(32),playerEntity->getRenderer());
-
     if(!playerTexture.loadFromFile("Timpy.png")) {
         SDL_Log("Could not load Timpy texture!");
     }
 
-    if(!c4Texture.loadFromFile("C4.png")) {
-        SDL_Log("Could not load c4 texture!");
-    }
-    if(!detinatorTexture.loadFromFile("Detinator.png")) {
-        SDL_Log("Could not load detinator texture!");
-    }
-
-    c4Entity.setTexture(c4Texture);
-    c4Entity.setDimensions(scale(32),scale(32));
-    c4Entity.setSource(32,32);
     playerEntity->setTexture(playerTexture);
     playerEntity->setSource(26,32);
 
@@ -146,7 +133,7 @@ bool Player::damage() {
         shield = 0;
         health -= 50;
         if(health <= 0) {
-           ggs.playerDeath = true;
+           ggs.currentRunState = RunState::deathScreen;
         }
     } else {
         shield -= ggs.playerLevels[armor] == 0 ? 50 : 50 - 50*ggs.playerProperties[armor][ggs.playerLevels[armor]-1][1]/100;

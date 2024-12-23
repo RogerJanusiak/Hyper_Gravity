@@ -72,8 +72,6 @@ public:
     void setInvincible(bool _invincible) { invincible = _invincible; }
     void tickInvicibilty(float dt);
 
-    Entity* getC4Entity() { return &c4Entity; }
-
     void setXNormalV(int vx) { xNormalVelocity = vx; }
 
     SDL_Rect getHitRect() { return playerHitRect; }
@@ -136,12 +134,6 @@ private:
     float timeSinceShot;
 
     SDL_Rect weaponRect;
-
-    //C4 Ability Variables
-    Entity c4Entity;
-    Texture c4Texture;
-    Texture detinatorTexture;
-    bool c4Placed = false;
 
     Sound damageSound;
 

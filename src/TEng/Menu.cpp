@@ -16,41 +16,27 @@ void UI_Button::setType(int type, SDL_Renderer* _renderer) {
         h = smallHeight;
 
         texture.setup(w,h,renderer);
-        texture.loadFromFile("upgrade-menu/small.png");
+        texture.loadFromFile("ui/small.png");
 
         hoverTexture.setup(w,h,renderer);
-        hoverTexture.loadFromFile("upgrade-menu/small-selected.png");
+        hoverTexture.loadFromFile("ui/small-selected.png");
 
         activeTexture.setup(w,h,renderer);
-        activeTexture.loadFromFile("upgrade-menu/small-active.png");
+        activeTexture.loadFromFile("ui/small-active.png");
     } else if(type == 2) {
         w = weaponWidth;
         h = weaponWidth;
 
         texture.setup(w,h,renderer);
-        texture.loadFromFile("upgrade-menu/upgrade-button.png");
+        texture.loadFromFile("ui/upgrade-button.png");
 
         hoverTexture.setup(w,h,renderer);
-        hoverTexture.loadFromFile("upgrade-menu/upgrade-selected.png");
+        hoverTexture.loadFromFile("ui/upgrade-selected.png");
 
         activeTexture.setup(w,h,renderer);
-        activeTexture.loadFromFile("upgrade-menu/upgrade-active.png");
-    } else if(type == 3) {
-        w = scaleUI(60);
-        h = scaleUI(30);
-
-        texture.setup(w,h,renderer);
-        texture.loadFromFile("upgrade-menu/weapon.png");
-
-        hoverTexture.setup(w,h,renderer);
-        hoverTexture.loadFromFile("upgrade-menu/weapon-selected.png");
-
-        activeTexture.setup(w,h,renderer);
-        activeTexture.loadFromFile("upgrade-menu/weapon-active.png");
+        activeTexture.loadFromFile("ui/upgrade-active.png");
     }
 }
-
-
 
 UI_Button::UI_Button(const int x, const int y, const std::string& text, SDL_Renderer* renderer, Sound* sound, const SDL_Color * color, TTF_Font* font, void (*action)(GlobalGameState& state, int attr1, int attr2),GlobalGameState& state, const int type, int attribute, int attribute2) :
 x(x), y(y), type(type), buttonClick(sound), action(action), state(state), attribute(attribute), attribute2(attribute2) {
@@ -160,6 +146,8 @@ void UI_Button::link(const RELATIVE_DIRECTION direction, UI_Button* button) {
             break;
     }
 }
+
+
 
 int UI_Menu::addButton(int x, int y, const std::string &text, SDL_Color* color, TTF_Font* font,
     const int above, const int below, const int left, const int right, void (*action)(GlobalGameState& state, int attr1, int attr2),GlobalGameState& state, int type, int attribute, int attribute2) {

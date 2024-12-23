@@ -6,7 +6,12 @@
 #include <SDL_video.h>
 #include <SDL_ttf.h>
 
-#include "../TEng/Sound.h"
+enum class RunState {
+    inWave,
+    deathScreen,
+    inventoryScreen,
+    upgradeScreen
+};
 
 enum Menu {
     head,
@@ -32,7 +37,7 @@ struct GlobalGameState {
     bool toPauseMenu = false;
     bool inRun = false;
 
-    bool playerDeath = false;
+    RunState currentRunState = RunState::upgradeScreen;
 
     int level = 0;
     bool controllerStickReset = false;

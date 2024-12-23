@@ -96,7 +96,7 @@ public:
   static constexpr int smallWidth = 160*0.8*UI_SCALE_FACTOR;
   static constexpr int smallHeight = 32*0.8*UI_SCALE_FACTOR;
 
-  static constexpr int weaponWidth = 60*UI_SCALE_FACTOR;
+  static constexpr int weaponWidth = 120*UI_SCALE_FACTOR;
 
 private:
 
