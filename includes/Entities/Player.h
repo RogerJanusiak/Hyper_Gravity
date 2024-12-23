@@ -9,21 +9,6 @@
 #include "../TEng/Sound.h"
 #include "../HEng/Weapon.h"
 
-enum Ability {
-    bounce,
-    teleport,
-    c4,
-    grenade,
-    none,
-};
-
-enum PlayerUpgrades {
-    armor,
-    shield,
-    speed,
-    dodge
-};
-
 class Player {
 public:
     Player(Entity* entity, GlobalGameState& ggs);
@@ -58,6 +43,8 @@ public:
     void killEnemy();
     void zeroCombo() { combo = 0;}
     int getCombo() const { return combo; }
+
+    Weapon& getWeapon(int weapon);
 
     void changeXP(int _xp) { xp += _xp; }
     void setXP(int _xp ) { xp = _xp; }
@@ -103,8 +90,6 @@ private:
     Weapon* currentWeapon = nullptr;
     Weapon* primaryWeapon = nullptr;
     Weapon* secondaryWeapon = nullptr;
-
-    Ability currentAbility = Ability::none;
 
     float postDamageInvincibleTime = 0;
     bool invicibleFromDeath = false;

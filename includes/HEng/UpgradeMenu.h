@@ -1,13 +1,14 @@
 #ifndef UPGRADEMENU_H
 #define UPGRADEMENU_H
 
+#include "Weapon.h"
 #include "../TEng/Menu.h"
 #include "../TEng/Texture.h"
 
 class UpgradeMenu {
 public:
 
-	UpgradeMenu(GlobalGameState& ggs);
+	UpgradeMenu(GlobalGameState& ggs, Weapon& weapon);
 
 	void render();
 
@@ -16,6 +17,7 @@ public:
 private:
 
 	GlobalGameState& ggs;
+	Weapon& weapon;
 
 	Sound buttonSound;
 

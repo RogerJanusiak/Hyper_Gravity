@@ -21,6 +21,7 @@ private:
 	void renderDeathScreen() const;
 	void renderInventoryScreen();
 	void readInput();
+	void loadUpdateScreen();
 
 	GlobalGameState& ggs;
 
@@ -37,7 +38,7 @@ private:
 
 	UI_Menu inventoryMenu = UI_Menu(4);
 
-	UpgradeMenu upgradeMenu = UpgradeMenu(ggs);
+	std::unique_ptr<UpgradeMenu> upgradeMenu;
 
 	Texture inventoryMenuTitle;
 

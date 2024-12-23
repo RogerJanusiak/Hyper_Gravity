@@ -138,3 +138,23 @@ void Player::changeWeapon() {
     }
 
 }
+
+Weapon& Player::getWeapon(const int weapon) {
+    switch (weapon) {
+        case Weapon_Type::revolver:
+            return revolver;
+            break;
+        case Weapon_Type::rifle:
+            return rifle;
+            break;
+        case Weapon_Type::shotgun:
+            return shotgun;
+            break;
+        case Weapon_Type::laserPistol:
+            return laserPistol;
+            break;
+        default:
+            return revolver;
+            break;
+    }
+}

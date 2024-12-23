@@ -38,7 +38,10 @@ struct GlobalGameState {
     bool toPauseMenu = false;
     bool inRun = false;
 
-    RunState currentRunState = RunState::upgradeScreen;
+    bool openUpgrade = false;
+    int upgradeToOpen = 0;
+
+    RunState currentRunState = RunState::inventoryScreen;
 
     int level = 0;
     bool controllerStickReset = false;

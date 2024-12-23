@@ -1,10 +1,29 @@
 #include "../../includes/HEng/UpgradeMenu.h"
 
+#include <algorithm>
+
 void upgradeWeapon(GlobalGameState& ggs, int attr1, int attr2) {
 
 }
 
-UpgradeMenu::UpgradeMenu(GlobalGameState& ggs) : ggs(ggs) {
+std::string trimStart(const std::string& str) {
+	auto it = std::find_if_not(str.begin(), str.end(), [](char c) {
+		return c == '0';
+	});
+	return std::string(it, str.end());
+}
+
+std::string removeTrailingZeros(double i) {
+	std::string result = std::to_string(i);
+	result.erase(result.find_last_not_of('0') + 1, std::string::npos); // Remove trailing zeros
+	if (result.back() == '.') {
+		result.pop_back();  // Remove the decimal point if it's at the end
+	}
+	result = trimStart(result);
+	return result;
+}
+
+UpgradeMenu::UpgradeMenu(GlobalGameState& ggs, Weapon& weapon) : ggs(ggs), weapon(weapon) {
 
 	buttonSound.init("resources/sounds/buttonClick.wav", 0,-1);
 
@@ -31,19 +50,48 @@ UpgradeMenu::UpgradeMenu(GlobalGameState& ggs) : ggs(ggs) {
 	statTitle.setup(ggs.renderer);
 	augmentTitle.setup(ggs.renderer);
 
-	weaponText.loadFromRenderedText("Revolver", ggs.white, ggs.title);
+	upgrade1Value.loadFromRenderedText(std::to_string(weapon.getClipSize()), ggs.white, ggs.buttonFont);
+	upgrade2Value.loadFromRenderedText(std::to_string(weapon.getReloadSpeed()), ggs.white, ggs.buttonFont);
 
-	upgrade1Description.loadFromRenderedText("Clip Size: ", ggs.white, ggs.buttonFont);
-	upgrade2Description.loadFromRenderedText("Reload Speed: ", ggs.white, ggs.buttonFont);
-	upgrade3Description.loadFromRenderedText("Bullet Damage: ", ggs.white, ggs.buttonFont);
-	upgrade4Description.loadFromRenderedText("Bullet Durability: ", ggs.white, ggs.buttonFont);
-	upgrade5Description.loadFromRenderedText("Bullet Strenth: ", ggs.white, ggs.buttonFont);
+	upgradeMenu.setup(ggs.renderer, &buttonSound);
+	upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight), "+1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1);
+	upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight+30), "-1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1);
 
-	upgrade1Value.loadFromRenderedText("4", ggs.white, ggs.buttonFont);
-	upgrade2Value.loadFromRenderedText("3", ggs.white, ggs.buttonFont);
-	upgrade3Value.loadFromRenderedText("1", ggs.white, ggs.buttonFont);
-	upgrade4Value.loadFromRenderedText("1", ggs.white, ggs.buttonFont);
-	upgrade5Value.loadFromRenderedText("1", ggs.white, ggs.buttonFont);
+	if(weapon.getType() == laserPistol) {
+		weaponText.loadFromRenderedText("Laser Pistol", ggs.white, ggs.title);
+		upgrade1Description.loadFromRenderedText("Overheat Buffer: ", ggs.white, ggs.buttonFont);
+		upgrade2Description.loadFromRenderedText("Cool Off Time: ", ggs.white, ggs.buttonFont);
+		upgrade3Description.loadFromRenderedText("Cool Fire Rate: ", ggs.white, ggs.buttonFont);
+		upgrade3Value.loadFromRenderedText(removeTrailingZeros(weapon.getCoolFireRate()), ggs.white, ggs.buttonFont);
+		upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight+60), "-.1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1);
+	} else {
+		upgrade1Description.loadFromRenderedText("Clip Size: ", ggs.white, ggs.buttonFont);
+		upgrade2Description.loadFromRenderedText("Reload Speed: ", ggs.white, ggs.buttonFont);
+		upgrade3Description.loadFromRenderedText("Bullet Damage: ", ggs.white, ggs.buttonFont);
+		upgrade4Description.loadFromRenderedText("Bullet Durability: ", ggs.white, ggs.buttonFont);
+
+		upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight+60), "+1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1);
+		upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight+90), "+1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1);
+		upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight+120), "+1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1);
+
+		upgrade3Value.loadFromRenderedText(std::to_string(weapon.getDamage()), ggs.white, ggs.buttonFont);
+		upgrade4Value.loadFromRenderedText(std::to_string(weapon.getDurability()), ggs.white, ggs.buttonFont);
+
+		if(weapon.getType() == shotgun) {
+			weaponText.loadFromRenderedText("Shotgun", ggs.white, ggs.title);
+			upgrade5Description.loadFromRenderedText("Bullets Per Shot: ", ggs.white, ggs.buttonFont);
+			upgrade5Value.loadFromRenderedText(std::to_string(weapon.getBulletsPerShot()), ggs.white, ggs.buttonFont);
+		} else {
+			if(weapon.getType() == rifle) {
+				weaponText.loadFromRenderedText("Rifle", ggs.white, ggs.title);
+			} else {
+				weaponText.loadFromRenderedText("Revolver", ggs.white, ggs.title);
+			}
+			upgrade5Description.loadFromRenderedText("Bullet Strenth: ", ggs.white, ggs.buttonFont);
+			upgrade5Value.loadFromRenderedText(std::to_string(weapon.getStrength()), ggs.white, ggs.buttonFont);
+		}
+	}
+
 
 	challenge1Description.loadFromRenderedText("Die by landing on enemies: ", ggs.white, ggs.buttonFont);
 	challenge2Description.loadFromRenderedText("Kill enemies who are on different platforms: ", ggs.white, ggs.buttonFont);
@@ -53,14 +101,6 @@ UpgradeMenu::UpgradeMenu(GlobalGameState& ggs) : ggs(ggs) {
 
 	statTitle.loadFromRenderedText("Stats:", ggs.white, ggs.title);
 	augmentTitle.loadFromRenderedText("Augements:", ggs.white, ggs.title);
-
-	upgradeMenu.setup(ggs.renderer, &buttonSound);
-
-	upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight), "+1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1);
-	upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight+30), "+1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1);
-	upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight+60), "+1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1);
-	upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight+90), "+1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1);
-	upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight+120), "+1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1);
 }
 
 void UpgradeMenu::render() {

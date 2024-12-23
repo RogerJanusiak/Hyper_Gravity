@@ -34,6 +34,12 @@ public:
   [[nodiscard]] int getBulletsInClip() const { return bulletsInClip; }
   [[nodiscard]] int getClipSize() const { return clipSize; }
   [[nodiscard]] int getDamage() const { return bulletDamage; }
+  [[nodiscard]] int getReloadSpeed() const { return reloadSpeed; }
+  [[nodiscard]] int getDurability() const { return bulletDurability; }
+  [[nodiscard]] int getStrength() const { return bulletStrength; }
+  [[nodiscard]] int getBulletsPerShot() const { return bulletsPerShot; }
+  [[nodiscard]] double getCoolFireRate() const { return coolFireRate; }
+
 
   void reset();
 
