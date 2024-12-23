@@ -4,6 +4,24 @@
 
 void upgradeWeapon(GlobalGameState& ggs, int attr1, int attr2) {
 
+	switch(attr1) {
+	case revolver:
+		ggs.revolverUpgrades[attr2]++;
+		ggs.revolverUpgraded = true;
+		break;
+	case rifle:
+		ggs.rifleUpgrades[attr2]++;
+		ggs.rifleUpgraded = true;
+		break;
+	case shotgun:
+		ggs.shotgunUpgrades[attr2]++;
+		ggs.shotgunUpgraded = true;
+		break;
+	case laserPistol:
+		ggs.laserRifleUpgrades[attr2]++;
+		ggs.laserRifleUpgraded = true;
+		break;
+	}
 }
 
 std::string trimStart(const std::string& str) {
@@ -54,8 +72,8 @@ UpgradeMenu::UpgradeMenu(GlobalGameState& ggs, Weapon& weapon) : ggs(ggs), weapo
 	upgrade2Value.loadFromRenderedText(std::to_string(weapon.getReloadSpeed()), ggs.white, ggs.buttonFont);
 
 	upgradeMenu.setup(ggs.renderer, &buttonSound);
-	upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight), "+1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1);
-	upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight+30), "-1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1);
+	upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight), "+1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1, weapon.getType(), 0);
+	upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight+30), "-1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1, weapon.getType(), 1);
 
 	if(weapon.getType() == laserPistol) {
 		weaponText.loadFromRenderedText("Laser Pistol", ggs.white, ggs.title);
@@ -63,16 +81,16 @@ UpgradeMenu::UpgradeMenu(GlobalGameState& ggs, Weapon& weapon) : ggs(ggs), weapo
 		upgrade2Description.loadFromRenderedText("Cool Off Time: ", ggs.white, ggs.buttonFont);
 		upgrade3Description.loadFromRenderedText("Cool Fire Rate: ", ggs.white, ggs.buttonFont);
 		upgrade3Value.loadFromRenderedText(removeTrailingZeros(weapon.getCoolFireRate()), ggs.white, ggs.buttonFont);
-		upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight+60), "-.1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1);
+		upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight+60), "-.1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1,weapon.getType(), 2);
 	} else {
 		upgrade1Description.loadFromRenderedText("Clip Size: ", ggs.white, ggs.buttonFont);
 		upgrade2Description.loadFromRenderedText("Reload Speed: ", ggs.white, ggs.buttonFont);
 		upgrade3Description.loadFromRenderedText("Bullet Damage: ", ggs.white, ggs.buttonFont);
 		upgrade4Description.loadFromRenderedText("Bullet Durability: ", ggs.white, ggs.buttonFont);
 
-		upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight+60), "+1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1);
-		upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight+90), "+1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1);
-		upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight+120), "+1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1);
+		upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight+60), "+1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1,weapon.getType(), 2);
+		upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight+90), "+1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1,weapon.getType(), 3);
+		upgradeMenu.addButton(scaleUI(statsCenter+25), scaleUI(statsHeight+120), "+1", &ggs.white, ggs.buttonFont, -1, -1, -1, -1, &upgradeWeapon, ggs, 1,weapon.getType(), 4);
 
 		upgrade3Value.loadFromRenderedText(std::to_string(weapon.getDamage()), ggs.white, ggs.buttonFont);
 		upgrade4Value.loadFromRenderedText(std::to_string(weapon.getDurability()), ggs.white, ggs.buttonFont);

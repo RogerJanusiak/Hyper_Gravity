@@ -19,7 +19,7 @@ bool init(GlobalGameState& ggs) {
 		return false;
 	}
 
-	ggs.window = SDL_CreateWindow("Hyper_Gravity 0.4.1 (Unstable)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+	ggs.window = SDL_CreateWindow("Hyper_Gravity 0.4.5 (Unstable V4)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 	if (ggs.window == nullptr) {
 		SDL_Log( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
 		return false;

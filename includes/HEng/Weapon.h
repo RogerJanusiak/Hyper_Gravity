@@ -40,6 +40,14 @@ public:
   [[nodiscard]] int getBulletsPerShot() const { return bulletsPerShot; }
   [[nodiscard]] double getCoolFireRate() const { return coolFireRate; }
 
+  void changeClipSize(const int changeAmount) { clipSize += changeAmount; }
+  void changeDamage(const int changeAmount) { bulletDamage += changeAmount; }
+  void changeReloadSpeed(const double changeAmount) { reloadSpeed += changeAmount; }
+  void changeDurability(const int changeAmount) { bulletDurability += changeAmount; }
+  void changeStrength(const int changeAmount) { bulletStrength += changeAmount; }
+  void changeBulletsPerShot(const int changeAmount) { bulletsPerShot += changeAmount; }
+  void changeCoolFireRate(const double changeAmount) { coolFireRate += changeAmount; }
+
 
   void reset();
 

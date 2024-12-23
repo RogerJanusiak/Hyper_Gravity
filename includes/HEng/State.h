@@ -43,6 +43,16 @@ struct GlobalGameState {
 
     RunState currentRunState = RunState::inventoryScreen;
 
+    bool revolverUpgraded = false;
+    bool rifleUpgraded = false;
+    bool shotgunUpgraded = false;
+    bool laserRifleUpgraded = false;
+
+    int revolverUpgrades[5] = {0,0,0,0,0};
+    int rifleUpgrades[5] = {0,0,0,0,0};
+    int shotgunUpgrades[5] = {0,0,0,0,0};
+    int laserRifleUpgrades[5] = {0,0,0,0,0};
+
     int level = 0;
     bool controllerStickReset = false;
 

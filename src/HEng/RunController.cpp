@@ -40,6 +40,21 @@ RunController::RunController(GlobalGameState& ggs) : ggs(ggs) {
 
 void RunController::run() {
 
+	if(ggs.revolverUpgraded) {
+		Weapon& revolver = currentRun->getPlayer().getWeapon(Weapon_Type::revolver);
+		revolver.changeClipSize(ggs.revolverUpgrades[0]);
+		revolver.changeReloadSpeed(ggs.revolverUpgrades[1]*-1);
+		revolver.changeDamage(ggs.revolverUpgrades[2]);
+		revolver.changeDurability(ggs.revolverUpgrades[3]);
+		revolver.changeStrength(ggs.revolverUpgrades[4]);
+		ggs.revolverUpgraded = false;
+		ggs.openUpgrade = true;
+		ggs.upgradeToOpen = Weapon_Type::revolver;
+		for(auto& upgrade : ggs.revolverUpgrades) {
+			upgrade = 0;
+		}
+	}
+
 	if(ggs.openUpgrade) {
 		ggs.currentRunState = RunState::upgradeScreen;
 		ggs.openUpgrade = false;
@@ -82,7 +97,11 @@ void RunController::readInput() {
         		currentMenu = nullptr;
         		ggs.currentRunState = RunState::inventoryScreen;
         		upgradeMenu = nullptr;
+        	} else if(e.key.keysym.sym == SDLK_ESCAPE && ggs.currentRunState == RunState::inventoryScreen) {
+        		currentMenu = nullptr;
+        		ggs.currentRunState = RunState::inWave;
         	}
+
         } else if( e.type == SDL_JOYBUTTONDOWN ) {
             if(SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == 1) {
             	if(ggs.currentRunState == RunState::deathScreen) {
