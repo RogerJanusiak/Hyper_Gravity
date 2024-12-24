@@ -126,9 +126,7 @@ if(APPLE)
             includes/HEng/WaveController.h
             src/HEng/WaveController.cpp
             src/HEng/RunController.cpp
-            includes/HEng/RunController.h
-            src/HEng/UpgradeMenu.cpp
-            includes/HEng/UpgradeMenu.h)
+            includes/HEng/RunController.h)
 
     Message("")
     Message( STATUS "SOURCE entry point : " ${SOURCE_FILES} )

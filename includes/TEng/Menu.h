@@ -98,7 +98,7 @@ public:
 
   static constexpr int weaponWidth = 120*UI_SCALE_FACTOR;
 
-private:
+protected:
 
   int x, y;
   int w = 0, h = 0;
@@ -135,6 +135,10 @@ private:
 
   bool disabled = false;
   bool active = false;
+
+};
+
+class UI_Augment : UI_Button {
 
 };
 

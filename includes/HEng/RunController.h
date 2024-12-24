@@ -2,7 +2,6 @@
 #define RUNCONTROLLER_H
 #include "Run.h"
 #include "State.h"
-#include "UpgradeMenu.h"
 #include "WaveController.h"
 #include "../TEng/Menu.h"
 
@@ -37,8 +36,6 @@ private:
 	Sound buttonSound;
 
 	UI_Menu inventoryMenu = UI_Menu(4);
-
-	std::unique_ptr<UpgradeMenu> upgradeMenu;
 
 	Texture inventoryMenuTitle;
 

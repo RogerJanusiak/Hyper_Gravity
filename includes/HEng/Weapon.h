@@ -4,7 +4,6 @@
 #include "../TEng/Sound.h"
 #include "State.h"
 #include "../TEng/Texture.h"
-
 #include <list>
 
 enum Weapon_Type {
@@ -27,7 +26,6 @@ public:
 
   int reload(float dt);
   void forceReload();
-  [[nodiscard]] bool isReloadable() const { return reloadable; }
   bool wasJustReloaded();
 
   bool shoot(std::list<Entity>& eBullets, std::list<Bullet>& bullets, bool direction, int playerX, int playerY);
@@ -35,19 +33,6 @@ public:
   [[nodiscard]] int getClipSize() const { return clipSize; }
   [[nodiscard]] int getDamage() const { return bulletDamage; }
   [[nodiscard]] int getReloadSpeed() const { return reloadSpeed; }
-  [[nodiscard]] int getDurability() const { return bulletDurability; }
-  [[nodiscard]] int getStrength() const { return bulletStrength; }
-  [[nodiscard]] int getBulletsPerShot() const { return bulletsPerShot; }
-  [[nodiscard]] double getCoolFireRate() const { return coolFireRate; }
-
-  void changeClipSize(const int changeAmount) { clipSize += changeAmount; }
-  void changeDamage(const int changeAmount) { bulletDamage += changeAmount; }
-  void changeReloadSpeed(const double changeAmount) { reloadSpeed += changeAmount; }
-  void changeDurability(const int changeAmount) { bulletDurability += changeAmount; }
-  void changeStrength(const int changeAmount) { bulletStrength += changeAmount; }
-  void changeBulletsPerShot(const int changeAmount) { bulletsPerShot += changeAmount; }
-  void changeCoolFireRate(const double changeAmount) { coolFireRate += changeAmount; }
-
 
   void reset();
 
@@ -84,7 +69,6 @@ private:
 
   double reloadSpeed = 0;
 
-  bool reloadable = true;
   bool reloaded = true;
   bool justReloaded = false;
   float timeSinceShot = 0;

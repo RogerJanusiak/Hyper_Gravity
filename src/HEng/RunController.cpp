@@ -2,8 +2,7 @@
 #include "../../includes/Utils/Input.h"
 
 void upgrade(GlobalGameState& ggs, int attr1, int attr2) {
-	ggs.openUpgrade = true;
-	ggs.upgradeToOpen = attr1;
+
 }
 
 RunController::RunController(GlobalGameState& ggs) : ggs(ggs) {
@@ -39,28 +38,6 @@ RunController::RunController(GlobalGameState& ggs) : ggs(ggs) {
 }
 
 void RunController::run() {
-
-	if(ggs.revolverUpgraded) {
-		Weapon& revolver = currentRun->getPlayer().getWeapon(Weapon_Type::revolver);
-		revolver.changeClipSize(ggs.revolverUpgrades[0]);
-		revolver.changeReloadSpeed(ggs.revolverUpgrades[1]*-1);
-		revolver.changeDamage(ggs.revolverUpgrades[2]);
-		revolver.changeDurability(ggs.revolverUpgrades[3]);
-		revolver.changeStrength(ggs.revolverUpgrades[4]);
-		ggs.revolverUpgraded = false;
-		ggs.openUpgrade = true;
-		ggs.upgradeToOpen = Weapon_Type::revolver;
-		for(auto& upgrade : ggs.revolverUpgrades) {
-			upgrade = 0;
-		}
-	}
-
-	if(ggs.openUpgrade) {
-		ggs.currentRunState = RunState::upgradeScreen;
-		ggs.openUpgrade = false;
-		upgradeMenu = std::make_unique<UpgradeMenu>(ggs, currentRun->getPlayer().getWeapon(ggs.upgradeToOpen));
-	}
-
 	switch (ggs.currentRunState) {
 		case RunState::deathScreen: {
 			renderDeathScreen();
@@ -75,11 +52,6 @@ void RunController::run() {
 			renderInventoryScreen();
 			readInput();
 		} break;
-		case RunState::upgradeScreen: {
-			upgradeMenu->render();
-			readInput();
-			currentMenu = upgradeMenu->getMenu();
-		} break;
 	}
 }
 
@@ -93,10 +65,6 @@ void RunController::readInput() {
         	if(e.key.keysym.sym == SDLK_SPACE) {
         		ggs.currentRunState = RunState::inWave;
         		ggs.inRun = false;
-        	} else if(e.key.keysym.sym == SDLK_ESCAPE && ggs.currentRunState == RunState::upgradeScreen) {
-        		currentMenu = nullptr;
-        		ggs.currentRunState = RunState::inventoryScreen;
-        		upgradeMenu = nullptr;
         	} else if(e.key.keysym.sym == SDLK_ESCAPE && ggs.currentRunState == RunState::inventoryScreen) {
         		currentMenu = nullptr;
         		ggs.currentRunState = RunState::inWave;

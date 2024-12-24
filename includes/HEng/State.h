@@ -5,13 +5,11 @@
 #include <SDL_render.h>
 #include <SDL_video.h>
 #include <SDL_ttf.h>
-#include "../TEng/Sound.h"
 
 enum class RunState {
     inWave,
     deathScreen,
     inventoryScreen,
-    upgradeScreen
 };
 
 enum Menu {
@@ -23,6 +21,22 @@ enum Menu {
     abilityUpgrade,
     playerUpgrade,
     notInMenu,
+};
+
+enum class AID {
+    damage1,
+    clipIncrease1,
+  };
+
+struct Augment {
+
+    std::string name;
+    std::string description;
+    AID id;
+
+    bool active;
+    bool compadableWith[4];
+
 };
 
 struct GlobalGameState {
@@ -38,20 +52,7 @@ struct GlobalGameState {
     bool toPauseMenu = false;
     bool inRun = false;
 
-    bool openUpgrade = false;
-    int upgradeToOpen = 0;
-
     RunState currentRunState = RunState::inventoryScreen;
-
-    bool revolverUpgraded = false;
-    bool rifleUpgraded = false;
-    bool shotgunUpgraded = false;
-    bool laserRifleUpgraded = false;
-
-    int revolverUpgrades[5] = {0,0,0,0,0};
-    int rifleUpgrades[5] = {0,0,0,0,0};
-    int shotgunUpgrades[5] = {0,0,0,0,0};
-    int laserRifleUpgrades[5] = {0,0,0,0,0};
 
     int level = 0;
     bool controllerStickReset = false;
@@ -76,6 +77,10 @@ struct GlobalGameState {
     TTF_Font *buttonFont{};
     TTF_Font *verySmall{};
     TTF_Font *title{};
+
+    //Augments
+    Augment damage1 = {"Damage 1", "Passive. Increase the damage of the weapon by 1.",AID::damage1,false,{true,true,true,true}};
+    Augment clipIncrease1 = {"Clip Increase 1", "Passive. Increase the amount of ammo that can be shot before reloading by 1.",AID::clipIncrease1,false,{true,true,true,true}};
 
 };
 
