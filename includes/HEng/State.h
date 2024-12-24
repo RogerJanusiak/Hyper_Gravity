@@ -52,7 +52,7 @@ struct GlobalGameState {
     bool toPauseMenu = false;
     bool inRun = false;
 
-    RunState currentRunState = RunState::inventoryScreen;
+    RunState currentRunState = RunState::inWave;
 
     int level = 0;
     bool controllerStickReset = false;

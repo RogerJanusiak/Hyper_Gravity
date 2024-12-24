@@ -30,10 +30,10 @@ RunController::RunController(GlobalGameState& ggs) : ggs(ggs) {
 
 	int spacing = (WINDOW_WIDTH-scaleUI(120*4))/5;
 	int height = (WINDOW_HEIGHT - scaleUI(120))/2;
-	int bt1 = inventoryMenu.addButton(spacing,height,"ui/upgrade-revolver.png",-1,-1,-1,-1, &upgrade,ggs, 2,Weapon_Type::revolver);
-	int bt2 = inventoryMenu.addButton(spacing*2 + scaleUI(120),height,"ui/upgrade-shotgun.png",-1,-1,bt1,-1, &upgrade,ggs, 2,Weapon_Type::shotgun);
-	int bt3 = inventoryMenu.addButton(spacing*3 + scaleUI(120*2),height,"ui/upgrade-rifle.png",-1,-1,bt2,-1, &upgrade,ggs, 2,Weapon_Type::rifle);
-	inventoryMenu.addButton(spacing*4 + scaleUI(120*3),height,"ui/upgrade-laser-pistol.png",-1,-1,bt3,-1, &upgrade,ggs, 2,Weapon_Type::laserPistol);
+	//int bt1 = inventoryMenu.addButton(spacing,height,"ui/upgrade-revolver.png",-1,-1,-1,-1, &upgrade,ggs, 2,Weapon_Type::revolver);
+	//int bt2 = inventoryMenu.addButton(spacing*2 + scaleUI(120),height,"ui/upgrade-shotgun.png",-1,-1,bt1,-1, &upgrade,ggs, 2,Weapon_Type::shotgun);
+	//int bt3 = inventoryMenu.addButton(spacing*3 + scaleUI(120*2),height,"ui/upgrade-rifle.png",-1,-1,bt2,-1, &upgrade,ggs, 2,Weapon_Type::rifle);
+	//inventoryMenu.addButton(spacing*4 + scaleUI(120*3),height,"ui/upgrade-laser-pistol.png",-1,-1,bt3,-1, &upgrade,ggs, 2,Weapon_Type::laserPistol);
 	inventoryMenu.addTitle((WINDOW_WIDTH-inventoryMenuTitle.getWidth())/2, scale(100), inventoryMenuTitle);
 }
 

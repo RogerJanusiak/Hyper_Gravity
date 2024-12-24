@@ -109,29 +109,29 @@ void quitToMenu(GlobalGameState& ggs, int attr1, int attr2) {
 }
 
 void MainMenu::initMenus() {
-    const int centeredX = (WINDOW_WIDTH-UI_Button::width)/2;
+    const int centeredX = (WINDOW_WIDTH-Button::width)/2;
 
     buttonSound.init("resources/sounds/buttonClick.wav", 0,-1);
 
     mainMenu.setup(ggs.renderer, &buttonSound);
-    const int arcadeModeButton = mainMenu.addButton(centeredX,scaleUI(215),"Arcade Mode",&ggs.white, ggs.buttonFont,-1,-1,-1,-1,&showLevelSelect,ggs);
-    const int settingsButton = mainMenu.addButton(centeredX,scaleUI(280),"Settings",&ggs.white, ggs.buttonFont,arcadeModeButton,-1,-1,-1, &noAction, ggs);
-    mainMenu.addButton(centeredX,scaleUI(345),"Quit To Desktop",&ggs.white, ggs.buttonFont,settingsButton,-1,-1,-1,&quitToDesktop,ggs);
+    const int arcadeModeButton = mainMenu.addButton(centeredX,scaleUI(215),"Arcade Mode",-1,-1,-1,-1,&showLevelSelect,ggs);
+    const int settingsButton = mainMenu.addButton(centeredX,scaleUI(280),"Settings",arcadeModeButton,-1,-1,-1, &noAction, ggs);
+    mainMenu.addButton(centeredX,scaleUI(345),"Quit To Desktop",settingsButton,-1,-1,-1,&quitToDesktop,ggs);
     logoTexture.setup(scaleUI(454),scaleUI(92),ggs.renderer);
     logoTexture.loadFromFile("logo.png");
     mainMenu.addTitle((WINDOW_WIDTH-scaleUI(454))/2,scaleUI(100), logoTexture);
 
     levelSelect.setup(ggs.renderer, &buttonSound);
-    const int level1Button = levelSelect.addButton(centeredX,scaleUI(225),"The Ducts",&ggs.white, ggs.buttonFont,-1,-1,-1,-1, &selectLevel, ggs,0,1);
-    const int level2Button = levelSelect.addButton(centeredX,scaleUI(290),"Air Port",&ggs.white, ggs.buttonFont,level1Button,-1,-1,-1, &selectLevel, ggs,0,2);
-    const int level3Button = levelSelect.addButton(centeredX,scaleUI(355),"Labratory",&ggs.white, ggs.buttonFont,level2Button,-1,-1,-1, &selectLevel, ggs,0,3);
-    levelSelect.addButton(centeredX,scaleUI(420),"Lobby",&ggs.white, ggs.buttonFont,level3Button,-1,-1,-1, &selectLevel, ggs,0,4);
+    const int level1Button = levelSelect.addButton(centeredX,scaleUI(225),"The Ducts",-1,-1,-1,-1, &selectLevel, ggs,1);
+    const int level2Button = levelSelect.addButton(centeredX,scaleUI(290),"Air Port",level1Button,-1,-1,-1, &selectLevel, ggs,2);
+    const int level3Button = levelSelect.addButton(centeredX,scaleUI(355),"Labratory",level2Button,-1,-1,-1, &selectLevel, ggs,3);
+    levelSelect.addButton(centeredX,scaleUI(420),"Lobby",level3Button,-1,-1,-1, &selectLevel, ggs,4);
     levelSelect.addTitle((WINDOW_WIDTH-scaleUI(454))/2,scaleUI(100), logoTexture);
 
     pauseMenu.setup(ggs.renderer, &buttonSound);
-    const int resumeButton = pauseMenu.addButton(centeredX,scaleUI(215),"Resume game",&ggs.white, ggs.buttonFont,-1,-1,-1,-1,&resumeGame,ggs);
-    const int quitToMenuButton = pauseMenu.addButton(centeredX,scaleUI(280),"Quit to Menu",&ggs.white, ggs.buttonFont,resumeButton,-1,-1,-1, &quitToMenu, ggs);
-    pauseMenu.addButton(centeredX,scaleUI(345),"Quit To Desktop",&ggs.white, ggs.buttonFont,quitToMenuButton,-1,-1,-1,&quitToDesktop,ggs);
+    const int resumeButton = pauseMenu.addButton(centeredX,scaleUI(215),"Resume game",-1,-1,-1,-1,&resumeGame,ggs);
+    const int quitToMenuButton = pauseMenu.addButton(centeredX,scaleUI(280),"Quit to Menu",resumeButton,-1,-1,-1, &quitToMenu, ggs);
+    pauseMenu.addButton(centeredX,scaleUI(345),"Quit To Desktop",quitToMenuButton,-1,-1,-1,&quitToDesktop,ggs);
     pauseMenu.addTitle((WINDOW_WIDTH-scaleUI(454))/2,scaleUI(100), logoTexture);
 
 }

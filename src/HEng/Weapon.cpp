@@ -4,8 +4,6 @@
 
 Weapon::Weapon(GlobalGameState& ggs, const Weapon_Type type, SDL_Renderer* renderer) : ggs(ggs), renderer(renderer), type(type) {
 
-  Augment test = {"Name", "Description", true};
-
   switch (type) {
       default: {
           texture.setup(scale(42),scale(21),renderer);
