@@ -31,7 +31,9 @@ enum class AID {
 struct Augment {
 
     std::string name;
-    std::string description;
+    std::string descriptionLine1;
+    std::string descriptionLine2;
+    std::string image;
     AID id;
 
     bool active;
@@ -78,9 +80,12 @@ struct GlobalGameState {
     TTF_Font *verySmall{};
     TTF_Font *title{};
 
+    TTF_Font *augTitle{};
+    TTF_Font *augDescription{};
+
     //Augments
-    Augment damage1 = {"Damage 1", "Passive. Increase the damage of the weapon by 1.",AID::damage1,false,{true,true,true,true}};
-    Augment clipIncrease1 = {"Clip Increase 1", "Passive. Increase the amount of ammo that can be shot before reloading by 1.",AID::clipIncrease1,false,{true,true,true,true}};
+    Augment damage1 = {"Damage 1", "Passive | All Weapons. Increase the ","damage of the weapon by 1.","Explosion-5.png",AID::damage1,false,{true,true,true,true}};
+    Augment clipIncrease1 = {"Clip Increase 1", "Passive | All Weapons. Increase the amount"," of ammo in clip by 1.","Timpy.png",AID::clipIncrease1,false,{true,true,true,true}};
 
 };
 

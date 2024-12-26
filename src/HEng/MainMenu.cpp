@@ -110,14 +110,14 @@ void quitToMenu(GlobalGameState& ggs, int attr1, int attr2) {
 }
 
 void MainMenu::initMenus() {
-    const int centeredX = (WINDOW_WIDTH-Button::getWidth())/2;
+    const int centeredX = (WINDOW_WIDTH-AugButton::getWidth())/2;
 
     buttonSound.init("resources/sounds/buttonClick.wav", 0,-1);
 
     mainMenu.setup(ggs.renderer, &buttonSound);
     const int arcadeModeButton = mainMenu.addButton(std::make_unique<AugButton>(ggs, centeredX,scaleUI(215), ggs.damage1, &showLevelSelect),-1,-1,-1,-1);
-    const int settingsButton = mainMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(280), "Settings", &noAction),arcadeModeButton,-1,-1,-1);
-    mainMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(345), "Quit To Desktop", &quitToDesktop),settingsButton,-1,-1,-1);
+    //const int settingsButton = mainMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(280), "Settings", &noAction),arcadeModeButton,-1,-1,-1);
+    //mainMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(345), "Quit To Desktop", &quitToDesktop),settingsButton,-1,-1,-1);
 
     logoTexture.setup(scaleUI(454),scaleUI(92),ggs.renderer);
     logoTexture.loadFromFile("logo.png");

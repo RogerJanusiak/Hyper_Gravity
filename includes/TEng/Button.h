@@ -29,10 +29,11 @@ enum class RELATIVE_DIRECTION {
 class Button {
 
 public:
+	virtual ~Button() = default;
 
 	Button(GlobalGameState& ggs, int x, int y, const std::string& text, void (*action)(GlobalGameState& ggs, int attr1, int attr2), int attr1 = 0, int attr2 = 0);
 
-	void render() const;
+	virtual void render() const;
 	[[nodiscard]] static int getWidth() { return width; }
 
 	[[nodiscard]] Button* move(MENU_CONTROL action) const;
@@ -47,6 +48,8 @@ public:
 	[[nodiscard]] bool isActive() const { return active; }
 
 	[[nodiscard]] bool isSelected() const {return selected;}
+
+	static int scaleButton(int x) { return scaleUI(x)*1.5; }
 
 	void click();
 
@@ -76,7 +79,6 @@ protected:
 	Texture hoverTexture;
 	Texture activeTexture;
 
-	Texture imageTexture;
 	Texture textTexture;
 
 	Sound buttonClick;
