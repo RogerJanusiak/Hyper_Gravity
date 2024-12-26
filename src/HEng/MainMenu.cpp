@@ -2,6 +2,7 @@
 
 #include "../../includes/HEng/MainMenu.h"
 #include "../../includes/Utils/Input.h"
+#include "../../includes/TEng/Buttons.h"
 
 MainMenu::MainMenu(GlobalGameState& ggs) : ggs(ggs) {
     initMenus();
@@ -109,29 +110,31 @@ void quitToMenu(GlobalGameState& ggs, int attr1, int attr2) {
 }
 
 void MainMenu::initMenus() {
-    const int centeredX = (WINDOW_WIDTH-Button::width)/2;
+    const int centeredX = (WINDOW_WIDTH-Button::getWidth())/2;
 
     buttonSound.init("resources/sounds/buttonClick.wav", 0,-1);
 
     mainMenu.setup(ggs.renderer, &buttonSound);
-    const int arcadeModeButton = mainMenu.addButton(centeredX,scaleUI(215),"Arcade Mode",-1,-1,-1,-1,&showLevelSelect,ggs);
-    const int settingsButton = mainMenu.addButton(centeredX,scaleUI(280),"Settings",arcadeModeButton,-1,-1,-1, &noAction, ggs);
-    mainMenu.addButton(centeredX,scaleUI(345),"Quit To Desktop",settingsButton,-1,-1,-1,&quitToDesktop,ggs);
+    const int arcadeModeButton = mainMenu.addButton(std::make_unique<AugButton>(ggs, centeredX,scaleUI(215), ggs.damage1, &showLevelSelect),-1,-1,-1,-1);
+    const int settingsButton = mainMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(280), "Settings", &noAction),arcadeModeButton,-1,-1,-1);
+    mainMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(345), "Quit To Desktop", &quitToDesktop),settingsButton,-1,-1,-1);
+
     logoTexture.setup(scaleUI(454),scaleUI(92),ggs.renderer);
     logoTexture.loadFromFile("logo.png");
     mainMenu.addTitle((WINDOW_WIDTH-scaleUI(454))/2,scaleUI(100), logoTexture);
 
     levelSelect.setup(ggs.renderer, &buttonSound);
-    const int level1Button = levelSelect.addButton(centeredX,scaleUI(225),"The Ducts",-1,-1,-1,-1, &selectLevel, ggs,1);
-    const int level2Button = levelSelect.addButton(centeredX,scaleUI(290),"Air Port",level1Button,-1,-1,-1, &selectLevel, ggs,2);
-    const int level3Button = levelSelect.addButton(centeredX,scaleUI(355),"Labratory",level2Button,-1,-1,-1, &selectLevel, ggs,3);
-    levelSelect.addButton(centeredX,scaleUI(420),"Lobby",level3Button,-1,-1,-1, &selectLevel, ggs,4);
+    const int level1Button = levelSelect.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(215), "The Ducts", &selectLevel,1),-1,-1,-1,-1);
+    const int level2Button = levelSelect.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(280), "Air Port", &selectLevel,2),level1Button,-1,-1,-1);
+    const int level3Button = levelSelect.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(345), "Labratory", &selectLevel,3),level2Button,-1,-1,-1);
+    levelSelect.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(410), "Lobby", &selectLevel,4),level3Button,-1,-1,-1);
     levelSelect.addTitle((WINDOW_WIDTH-scaleUI(454))/2,scaleUI(100), logoTexture);
 
     pauseMenu.setup(ggs.renderer, &buttonSound);
-    const int resumeButton = pauseMenu.addButton(centeredX,scaleUI(215),"Resume game",-1,-1,-1,-1,&resumeGame,ggs);
-    const int quitToMenuButton = pauseMenu.addButton(centeredX,scaleUI(280),"Quit to Menu",resumeButton,-1,-1,-1, &quitToMenu, ggs);
-    pauseMenu.addButton(centeredX,scaleUI(345),"Quit To Desktop",quitToMenuButton,-1,-1,-1,&quitToDesktop,ggs);
+
+    const int resumeButton = pauseMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(215), "Resume Game", &resumeGame),-1,-1,-1,-1);
+    const int quitToMenuButton = pauseMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(280), "Quit To Menu", &quitToMenu),resumeButton,-1,-1,-1);
+    pauseMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(345), "Quit To Desktop", &quitToDesktop),quitToMenuButton,-1,-1,-1);
     pauseMenu.addTitle((WINDOW_WIDTH-scaleUI(454))/2,scaleUI(100), logoTexture);
 
 }

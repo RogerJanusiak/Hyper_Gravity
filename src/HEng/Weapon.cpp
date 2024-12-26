@@ -72,7 +72,8 @@ Weapon::Weapon(GlobalGameState& ggs, const Weapon_Type type, SDL_Renderer* rende
           reloadSpeed = 2;
           bulletDurability = 1;
           bulletStrength = 1;
-          bulletDamage = 3;
+          bulletDamage = 1;
+          bulletsPerShot = 3;
 
           //TODO: Add unique sounds
           fireSound.init("resources/sounds/revolver-shoot.wav",0,-1);

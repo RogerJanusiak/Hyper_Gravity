@@ -12,23 +12,23 @@ void mouseMove(const GlobalGameState& ggs, UI_Menu& currentMenu) {
         }
     }
 
-    std::vector<Button>* menuButtons = currentMenu.getButtons();
+    std::vector<std::unique_ptr<Button>>* menuButtons = currentMenu.getButtons();
     for(auto & menuButton : *menuButtons) {
-        if(menuButton.mouseEvent(x,y)) {
+        if(menuButton->mouseEvent(x,y)) {
             if(currentMenu.currentButton != nullptr) {
                 currentMenu.currentButton->deselect();
             }
-            currentMenu.currentButton = &menuButton;
+            currentMenu.currentButton = menuButton.get();
             currentMenu.currentButton->select();
         }
     }
 }
 
 void menuSelect(UI_Menu& currentMenu) {
-    std::vector<Button>* menuButtons = currentMenu.getButtons();
+    std::vector<std::unique_ptr<Button>>* menuButtons = currentMenu.getButtons();
     for(auto & menuButton : *menuButtons) {
-        if(menuButton.isSelected()) {
-            menuButton.click();
+        if(menuButton->isSelected()) {
+            menuButton->click();
         }
     }
 }

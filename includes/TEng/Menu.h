@@ -14,9 +14,7 @@ public:
 
   explicit UI_Menu(const int numberOfButtons) { buttons.reserve(numberOfButtons); };
 
-  int addButton(int x, int y, const std::string& text,
-    int above, int below, int left, int right, void (*action)(GlobalGameState& state, int attr1, int attr2),GlobalGameState& state, int attribute = 0,int attribute2 = 0);
-
+  int addButton(std::unique_ptr<Button> button, int above, int below, int left, int right);
   void reset() { buttons.clear(); };
 
   void loadMenu();
@@ -27,7 +25,7 @@ public:
 
   void render() const;
 
-  std::vector<Button>* getButtons() { return &buttons; }
+  std::vector<std::unique_ptr<Button>>* getButtons() { return &buttons; }
 
   //TODO: Make functions surrounding this!
   Button* currentButton = nullptr;
@@ -42,7 +40,7 @@ private:
   SDL_Renderer* renderer = nullptr;
   Texture titleTexture;
   int titleX = 0,titleY = 0;
-  std::vector<Button> buttons;
+  std::vector<std::unique_ptr<Button>> buttons;
 
 };
 
