@@ -1,6 +1,7 @@
 #ifndef RUNCONTROLLER_H
 #define RUNCONTROLLER_H
 #include "Run.h"
+#include "RunMenu.h"
 #include "State.h"
 #include "WaveController.h"
 #include "../TEng/Menu.h"
@@ -33,13 +34,7 @@ private:
 	Texture continueText;
 	Texture grave;
 
-	Sound buttonSound;
-
-	UI_Menu inventoryMenu = UI_Menu(4);
-
-	Texture inventoryMenuTitle;
-
-	UI_Menu* currentMenu = nullptr;
+	RunMenu runMenu = RunMenu(ggs);
 
 };
 

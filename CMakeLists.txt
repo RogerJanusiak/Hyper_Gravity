@@ -130,7 +130,9 @@ if(APPLE)
             includes/TEng/Button.h
             src/TEng/Button.cpp
             includes/TEng/Buttons.h
-            src/TEng/Buttons.cpp)
+            src/TEng/Buttons.cpp
+            src/HEng/RunMenu.cpp
+            includes/HEng/RunMenu.h)
 
     Message("")
     Message( STATUS "SOURCE entry point : " ${SOURCE_FILES} )

@@ -9,7 +9,7 @@
 enum class RunState {
     inWave,
     deathScreen,
-    inventoryScreen,
+    inMenu
 };
 
 enum Menu {

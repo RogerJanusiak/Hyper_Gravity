@@ -60,7 +60,7 @@ protected:
 	int x, y;
 
 	static constexpr int width = 160*1.5*UI_SCALE_FACTOR;
-	static constexpr int h = 32*1.5*UI_SCALE_FACTOR;
+	static constexpr int height = 32*1.5*UI_SCALE_FACTOR;
 
 	int attribute;
 	int attribute2;

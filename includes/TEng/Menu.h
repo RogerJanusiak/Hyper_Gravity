@@ -19,7 +19,7 @@ public:
 
   void loadMenu();
 
-  void setup(SDL_Renderer* _renderer, Sound* _buttonSound) { renderer = _renderer;buttonSound = _buttonSound; }
+  void setup(SDL_Renderer* _renderer) { renderer = _renderer; }
 
   void addTitle(const int x, const int y, const Texture & texture) { titleX = x, titleY = y, titleTexture = texture; }
 
@@ -34,8 +34,6 @@ private:
 
   TTF_Font* font = nullptr;
   SDL_Color* color = nullptr;
-
-  Sound* buttonSound;
 
   SDL_Renderer* renderer = nullptr;
   Texture titleTexture;

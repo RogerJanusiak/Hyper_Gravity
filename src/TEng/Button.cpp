@@ -6,17 +6,17 @@ x(x), y(y), attribute(attr1), attribute2(attr2), state(ggs), action(action) {
     textTexture.setup(0,0,ggs.renderer);
     textTexture.loadFromRenderedText(text, ggs.white, ggs.buttonFont);
 
-    texture.setup(width,h,ggs.renderer);
+    texture.setup(width,height,ggs.renderer);
     texture.loadFromFile("button.png");
 
-    hoverTexture.setup(width,h,ggs.renderer);
+    hoverTexture.setup(width,height,ggs.renderer);
     hoverTexture.loadFromFile("button1.png");
 
     buttonClick.init("resources/sounds/buttonClick.wav",0,-1);
 }
 
 bool Button::mouseEvent(const int mouseX, const int mouseY) const {
-    if(mouseX >= x && mouseX <= x+width && mouseY >= y && mouseY <= y+h) {
+    if(mouseX >= x && mouseX <= x+width && mouseY >= y && mouseY <= y+height) {
         return true;
     }
     return false;
@@ -30,7 +30,7 @@ void Button::render() const {
     if(selected) {
         hoverTexture.render(x,y);
     }
-    textTexture.render(x+(width-textTexture.getWidth())/2,y+(h-textTexture.getHeight())/2);
+    textTexture.render(x+(width-textTexture.getWidth())/2,y+(height-textTexture.getHeight())/2);
 }
 
 Button* Button::move(const MENU_CONTROL action) const {

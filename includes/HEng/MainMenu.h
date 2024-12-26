@@ -20,7 +20,6 @@ private:
 
 	GlobalGameState& ggs;
 
-	Sound buttonSound;
 	Texture logoTexture;
 
 	UI_Menu mainMenu = UI_Menu(3);
