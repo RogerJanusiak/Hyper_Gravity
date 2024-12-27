@@ -10,6 +10,8 @@ public:
 	void render() const override;
 	static int getWidth() { return width; }
 
+	[[nodiscard]] int getHeight() const override { return height; }
+
 private:
 
 	static constexpr int width = 200*1.5*UI_SCALE_FACTOR;
@@ -31,9 +33,7 @@ public:
 	void render() const override;
 	static int getWidth() { return width; }
 
-	static constexpr int width = 120*UI_SCALE_FACTOR;
-	// TODO: The height is not reconized by the mouse event function
-	static constexpr int height = 120*UI_SCALE_FACTOR;
+	int getHeight() const override { return height; }
 
 private:
 
@@ -41,6 +41,9 @@ private:
 	Texture texture;
 	Texture hoverTexture;
 	Texture activeTexture;
+
+	static constexpr int width = 120*UI_SCALE_FACTOR;
+	static constexpr int height = 120*UI_SCALE_FACTOR;
 
 };
 

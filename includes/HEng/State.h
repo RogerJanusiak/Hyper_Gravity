@@ -85,7 +85,7 @@ struct GlobalGameState {
 
     //Augments
     Augment damage1 = {"Damage 1", "Passive | All Weapons. Increase the ","damage of the weapon by 1.","Explosion-5.png",AID::damage1,false,{true,true,true,true}};
-    Augment clipIncrease1 = {"Clip Increase 1", "Passive | All Weapons. Increase the amount"," of ammo in clip by 1.","Timpy.png",AID::clipIncrease1,false,{true,true,true,true}};
+    Augment clipIncrease1 = {"Clip Increase 1", "Passive | All Weapons. Increase the","amount of ammo in clip by 1.","Timpy.png",AID::clipIncrease1,false,{true,true,true,true}};
 
 };
 

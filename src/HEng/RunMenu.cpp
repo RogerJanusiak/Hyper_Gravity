@@ -11,16 +11,19 @@ RunMenu::RunMenu(GlobalGameState& ggs) : ggs(ggs) {
 	inventoryMenu.setup(ggs.renderer);
 
 	inventoryMenuTitle.setup(ggs.renderer);
-	inventoryMenuTitle.loadFromRenderedText("Choose Weapon to Upgrade",ggs.white,ggs.title);
+	inventoryMenuTitle.loadFromRenderedText("Remove/Move Augments",ggs.white,ggs.title);
 
 	int spacing = (WINDOW_WIDTH-scaleUI(120*4))/5;
-	int height = (WINDOW_HEIGHT - scaleUI(120))/2;
+	int height = scaleUI(40)*2+inventoryMenuTitle.getHeight();
 	int bt1 = inventoryMenu.addButton(std::make_unique<InventoryButton>(ggs,spacing,height,"ui/upgrade-revolver.png", &upgrade, Weapon_Type::revolver),-1,-1,-1,-1);
 	int bt2 = inventoryMenu.addButton(std::make_unique<InventoryButton>(ggs,spacing*2 + scaleUI(120),height,"ui/upgrade-shotgun.png", &upgrade, Weapon_Type::shotgun),-1,-1,bt1,-1);
 	int bt3 = inventoryMenu.addButton(std::make_unique<InventoryButton>(ggs,spacing*3 + scaleUI(120*2),height,"ui/upgrade-rifle.png", &upgrade, Weapon_Type::rifle),-1,-1,bt2,-1);
 	inventoryMenu.addButton(std::make_unique<InventoryButton>(ggs,spacing*4 + scaleUI(120*3),height,"ui/upgrade-laser-pistol.png", &upgrade, Weapon_Type::laserPistol),-1,-1,bt3,-1);
 
-	inventoryMenu.addTitle((WINDOW_WIDTH-inventoryMenuTitle.getWidth())/2, scale(100), inventoryMenuTitle);
+	int revolverAug1 = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,spacing,height+scaleUI(160),ggs.damage1, &upgrade), bt1, -1,-1,-1);
+	inventoryMenu.addButton(std::make_unique<AugButton>(ggs,spacing,height+scaleUI(160+64+40),ggs.clipIncrease1, &upgrade), revolverAug1, -1,-1,-1);
+
+	inventoryMenu.addTitle((WINDOW_WIDTH-inventoryMenuTitle.getWidth())/2, scaleUI(40), inventoryMenuTitle);
 }
 
 void RunMenu::render() {

@@ -6,22 +6,17 @@
 #include "WaveController.h"
 #include "../TEng/Menu.h"
 
-
 class RunController {
 
 public:
 
 	explicit RunController(GlobalGameState& ggs);
-
 	void run();
-
 
 private:
 
 	void renderDeathScreen() const;
-	void renderInventoryScreen();
 	void readInput();
-	void loadUpdateScreen();
 
 	GlobalGameState& ggs;
 
@@ -37,7 +32,5 @@ private:
 	RunMenu runMenu = RunMenu(ggs);
 
 };
-
-
 
 #endif //RUNCONTROLLER_H

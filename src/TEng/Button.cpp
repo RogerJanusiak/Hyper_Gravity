@@ -16,7 +16,7 @@ x(x), y(y), attribute(attr1), attribute2(attr2), state(ggs), action(action) {
 }
 
 bool Button::mouseEvent(const int mouseX, const int mouseY) const {
-    if(mouseX >= x && mouseX <= x+width && mouseY >= y && mouseY <= y+height) {
+    if(mouseX >= x && mouseX <= x+width && mouseY >= y && mouseY <= y+getHeight()) {
         return true;
     }
     return false;

@@ -35,6 +35,7 @@ public:
 
 	virtual void render() const;
 	[[nodiscard]] static int getWidth() { return width; }
+	[[nodiscard]] virtual int getHeight() const { return height; }
 
 	[[nodiscard]] Button* move(MENU_CONTROL action) const;
 	void linkButtons(Button* above, Button* below,Button* left, Button* right) { buttonAbove = above; buttonBelow = below; buttonLeft = left; buttonRight = right; }
@@ -58,9 +59,6 @@ public:
 protected:
 
 	int x, y;
-
-	static constexpr int width = 160*1.5*UI_SCALE_FACTOR;
-	static constexpr int height = 32*1.5*UI_SCALE_FACTOR;
 
 	int attribute;
 	int attribute2;
@@ -87,6 +85,12 @@ protected:
 	bool secondaryImage = false;
 
 	bool active = false;
+
+private:
+
+	static constexpr int width = 160*1.5*UI_SCALE_FACTOR;
+	static constexpr int height = 32*1.5*UI_SCALE_FACTOR;
+
 };
 
 #endif //BUTTON_H
