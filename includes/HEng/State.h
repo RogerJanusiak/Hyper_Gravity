@@ -68,6 +68,9 @@ struct GlobalGameState {
 
     bool updateText = false;
 
+    bool weaponSelected = false;
+    int selectedWeapon = 0;
+
     //Developer Options
     bool developerMode = false;
     bool pauseEnemies = false;

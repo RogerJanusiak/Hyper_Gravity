@@ -35,6 +35,7 @@ void RunController::run() {
 		} break;
 		case RunState::inMenu: {
 			runMenu.readInput();
+			runMenu.run();
 			runMenu.render();
 		} break;
 	}

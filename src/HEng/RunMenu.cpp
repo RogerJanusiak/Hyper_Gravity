@@ -3,27 +3,45 @@
 #include "../../includes/TEng/Buttons.h"
 #include "../../includes/Utils/Input.h"
 
-void upgrade(GlobalGameState& ggs, int attr1, int attr2) {
-
+void selectWeapon(GlobalGameState& ggs, int attr1, int attr2) {
+	ggs.weaponSelected = true;
+	ggs.selectedWeapon = attr1;
 }
 
 RunMenu::RunMenu(GlobalGameState& ggs) : ggs(ggs) {
-	inventoryMenu.setup(ggs.renderer);
 
+	inventoryMenu.setup(ggs.renderer);
 	inventoryMenuTitle.setup(ggs.renderer);
 	inventoryMenuTitle.loadFromRenderedText("Remove/Move Augments",ggs.white,ggs.title);
-
-	int spacing = (WINDOW_WIDTH-scaleUI(120*4))/5;
-	int height = scaleUI(40)*2+inventoryMenuTitle.getHeight();
-	int bt1 = inventoryMenu.addButton(std::make_unique<InventoryButton>(ggs,spacing,height,"ui/upgrade-revolver.png", &upgrade, Weapon_Type::revolver),-1,-1,-1,-1);
-	int bt2 = inventoryMenu.addButton(std::make_unique<InventoryButton>(ggs,spacing*2 + scaleUI(120),height,"ui/upgrade-shotgun.png", &upgrade, Weapon_Type::shotgun),-1,-1,bt1,-1);
-	int bt3 = inventoryMenu.addButton(std::make_unique<InventoryButton>(ggs,spacing*3 + scaleUI(120*2),height,"ui/upgrade-rifle.png", &upgrade, Weapon_Type::rifle),-1,-1,bt2,-1);
-	inventoryMenu.addButton(std::make_unique<InventoryButton>(ggs,spacing*4 + scaleUI(120*3),height,"ui/upgrade-laser-pistol.png", &upgrade, Weapon_Type::laserPistol),-1,-1,bt3,-1);
-
-	int revolverAug1 = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,spacing,height+scaleUI(160), &upgrade), bt1, -1,-1,-1);
-	inventoryMenu.addButton(std::make_unique<AugButton>(ggs,spacing,height+scaleUI(160+64+40),ggs.clipIncrease1, &upgrade), revolverAug1, -1,-1,-1);
-
 	inventoryMenu.addTitle((WINDOW_WIDTH-inventoryMenuTitle.getWidth())/2, scaleUI(40), inventoryMenuTitle);
+
+	spacing = (WINDOW_WIDTH-scaleUI(120*4))/5;
+	height = scaleUI(40)*2+inventoryMenuTitle.getHeight();
+
+	initBaseInventoryMenu();
+
+}
+
+void RunMenu::run() {
+	if(ggs.weaponSelected) {
+		ggs.weaponSelected = false;
+		currentMenu->reset();
+		initBaseInventoryMenu();
+		switch (ggs.selectedWeapon) {
+		default:
+			loadWeaponAugments(revolver);
+			break;
+		case rifle:
+			loadWeaponAugments(rifle);
+			break;
+		case shotgun:
+			loadWeaponAugments(shotgun);
+			break;
+		case laserPistol:
+			loadWeaponAugments(laserPistol);
+			break;
+		}
+	}
 }
 
 void RunMenu::render() {
@@ -126,5 +144,35 @@ void RunMenu::readInput() {
         }
     }
 }
+
+void RunMenu::initBaseInventoryMenu() {
+	bt1 = inventoryMenu.addButton(std::make_unique<InventoryButton>(ggs,spacing,height,"ui/upgrade-revolver.png", &selectWeapon, Weapon_Type::revolver),-1,-1,-1,-1);
+	bt2 = inventoryMenu.addButton(std::make_unique<InventoryButton>(ggs,spacing*2 + scaleUI(120),height,"ui/upgrade-shotgun.png", &selectWeapon, Weapon_Type::shotgun),-1,-1,bt1,-1);
+	bt3 = inventoryMenu.addButton(std::make_unique<InventoryButton>(ggs,spacing*3 + scaleUI(120*2),height,"ui/upgrade-rifle.png", &selectWeapon, Weapon_Type::rifle),-1,-1,bt2,-1);
+	bt4 = inventoryMenu.addButton(std::make_unique<InventoryButton>(ggs,spacing*4 + scaleUI(120*3),height,"ui/upgrade-laser-pistol.png", &selectWeapon, Weapon_Type::laserPistol),-1,-1,bt3,-1);
+}
+
+
+void RunMenu::loadWeaponAugments(Weapon_Type weapon) {
+	switch (weapon) {
+		case shotgun: {
+			int shotgunAug1 = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,spacing*2+scaleUI(120+60)-AugButton::getStaticWidth()/2,height+scaleUI(160), &selectWeapon), bt2, -1,-1,-1);
+			inventoryMenu.addButton(std::make_unique<AugButton>(ggs,spacing*2+scaleUI(120+60)-AugButton::getStaticWidth()/2,height+scaleUI(160+64+40),ggs.clipIncrease1, &selectWeapon), shotgunAug1, -1,-1,-1);
+		} break;
+		case rifle: {
+			int rifleAug1 = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,spacing*3+scaleUI(120*2+60)-AugButton::getStaticWidth()/2,height+scaleUI(160), &selectWeapon), bt3, -1,-1,-1);
+			inventoryMenu.addButton(std::make_unique<AugButton>(ggs,spacing*3+scaleUI(120*2+60)-AugButton::getStaticWidth()/2,height+scaleUI(160+64+40),ggs.clipIncrease1, &selectWeapon), rifleAug1, -1,-1,-1);
+		} break;
+		case laserPistol: {
+			int laserPistolAug1 = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,spacing*4+scaleUI(120*4)-AugButton::getStaticWidth(),height+scaleUI(160), &selectWeapon), bt4, -1,-1,-1);
+			inventoryMenu.addButton(std::make_unique<AugButton>(ggs,spacing*4+scaleUI(120*4)-AugButton::getStaticWidth(),height+scaleUI(160+64+40),ggs.clipIncrease1, &selectWeapon), laserPistolAug1, -1,-1,-1);
+		} break;
+		default: {
+			int revolverAug1 = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,spacing,height+scaleUI(160), &selectWeapon), bt1, -1,-1,-1);
+			inventoryMenu.addButton(std::make_unique<AugButton>(ggs,spacing,height+scaleUI(160+64+40),ggs.clipIncrease1, &selectWeapon), revolverAug1, -1,-1,-1);
+		} break;
+	}
+}
+
 
 

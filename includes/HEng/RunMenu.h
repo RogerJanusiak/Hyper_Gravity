@@ -1,6 +1,7 @@
 #ifndef RUNMENU_H
 #define RUNMENU_H
 
+#include "Weapon.h"
 #include "../../includes/TEng/Menu.h"
 #include "../../includes/TEng/Texture.h"
 
@@ -18,9 +19,12 @@ public:
 	explicit RunMenu(GlobalGameState& ggs);
 
 	void render();
+	void run();
 	void changeMenu(RunMenus menu);
 
 	void readInput();
+
+	void loadWeaponAugments(Weapon_Type weapon);
 
 private:
 
@@ -30,7 +34,13 @@ private:
 	Texture inventoryMenuTitle;
 
 	UI_Menu* currentMenu = nullptr;
-	RunMenus currentMenuState;
+	RunMenus currentMenuState = RunMenus::inventory;
+
+	void initBaseInventoryMenu();
+
+	int height = 0;
+	int spacing = 0;
+	int bt1 = 0, bt2 = 0, bt3 = 0, bt4 = 0;
 
 };
 
