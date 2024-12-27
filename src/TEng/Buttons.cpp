@@ -1,7 +1,7 @@
 #include "../../includes/TEng/Buttons.h"
 
-AugButton::AugButton(GlobalGameState& ggs, int x, int y, const Augment& augment, void (*action)(GlobalGameState& ggs, int attr1, int attr2), int attr1, int attr2) :
-Button(ggs, x, y, augment.name, action, attr1, attr2) {
+AugButton::AugButton(GlobalGameState& ggs, int x, int y, const Augment* augment, void (*action)(GlobalGameState& ggs, int attr1, int attr2), int attr1, int attr2) :
+Button(ggs, x, y, augment->name, action, attr1, attr2) {
 
 	texture.setup(width,height,ggs.renderer);
 	texture.loadFromFile("ui/aug-button.png");
@@ -10,16 +10,16 @@ Button(ggs, x, y, augment.name, action, attr1, attr2) {
 	hoverTexture.loadFromFile("ui/aug-button-selected.png");
 
 	imageTexture.setup(scaleUI(32)*1.5,scaleUI(32)*1.5,ggs.renderer);
-	imageTexture.loadFromFile(augment.image);
+	imageTexture.loadFromFile(augment->image);
 
 	titleTexture.setup(ggs.renderer);
-	titleTexture.loadFromRenderedText(augment.name,ggs.white, ggs.augTitle);
+	titleTexture.loadFromRenderedText(augment->name,ggs.white, ggs.augTitle);
 
 	descriptionLine1.setup(ggs.renderer);
-	descriptionLine1.loadFromRenderedText(augment.descriptionLine1,ggs.white, ggs.augDescription);
+	descriptionLine1.loadFromRenderedText(augment->descriptionLine1,ggs.white, ggs.augDescription);
 
 	descriptionLine2.setup(ggs.renderer);
-	descriptionLine2.loadFromRenderedText(augment.descriptionLine2,ggs.white, ggs.augDescription);
+	descriptionLine2.loadFromRenderedText(augment->descriptionLine2,ggs.white, ggs.augDescription);
 
 }
 

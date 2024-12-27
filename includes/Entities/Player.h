@@ -67,16 +67,16 @@ public:
 
     int abilitiesKills = 0;
 
+    Weapon revolver;
+    Weapon rifle;
+    Weapon shotgun;
+    Weapon laserPistol;
+
 private:
     const int playerWidth = scale(50);
     const int playerHeight = scale(60);
 
     GlobalGameState& ggs;
-
-    Weapon revolver;
-    Weapon rifle;
-    Weapon shotgun;
-    Weapon laserPistol;
 
     bool playerDirection = false;
 

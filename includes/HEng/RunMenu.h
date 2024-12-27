@@ -4,6 +4,7 @@
 #include "Weapon.h"
 #include "../../includes/TEng/Menu.h"
 #include "../../includes/TEng/Texture.h"
+#include "../../includes/Entities/Player.h"
 
 enum class RunMenus {
 	pause,
@@ -16,7 +17,7 @@ class RunMenu {
 
 public:
 
-	explicit RunMenu(GlobalGameState& ggs);
+	explicit RunMenu(GlobalGameState& ggs, Player& player);
 
 	void render();
 	void run();
@@ -29,6 +30,7 @@ public:
 private:
 
 	GlobalGameState& ggs;
+	Player& player;
 
 	UI_Menu inventoryMenu = UI_Menu(4);
 	Texture inventoryMenuTitle;

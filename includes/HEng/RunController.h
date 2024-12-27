@@ -29,7 +29,7 @@ private:
 	Texture continueText;
 	Texture grave;
 
-	RunMenu runMenu = RunMenu(ggs);
+	std::unique_ptr<RunMenu> runMenu;
 
 };
 

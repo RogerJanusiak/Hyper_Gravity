@@ -19,7 +19,8 @@ RunController::RunController(GlobalGameState& ggs) : ggs(ggs) {
 	grave.loadFromFile("gravestone.png");
 
 	ggs.currentRunState = RunState::inMenu;
-	runMenu.changeMenu(RunMenus::inventory);
+	runMenu = std::make_unique<RunMenu>(ggs, currentRun->getPlayer());
+	runMenu->changeMenu(RunMenus::inventory);
 
 }
 
@@ -34,9 +35,9 @@ void RunController::run() {
 			waveController->operate();
 		} break;
 		case RunState::inMenu: {
-			runMenu.readInput();
-			runMenu.run();
-			runMenu.render();
+			runMenu->readInput();
+			runMenu->run();
+			runMenu->render();
 		} break;
 	}
 }

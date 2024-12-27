@@ -34,6 +34,9 @@ public:
   [[nodiscard]] int getDamage() const { return bulletDamage; }
   [[nodiscard]] int getReloadSpeed() const { return reloadSpeed; }
 
+  [[nodiscard]] Augment* getPrimaryAugment() const { return primaryAugment; }
+  [[nodiscard]] Augment* getSecondaryAugment() const { return secondaryAugment; }
+
   void reset();
 
 private:
@@ -72,6 +75,9 @@ private:
   bool reloaded = true;
   bool justReloaded = false;
   float timeSinceShot = 0;
+
+  Augment* primaryAugment = nullptr;
+  Augment* secondaryAugment = &ggs.damage1;
 
 };
 
