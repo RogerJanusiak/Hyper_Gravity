@@ -7,9 +7,12 @@ class AugButton : public Button {
 public:
 
 	AugButton(GlobalGameState& ggs, int x, int y, const Augment& augment, void (*action)(GlobalGameState& ggs, int attr1, int attr2), int attr1 = 0, int attr2 = 0);
-	void render() const override;
-	static int getWidth() { return width; }
+	AugButton(GlobalGameState& ggs, int x, int y, void (*action)(GlobalGameState& ggs, int attr1, int attr2), int attr1 = 0, int attr2 = 0);
 
+	void render() const override;
+
+	[[nodiscard]] static int getStaticWidth() { return width; }
+	[[nodiscard]] int getWidth() const override { return width; }
 	[[nodiscard]] int getHeight() const override { return height; }
 
 private:
@@ -18,11 +21,14 @@ private:
 	static constexpr int height = 48*1.5*UI_SCALE_FACTOR;
 
 	Texture texture;
+	Texture hoverTexture;
 
 	Texture imageTexture;
 	Texture titleTexture;
 	Texture descriptionLine1;
 	Texture descriptionLine2;
+
+	bool isBlank = false;
 
 };
 
@@ -31,7 +37,9 @@ public:
 
 	InventoryButton(GlobalGameState& ggs, int x, int y, std::string path, void (*action)(GlobalGameState& ggs, int attr1, int attr2), int attr1 = 0, int attr2 = 0);
 	void render() const override;
-	static int getWidth() { return width; }
+	static int getStaticWidth() { return width; }
+
+	[[nodiscard]] int getWidth() const override { return width; }
 
 	int getHeight() const override { return height; }
 

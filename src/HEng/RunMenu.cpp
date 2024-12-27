@@ -20,7 +20,7 @@ RunMenu::RunMenu(GlobalGameState& ggs) : ggs(ggs) {
 	int bt3 = inventoryMenu.addButton(std::make_unique<InventoryButton>(ggs,spacing*3 + scaleUI(120*2),height,"ui/upgrade-rifle.png", &upgrade, Weapon_Type::rifle),-1,-1,bt2,-1);
 	inventoryMenu.addButton(std::make_unique<InventoryButton>(ggs,spacing*4 + scaleUI(120*3),height,"ui/upgrade-laser-pistol.png", &upgrade, Weapon_Type::laserPistol),-1,-1,bt3,-1);
 
-	int revolverAug1 = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,spacing,height+scaleUI(160),ggs.damage1, &upgrade), bt1, -1,-1,-1);
+	int revolverAug1 = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,spacing,height+scaleUI(160), &upgrade), bt1, -1,-1,-1);
 	inventoryMenu.addButton(std::make_unique<AugButton>(ggs,spacing,height+scaleUI(160+64+40),ggs.clipIncrease1, &upgrade), revolverAug1, -1,-1,-1);
 
 	inventoryMenu.addTitle((WINDOW_WIDTH-inventoryMenuTitle.getWidth())/2, scaleUI(40), inventoryMenuTitle);

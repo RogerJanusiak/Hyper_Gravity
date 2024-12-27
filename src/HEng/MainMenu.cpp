@@ -109,7 +109,7 @@ void quitToMenu(GlobalGameState& ggs, int attr1, int attr2) {
 }
 
 void MainMenu::initMenus() {
-    const int centeredX = (WINDOW_WIDTH-Button::getWidth())/2;
+    const int centeredX = (WINDOW_WIDTH-Button::getStaticWidth())/2;
 
     mainMenu.setup(ggs.renderer);
     const int arcadeModeButton = mainMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(215), "Arcade Mode", &showLevelSelect),-1,-1,-1,-1);

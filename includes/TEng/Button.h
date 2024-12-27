@@ -34,7 +34,8 @@ public:
 	Button(GlobalGameState& ggs, int x, int y, const std::string& text, void (*action)(GlobalGameState& ggs, int attr1, int attr2), int attr1 = 0, int attr2 = 0);
 
 	virtual void render() const;
-	[[nodiscard]] static int getWidth() { return width; }
+	[[nodiscard]] static int getStaticWidth() { return width; }
+	[[nodiscard]] virtual int getWidth() const { return width; }
 	[[nodiscard]] virtual int getHeight() const { return height; }
 
 	[[nodiscard]] Button* move(MENU_CONTROL action) const;
