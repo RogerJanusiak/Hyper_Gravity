@@ -37,6 +37,16 @@ public:
   [[nodiscard]] Augment* getPrimaryAugment() const { return primaryAugment; }
   [[nodiscard]] Augment* getSecondaryAugment() const { return secondaryAugment; }
 
+  void removePrimaryAugment() {
+    primaryAugment = nullptr;
+    if(secondaryAugment != nullptr) {
+      primaryAugment = secondaryAugment;
+      secondaryAugment = nullptr;
+    }
+  }
+
+  void removeSecondaryAugment() { secondaryAugment = nullptr; }
+
   void reset();
 
 private:
@@ -76,7 +86,7 @@ private:
   bool justReloaded = false;
   float timeSinceShot = 0;
 
-  Augment* primaryAugment = nullptr;
+  Augment* primaryAugment = &ggs.clipIncrease1;
   Augment* secondaryAugment = &ggs.damage1;
 
 };

@@ -18,7 +18,7 @@ RunController::RunController(GlobalGameState& ggs) : ggs(ggs) {
 	grave.setup(scale(64*2.5), scale(72*2.5), ggs.renderer);
 	grave.loadFromFile("gravestone.png");
 
-	ggs.currentRunState = RunState::inMenu;
+	ggs.currentRunState = RunState::inWave;
 	runMenu = std::make_unique<RunMenu>(ggs, currentRun->getPlayer());
 	runMenu->changeMenu(RunMenus::inventory);
 
@@ -33,6 +33,7 @@ void RunController::run() {
 		case RunState::inWave: {
 			waveController->readInput();
 			waveController->operate();
+			//readInput();
 		} break;
 		case RunState::inMenu: {
 			runMenu->readInput();
@@ -46,10 +47,11 @@ void RunController::readInput() {
 	SDL_Event e;
 
 	while(SDL_PollEvent(&e) != 0) {
+
         if( e.type == SDL_QUIT ) {
             ggs.quit = true;
         } else if( e.type == SDL_KEYDOWN ) {
-        	if(e.key.keysym.sym == SDLK_SPACE) {
+        	if(e.key.keysym.sym == SDLK_SPACE && ggs.currentRunState == RunState::deathScreen) {
         		ggs.currentRunState = RunState::inWave;
         		ggs.inRun = false;
         	}
