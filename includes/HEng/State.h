@@ -75,19 +75,12 @@ struct GlobalGameState {
 
     bool updateText = false;
 
-    bool weaponSelected = false;
-    int selectedWeapon = 0;
+    int weaponChanged = 0;
+    int slotChanged = 0;
 
     bool augmentRemoved = false;
-    int removedAugment = 0;
-
-    bool addedAugment = false;
-    int slotAdded = 0;
 
     Augment* newAugment = nullptr;
-
-    bool moveAugment = false;
-    Augment* augmentToMove = nullptr;
 
     //Developer Options
     bool developerMode = false;

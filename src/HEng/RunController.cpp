@@ -20,7 +20,7 @@ RunController::RunController(GlobalGameState& ggs) : ggs(ggs) {
 
 	ggs.currentRunState = RunState::inMenu;
 	runMenu = std::make_unique<RunMenu>(ggs, currentRun->getPlayer());
-	runMenu->changeMenu(RunMenus::newAugment);
+	runMenu->changeMenu(RunMenus::inventory);
 
 }
 
@@ -29,8 +29,6 @@ void RunController::run() {
 		waveController->setAugmentBeenFound();
 		ggs.currentRunState = RunState::inMenu;
 		selectAugmentFound();
-		runMenu->initNewAugmentMenu();
-		runMenu->changeMenu(RunMenus::newAugment);
 	}
 
 	switch (ggs.currentRunState) {

@@ -12,6 +12,7 @@ public:
 	void render() const override;
 
 	[[nodiscard]] static int getStaticWidth() { return width; }
+	[[nodiscard]] static int getStaticHeight() { return height; }
 	[[nodiscard]] int getWidth() const override { return width; }
 	[[nodiscard]] int getHeight() const override { return height; }
 
