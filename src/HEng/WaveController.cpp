@@ -99,6 +99,7 @@ void WaveController::startWave() {
 	inWave = true;
     if(run.getWaveNumber() % 2 == 0) {
         augmentFound = true;
+        stopMovement();
         rightMovement = false;
         leftMovement = false;
     }
@@ -173,11 +174,23 @@ void WaveController::readInput() {
             }
 
             if(SDL_GameControllerGetAxis(ggs.controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_LEFTX) > JOYSTICK_DEAD_ZONE) {
-                player.setXNormalV(1);
-            } else if (SDL_GameControllerGetAxis(ggs.controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_LEFTX) < -JOYSTICK_DEAD_ZONE) {
+                rightMovement = true;
+            } else {
+                rightMovement = false;
+            }
+
+            if (SDL_GameControllerGetAxis(ggs.controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_LEFTX) < -JOYSTICK_DEAD_ZONE) {
+               leftMovement = true;
+            } else {
+                leftMovement = false;
+            }
+
+            if(!leftMovement && !rightMovement) {
+                player.setXNormalV(0);
+            } else if (leftMovement) {
                 player.setXNormalV(-1);
             } else {
-                player.setXNormalV(0);
+                player.setXNormalV(1);
             }
 
             // TODO: Move wave input to an function that is called by an enum so that code doesn't have to be replcated. Look at the menu code for example.
@@ -195,8 +208,12 @@ void WaveController::readInput() {
                 player.changeWeapon();
             } else if(SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_START) == 1) {
                 ggs.toPauseMenu = true;
+                stopMovement();
             } else if(SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_X) == 1) {
                 player.getWeapon()->forceReload();
+            } else if(SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_BACK) == 1) {
+                openInventory = true;
+                stopMovement();
             }
         }
     }

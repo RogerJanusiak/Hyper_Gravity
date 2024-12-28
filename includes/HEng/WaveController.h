@@ -18,6 +18,8 @@ public:
 	[[nodiscard]] bool doesInventoryNeedToOpen() const { return openInventory; }
 	void setInventoryNeedToOpen() { openInventory = false; }
 
+	void stopMovement() { leftMovement = false; rightMovement = false; player.setXNormalV(0); }
+
 private:
 
 	void startWave();

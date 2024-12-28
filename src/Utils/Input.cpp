@@ -56,6 +56,9 @@ void controllerEvent(UI_Menu& currentMenu, MENU_CONTROL control) {
         case MENU_CONTROL::select:
             menuSelect(currentMenu);
             break;
+        case MENU_CONTROL::secondarySelect:
+            menuSecondarySelect(currentMenu);
+            break;
         default: {
             if(currentMenu.currentButton != nullptr) {
                 Button* tempButton = currentMenu.currentButton->move(control);

@@ -226,10 +226,18 @@ void RunMenu::readInput() {
             			controllerEvent(*currentMenu,MENU_CONTROL::select);
             		}
             	}
-            } else if(SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_B) == 1) {
-                //if(currentMenu == &levelSelect) {
+            } else if(SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_B) == 1 || SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_START) == 1 || SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_BACK) == 1) {
+            	currentMenu = nullptr;
+            	ggs.currentRunState = RunState::inWave;
+            	player.revolver.upgrade();
+            	player.shotgun.upgrade();
+            	player.rifle.upgrade();
+            	player.laserPistol.upgrade();
 
-                //}
+            } else if(SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_X) == 1) {
+            	if(currentMenu != nullptr) {
+            		controllerEvent(*currentMenu,MENU_CONTROL::secondarySelect);
+            	}
             } else if(SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_DPAD_UP) == 1) {
             	if(currentMenu != nullptr) {
             		controllerEvent(*currentMenu,MENU_CONTROL::up);
@@ -285,9 +293,23 @@ void RunMenu::readInput() {
                 	}
                     ggs.controllerStickReset = false;
                 }
-            } else {
-                ggs.controllerStickReset = true;
-            }
+            } else if(SDL_GameControllerGetAxis(ggs.controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_LEFTX) > JOYSTICK_DEAD_ZONE) {
+        		if(ggs.controllerStickReset) {
+        			if(currentMenu != nullptr) {
+        				controllerEvent(*currentMenu,MENU_CONTROL::right);
+        			}
+        			ggs.controllerStickReset = false;
+        		}
+        	} else if (SDL_GameControllerGetAxis(ggs.controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_LEFTX) < -JOYSTICK_DEAD_ZONE) {
+        		if(ggs.controllerStickReset) {
+        			if(currentMenu != nullptr) {
+        				controllerEvent(*currentMenu,MENU_CONTROL::left);
+        			}
+        			ggs.controllerStickReset = false;
+        		}
+        	} else {
+        		ggs.controllerStickReset = true;
+        	}
         }
     }
 }
@@ -297,140 +319,159 @@ void RunMenu::initBaseInventoryMenu() {
 
 	inventoryMenu.addTitle((WINDOW_WIDTH-inventoryMenuTitle.getWidth())/2, scaleUI(30), inventoryMenuTitle);
 
-	if(player.shotgun.getPrimaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row3,player.shotgun.getPrimaryAugment(), &selectAugmentToMove,shotgun, 0 ,&removeAugment, shotgun,0), -1, -1,-1,-1);
-	} else {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row3, &noActionAug), -1, -1,-1,-1);
-	}
-	if(player.shotgun.getSecondaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row4, player.shotgun.getSecondaryAugment(), &selectAugmentToMove,shotgun, 1 ,&removeAugment, shotgun,1), -1, -1,-1,-1);
-	} else {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row4, &noActionAug), -1, -1,-1,-1);
-	}
-	if(player.rifle.getPrimaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row1,player.rifle.getPrimaryAugment(), &selectAugmentToMove,rifle, 0 ,&removeAugment, rifle,0), -1, -1,-1,-1);
-	} else {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row1, &noActionAug), -1, -1,-1,-1);
-	}
-	if(player.rifle.getSecondaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row2, player.rifle.getSecondaryAugment(), &selectAugmentToMove,rifle, 1 ,&removeAugment, rifle,1), -1, -1,-1,-1);
-	} else {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row2, &noActionAug), -1, -1,-1,-1);
-	}
-	if(player.laserPistol.getPrimaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row3,player.laserPistol.getPrimaryAugment(), &selectAugmentToMove,laserPistol, 0 ,&removeAugment, Weapon_Type::laserPistol,0), -1, -1,-1,-1);
-	} else {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row3, &noActionAug), -1, -1,-1,-1);
-	}
-	if(player.laserPistol.getSecondaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row4, player.laserPistol.getSecondaryAugment(), &selectAugmentToMove,laserPistol, 1 ,&removeAugment, Weapon_Type::laserPistol,1), -1, -1,-1,-1);
-	} else {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row4, &noActionAug), -1, -1,-1,-1);
-	}
+	int rp, rs, sp, ss, rip, ris, lp;
+
 	if(player.revolver.getPrimaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row1,player.revolver.getPrimaryAugment(), &selectAugmentToMove,revolver, 0 ,&removeAugment, revolver,0), -1, -1,-1,-1);
+		rp = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row1,player.revolver.getPrimaryAugment(), &selectAugmentToMove,revolver, 0 ,&removeAugment, revolver,0), -1, -1,-1,-1);
 	} else {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row1, &noActionAug), -1, -1,-1,-1);
+		rp = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row1, &noActionAug), -1, -1,-1,-1);
 	}
 	if(player.revolver.getSecondaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row2, player.revolver.getSecondaryAugment(), &selectAugmentToMove,revolver, 1 ,&removeAugment, revolver,1), -1, -1,-1,-1);
+		rs = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row2, player.revolver.getSecondaryAugment(), &selectAugmentToMove,revolver, 1 ,&removeAugment, revolver,1), rp, -1,-1,-1);
 	} else {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row2, &noActionAug), -1, -1,-1,-1);
+		rs = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row2, &noActionAug), rp, -1,-1,-1);
+	}
+	if(player.shotgun.getPrimaryAugment() != nullptr) {
+		sp = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row3,player.shotgun.getPrimaryAugment(), &selectAugmentToMove,shotgun, 0 ,&removeAugment, shotgun,0), rs, -1,-1,-1);
+	} else {
+		sp = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row3, &noActionAug), rs, -1,-1,-1);
+	}
+	if(player.shotgun.getSecondaryAugment() != nullptr) {
+		ss = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row4, player.shotgun.getSecondaryAugment(), &selectAugmentToMove,shotgun, 1 ,&removeAugment, shotgun,1), sp, -1,-1,-1);
+	} else {
+		ss = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row4, &noActionAug), sp, -1,-1,-1);
+	}
+	if(player.rifle.getPrimaryAugment() != nullptr) {
+		rip = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row1,player.rifle.getPrimaryAugment(), &selectAugmentToMove,rifle, 0 ,&removeAugment, rifle,0), -1, -1,rp,-1);
+	} else {
+		rip = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row1, &noActionAug), -1, -1,rp,-1);
+	}
+	if(player.rifle.getSecondaryAugment() != nullptr) {
+		ris = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row2, player.rifle.getSecondaryAugment(), &selectAugmentToMove,rifle, 1 ,&removeAugment, rifle,1), rip, -1,rs,-1);
+	} else {
+		ris = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row2, &noActionAug), rip, -1,rs,-1);
+	}
+	if(player.laserPistol.getPrimaryAugment() != nullptr) {
+		lp = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row3,player.laserPistol.getPrimaryAugment(), &selectAugmentToMove,laserPistol, 0 ,&removeAugment, Weapon_Type::laserPistol,0), ris, -1,sp,-1);
+	} else {
+		lp = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row3, &noActionAug), ris, -1,sp,-1);
+	}
+	if(player.laserPistol.getSecondaryAugment() != nullptr) {
+		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row4, player.laserPistol.getSecondaryAugment(), &selectAugmentToMove,laserPistol, 1 ,&removeAugment, Weapon_Type::laserPistol,1), lp, -1,ss,-1);
+	} else {
+		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row4, &noActionAug), lp, -1,ss,-1);
+	}
+
+	if(ggs.controller != nullptr) {
+		inventoryMenu.loadMenu();
 	}
 }
 
 void RunMenu::initMoveInventoryMenu() {
 	inventoryMenu.reset();
 
+	int rp, rs, sp, ss, rip, ris, lp;
+
 	inventoryMenu.addTitle((WINDOW_WIDTH-moveTitle.getWidth())/2, scaleUI(30), moveTitle);
 
-	if(player.shotgun.getPrimaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row3,player.shotgun.getPrimaryAugment(), &moveAugment,shotgun, 0), -1, -1,-1,-1);
-	} else {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row3, &moveAugment,shotgun, 0), -1, -1,-1,-1);
-	}
-	if(player.shotgun.getSecondaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row4, player.shotgun.getSecondaryAugment(), &moveAugment,shotgun, 1), -1, -1,-1,-1);
-	} else {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row4, &moveAugment, shotgun, 1), -1, -1,-1,-1);
-	}
-	if(player.rifle.getPrimaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row1,player.rifle.getPrimaryAugment(), &moveAugment,rifle, 0), -1, -1,-1,-1);
-	} else {
-		 inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row1, &moveAugment, rifle ,0), -1, -1,-1,-1);
-	}
-	if(player.rifle.getSecondaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row2, player.rifle.getSecondaryAugment(), &moveAugment,rifle, 1), -1, -1,-1,-1);
-	} else {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row2, &moveAugment, rifle, 1), -1, -1,-1,-1);
-	}
-	if(player.laserPistol.getPrimaryAugment() != nullptr) {
-		 inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row3,player.laserPistol.getPrimaryAugment(), &moveAugment,laserPistol, 0), -1, -1,-1,-1);
-	} else {
-		 inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row3, &moveAugment, laserPistol, 0), -1, -1,-1,-1);
-	}
-	if(player.laserPistol.getSecondaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row4, player.laserPistol.getSecondaryAugment(), &moveAugment,laserPistol, 1), -1, -1,-1,-1);
-	} else {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row4, &moveAugment,laserPistol,1), -1, -1,-1,-1);
-	}
 	if(player.revolver.getPrimaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row1,player.revolver.getPrimaryAugment(), &moveAugment,revolver, 0), -1, -1,-1,-1);
+		rp = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row1,player.revolver.getPrimaryAugment(), &moveAugment,revolver, 0), -1, -1,-1,-1);
 	} else {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row1, &moveAugment, revolver, 0), -1, -1,-1,-1);
+		rp = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row1, &moveAugment, revolver, 0), -1, -1,-1,-1);
 	}
 	if(player.revolver.getSecondaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row2, player.revolver.getSecondaryAugment(), &moveAugment,revolver, 1), -1, -1,-1,-1);
+		rs = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row2, player.revolver.getSecondaryAugment(), &moveAugment,revolver, 1), rp, -1,-1,-1);
 	} else {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row2, &moveAugment, revolver, 1), -1, -1,-1,-1);
+		rs = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row2, &moveAugment, revolver, 1), rp, -1,-1,-1);
 	}
+	if(player.shotgun.getPrimaryAugment() != nullptr) {
+		sp = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row3,player.shotgun.getPrimaryAugment(), &moveAugment,shotgun, 0), rs, -1,-1,-1);
+	} else {
+		sp = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row3, &moveAugment,shotgun, 0), rs, -1,-1,-1);
+	}
+	if(player.shotgun.getSecondaryAugment() != nullptr) {
+		ss = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row4, player.shotgun.getSecondaryAugment(), &moveAugment,shotgun, 1), sp, -1,-1,-1);
+	} else {
+		ss = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row4, &moveAugment, shotgun, 1), sp, -1,-1,-1);
+	}
+	if(player.rifle.getPrimaryAugment() != nullptr) {
+		rip = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row1,player.rifle.getPrimaryAugment(), &moveAugment,rifle, 0), -1, -1,rp,-1);
+	} else {
+		rip = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row1, &moveAugment, rifle ,0), -1, -1,rp,-1);
+	}
+	if(player.rifle.getSecondaryAugment() != nullptr) {
+		ris = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row2, player.rifle.getSecondaryAugment(), &moveAugment,rifle, 1), rip, -1,rs,-1);
+	} else {
+		ris = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row2, &moveAugment, rifle, 1), rip, -1,rs,-1);
+	}
+	if(player.laserPistol.getPrimaryAugment() != nullptr) {
+		 lp = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row3,player.laserPistol.getPrimaryAugment(), &moveAugment,laserPistol, 0), ris, -1,sp,-1);
+	} else {
+		 lp = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row3, &moveAugment, laserPistol, 0), ris, -1,sp,-1);
+	}
+	if(player.laserPistol.getSecondaryAugment() != nullptr) {
+		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row4, player.laserPistol.getSecondaryAugment(), &moveAugment,laserPistol, 1), lp, -1,ss,-1);
+	} else {
+		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row4, &moveAugment,laserPistol,1), lp, -1,ss,-1);
+	}
+
+	if(ggs.controller != nullptr) {
+		inventoryMenu.loadMenu();
+	}
+
 }
 
 void RunMenu::initNewInventoryMenu() {
 	inventoryMenu.reset();
 
+	int rp, rs, sp, ss, rip, ris, lp;
+
 	inventoryMenu.addTitle((WINDOW_WIDTH-newTitle.getWidth()-AugButton::getStaticWidth()-scaleUI(30))/2, scaleUI(30), newTitle);
+
+	if(player.revolver.getPrimaryAugment() != nullptr) {
+		rp = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row1,player.revolver.getPrimaryAugment(), &addAugment,revolver, 0,&selectAugmentToMoveFromNew,revolver, 0), -1, -1,-1,-1);
+	} else {
+		rp = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row1, &addAugment, revolver, 0), -1, -1,-1,-1);
+	}
+	if(player.revolver.getSecondaryAugment() != nullptr) {
+		rs = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row2, player.revolver.getSecondaryAugment(), &addAugment,revolver, 1,&selectAugmentToMoveFromNew,revolver, 1), rp, -1,-1,-1);
+	} else {
+		rs = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row2, &addAugment, revolver, 1), rp, -1,-1,-1);
+	}
+	if(player.shotgun.getPrimaryAugment() != nullptr) {
+		sp = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row3,player.shotgun.getPrimaryAugment(), &addAugment,shotgun, 0,&selectAugmentToMoveFromNew,shotgun, 0), rs, -1,-1,-1);
+	} else {
+		sp = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row3, &addAugment,shotgun, 0), rs, -1,-1,-1);
+	}
+	if(player.shotgun.getSecondaryAugment() != nullptr) {
+		ss = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row4, player.shotgun.getSecondaryAugment(), &addAugment,shotgun, 1,&selectAugmentToMoveFromNew,shotgun, 1), sp, -1,-1,-1);
+	} else {
+		ss = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row4, &addAugment, shotgun, 1), sp, -1,-1,-1);
+	}
+	if(player.rifle.getPrimaryAugment() != nullptr) {
+		rip = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row1,player.rifle.getPrimaryAugment(), &addAugment,rifle, 0,&selectAugmentToMoveFromNew,rifle, 0), -1, -1,rp,-1);
+	} else {
+		rip = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row1, &addAugment, rifle ,0), -1, -1,rp,-1);
+	}
+	if(player.rifle.getSecondaryAugment() != nullptr) {
+		ris = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row2, player.rifle.getSecondaryAugment(), &addAugment,rifle, 1,&selectAugmentToMoveFromNew,rifle, 1), rip, -1,rs,-1);
+	} else {
+		ris = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row2, &addAugment, rifle, 1), rip, -1,rs,-1);
+	}
+	if(player.laserPistol.getPrimaryAugment() != nullptr) {
+		 lp = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row3,player.laserPistol.getPrimaryAugment(), &addAugment,laserPistol, 0,&selectAugmentToMoveFromNew,laserPistol, 0), ris, -1,sp,-1);
+	} else {
+		 lp = inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row3, &addAugment, laserPistol, 0), ris, -1,sp,-1);
+	}
+	if(player.laserPistol.getSecondaryAugment() != nullptr) {
+		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row4, player.laserPistol.getSecondaryAugment(), &addAugment,laserPistol, 1,&selectAugmentToMoveFromNew,laserPistol, 1), lp, -1,ss,-1);
+	} else {
+		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row4, &addAugment,laserPistol,1), lp, -1,ss,-1);
+	}
 
 	inventoryMenu.addButton(std::make_unique<AugButton>(ggs,(WINDOW_WIDTH-newTitle.getWidth()-AugButton::getStaticWidth()-scaleUI(30))/2 + newTitle.getWidth() + scaleUI(30),scaleUI(15),ggs.newAugment, &noActionAug), -1, -1,-1,-1);
 
-	if(player.shotgun.getPrimaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row3,player.shotgun.getPrimaryAugment(), &addAugment,shotgun, 0,&selectAugmentToMoveFromNew,shotgun, 0), -1, -1,-1,-1);
-	} else {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row3, &addAugment,shotgun, 0), -1, -1,-1,-1);
-	}
-	if(player.shotgun.getSecondaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row4, player.shotgun.getSecondaryAugment(), &addAugment,shotgun, 1,&selectAugmentToMoveFromNew,shotgun, 1), -1, -1,-1,-1);
-	} else {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row4, &addAugment, shotgun, 1), -1, -1,-1,-1);
-	}
-	if(player.rifle.getPrimaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row1,player.rifle.getPrimaryAugment(), &addAugment,rifle, 0,&selectAugmentToMoveFromNew,rifle, 0), -1, -1,-1,-1);
-	} else {
-		 inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row1, &addAugment, rifle ,0), -1, -1,-1,-1);
-	}
-	if(player.rifle.getSecondaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row2, player.rifle.getSecondaryAugment(), &addAugment,rifle, 1,&selectAugmentToMoveFromNew,rifle, 1), -1, -1,-1,-1);
-	} else {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row2, &addAugment, rifle, 1), -1, -1,-1,-1);
-	}
-	if(player.laserPistol.getPrimaryAugment() != nullptr) {
-		 inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row3,player.laserPistol.getPrimaryAugment(), &addAugment,laserPistol, 0,&selectAugmentToMoveFromNew,laserPistol, 0), -1, -1,-1,-1);
-	} else {
-		 inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row3, &addAugment, laserPistol, 0), -1, -1,-1,-1);
-	}
-	if(player.laserPistol.getSecondaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row4, player.laserPistol.getSecondaryAugment(), &addAugment,laserPistol, 1,&selectAugmentToMoveFromNew,laserPistol, 1), -1, -1,-1,-1);
-	} else {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row4, &addAugment,laserPistol,1), -1, -1,-1,-1);
-	}
-	if(player.revolver.getPrimaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row1,player.revolver.getPrimaryAugment(), &addAugment,revolver, 0,&selectAugmentToMoveFromNew,revolver, 0), -1, -1,-1,-1);
-	} else {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row1, &addAugment, revolver, 0), -1, -1,-1,-1);
-	}
-	if(player.revolver.getSecondaryAugment() != nullptr) {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row2, player.revolver.getSecondaryAugment(), &addAugment,revolver, 1,&selectAugmentToMoveFromNew,revolver, 1), -1, -1,-1,-1);
-	} else {
-		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row2, &addAugment, revolver, 1), -1, -1,-1,-1);
+	if(ggs.controller != nullptr) {
+		inventoryMenu.loadMenu();
 	}
 }

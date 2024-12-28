@@ -17,6 +17,7 @@ enum class MENU_CONTROL {
 	back,
 	left,
 	right,
+	secondarySelect,
   };
 
 enum class RELATIVE_DIRECTION {
