@@ -11,8 +11,9 @@ void removeAugment(GlobalGameState& ggs, int attr1, int attr2) {
 }
 
 void addAugment(GlobalGameState& ggs, int attr1, int attr2) {
-	//ggs.addedAugment = true;
-	//ggs.slotAdded = attr1;
+	ggs.addedAugment = true;
+	ggs.weaponChanged = attr1;
+	ggs.slotChanged = attr2;
 }
 
 void selectAugmentToMove(GlobalGameState& ggs, int attr1, int attr2) {
@@ -35,14 +36,35 @@ RunMenu::RunMenu(GlobalGameState& ggs, Player& player) : ggs(ggs), player(player
 
 	inventoryMenu.setup(ggs.renderer);
 	inventoryMenuTitle.setup(ggs.renderer);
-	inventoryMenuTitle.loadFromRenderedText("Remove/Move Augments",ggs.white,ggs.title);
-	inventoryMenu.addTitle((WINDOW_WIDTH-inventoryMenuTitle.getWidth())/2, scaleUI(30), inventoryMenuTitle);
+	inventoryMenuTitle.loadFromRenderedText("Edit Augments",ggs.white,ggs.title);
 
-	spacing = (WINDOW_WIDTH-scaleUI(120*4))/5;
+	moveTitle.setup(ggs.renderer);
+	moveTitle.loadFromRenderedText("Select New Slot for Augment",ggs.white,ggs.title);
+
+	newTitle.setup(ggs.renderer);
+	newTitle.loadFromRenderedText("Select Slot to Equip: ",ggs.white,ggs.title);
+
 	height = scaleUI(30)*2+inventoryMenuTitle.getHeight();
+
+	row1 = height;
+	row2 = height+AugButton::getStaticHeight()+verticalSpacing;
+	row3 = row2+AugButton::getStaticHeight()+verticalSpacing+20;
+	row4 = row3+AugButton::getStaticHeight()+verticalSpacing;
 
 	player.revolver.changePrimaryAugment(&ggs.damage1);
 	player.shotgun.changeSecondaryAugment(&ggs.reload3);
+
+	revolverTexture.setup(scaleUI(64),scaleUI(34), ggs.renderer);
+	revolverTexture.loadFromFile("revolver.png");
+
+	shotgunTexture.setup(scaleUI(64),scaleUI(21), ggs.renderer);
+	shotgunTexture.loadFromFile("shotgun.png");
+
+	rifleTexture.setup(scaleUI(64),scaleUI(24), ggs.renderer);
+	rifleTexture.loadFromFile("rifle.png");
+
+	laserPistolTexture.setup(scaleUI(60),scaleUI(42), ggs.renderer);
+	laserPistolTexture.loadFromFile("laserPistol.png");
 
 	initBaseInventoryMenu();
 
@@ -84,26 +106,78 @@ void RunMenu::run() {
 	}
 
 	if(ggs.moveAugment) {
-		if(ggs.slotMovedTo == 0) {
-			getWeapon(player,ggs.weaponMovedTo)->changePrimaryAugment(ggs.newAugment);
-		} else {
-			getWeapon(player,ggs.weaponMovedTo)->changeSecondaryAugment(ggs.newAugment);
-		}
 		if(ggs.slotChanged == 0) {
 			getWeapon(player,ggs.weaponChanged)->removePrimaryAugment();
 		} else {
 			getWeapon(player,ggs.weaponChanged)->removeSecondaryAugment();
 		}
+		if(ggs.slotMovedTo == 0) {
+			getWeapon(player,ggs.weaponMovedTo)->changePrimaryAugment(ggs.newAugment);
+		} else {
+			getWeapon(player,ggs.weaponMovedTo)->changeSecondaryAugment(ggs.newAugment);
+		}
 		initBaseInventoryMenu();
 		ggs.newAugment = nullptr;
 		ggs.moveAugment = false;
 	}
+
+	if(newAugment) {
+		initNewInventoryMenu();
+		newAugment = false;
+	}
+
+	if(ggs.addedAugment) {
+		if(ggs.slotChanged == 0) {
+			getWeapon(player,ggs.weaponChanged)->changePrimaryAugment(ggs.newAugment);
+		} else {
+			getWeapon(player,ggs.weaponChanged)->changeSecondaryAugment(ggs.newAugment);
+		}
+		ggs.addedAugment = false;
+		initBaseInventoryMenu();
+		ggs.newAugment = nullptr;
+	}
+
 }
 
 void RunMenu::render() const {
 	if(currentMenu != nullptr) {
 		currentMenu->render();
 	}
+
+	SDL_SetRenderDrawColor(ggs.renderer, 255, 255, 255, 255); // White
+
+	int revolverX = column1-revolverTexture.getWidth()-scaleUI(40);
+	int revolverY = row1+(AugButton::getStaticHeight()*2+verticalSpacing-revolverTexture.getHeight())/2;
+	SDL_Point revolverPoints1[4] = {{revolverX+revolverTexture.getWidth()/2,revolverY+revolverTexture.getHeight()/2},{revolverX+revolverTexture.getWidth()+scaleUI(20),revolverY+revolverTexture.getHeight()/2},{revolverX+revolverTexture.getWidth()+scaleUI(20),row1+AugButton::getStaticHeight()/2},{column1,row1+AugButton::getStaticHeight()/2}};
+	SDL_Point revolverPoints2[4] = {{revolverX+revolverTexture.getWidth()/2,revolverY+revolverTexture.getHeight()/2},{revolverX+revolverTexture.getWidth()+scaleUI(20),revolverY+revolverTexture.getHeight()/2},{revolverX+revolverTexture.getWidth()+scaleUI(20),row2+AugButton::getStaticHeight()/2},{column1,row2+AugButton::getStaticHeight()/2}};
+	SDL_RenderDrawLines(ggs.renderer, revolverPoints1, 4);
+	SDL_RenderDrawLines(ggs.renderer, revolverPoints2, 4);
+
+	int shotgunX = column1-shotgunTexture.getWidth()-scaleUI(40);
+	int shotgunY = row3+(AugButton::getStaticHeight()*2+verticalSpacing-shotgunTexture.getHeight())/2;
+	SDL_Point shotgunPoints1[4] = {{shotgunX+shotgunTexture.getWidth()/2,shotgunY+shotgunTexture.getHeight()/2},{shotgunX+shotgunTexture.getWidth()+scaleUI(20),shotgunY+shotgunTexture.getHeight()/2},{shotgunX+shotgunTexture.getWidth()+scaleUI(20),row3+AugButton::getStaticHeight()/2},{column1,row3+AugButton::getStaticHeight()/2}};
+	SDL_Point shotgunPoints2[4] = {{shotgunX+shotgunTexture.getWidth()/2,shotgunY+shotgunTexture.getHeight()/2},{shotgunX+shotgunTexture.getWidth()+scaleUI(20),shotgunY+shotgunTexture.getHeight()/2},{shotgunX+shotgunTexture.getWidth()+scaleUI(20),row4+AugButton::getStaticHeight()/2},{column1,row4+AugButton::getStaticHeight()/2}};
+	SDL_RenderDrawLines(ggs.renderer, shotgunPoints1, 4);
+	SDL_RenderDrawLines(ggs.renderer, shotgunPoints2, 4);
+
+	int rifleX =column2+AugButton::getStaticWidth()+scaleUI(40);
+	int rifleY = row1+(AugButton::getStaticHeight()*2+verticalSpacing-rifleTexture.getHeight())/2;
+	SDL_Point riflePoints1[4] = {{rifleX+rifleTexture.getWidth()/2,rifleY+rifleTexture.getHeight()/2},{rifleX-scaleUI(20),rifleY+rifleTexture.getHeight()/2},{rifleX-scaleUI(20),row1+AugButton::getStaticHeight()/2},{column2+AugButton::getStaticWidth(),row1+AugButton::getStaticHeight()/2}};
+	SDL_Point riflePoints2[4] = {{rifleX+rifleTexture.getWidth()/2,rifleY+rifleTexture.getHeight()/2},{rifleX-scaleUI(20),rifleY+rifleTexture.getHeight()/2},{rifleX-scaleUI(20),row2+AugButton::getStaticHeight()/2},{column2+AugButton::getStaticWidth(),row2+AugButton::getStaticHeight()/2}};
+	SDL_RenderDrawLines(ggs.renderer, riflePoints1, 4);
+	SDL_RenderDrawLines(ggs.renderer, riflePoints2, 4);
+
+	int laserPistolX =column2+AugButton::getStaticWidth()+scaleUI(40);
+	int laserPistolY = row3+(AugButton::getStaticHeight()*2+verticalSpacing-laserPistolTexture.getHeight())/2;
+	SDL_Point laserPistolPoints1[4] = {{laserPistolX+laserPistolTexture.getWidth()/2,laserPistolY+laserPistolTexture.getHeight()/2},{laserPistolX-scaleUI(20),laserPistolY+laserPistolTexture.getHeight()/2},{laserPistolX-scaleUI(20),row3+AugButton::getStaticHeight()/2},{column2+AugButton::getStaticWidth(),row3+AugButton::getStaticHeight()/2}};
+	SDL_Point laserPistolPoints2[4] = {{laserPistolX+laserPistolTexture.getWidth()/2,laserPistolY+laserPistolTexture.getHeight()/2},{laserPistolX-scaleUI(20),laserPistolY+laserPistolTexture.getHeight()/2},{laserPistolX-scaleUI(20),row4+AugButton::getStaticHeight()/2},{column2+AugButton::getStaticWidth(),row4+AugButton::getStaticHeight()/2}};
+	SDL_RenderDrawLines(ggs.renderer, laserPistolPoints1, 4);
+	SDL_RenderDrawLines(ggs.renderer, laserPistolPoints2, 4);
+
+	revolverTexture.render(revolverX,revolverY);
+	shotgunTexture.render(shotgunX,shotgunY);
+	rifleTexture.render(rifleX,rifleY);
+	laserPistolTexture.render(laserPistolX,laserPistolY);
 }
 
 void RunMenu::changeMenu(RunMenus menu) {
@@ -207,14 +281,7 @@ void RunMenu::readInput() {
 void RunMenu::initBaseInventoryMenu() {
 	inventoryMenu.reset();
 
-	int verticalSpacing = scaleUI(20);
-	int column1 = scaleUI(110);
-	int column2 = scaleUI(110*2)+AugButton::getStaticWidth();
-
-	int row1 = height;
-	int row2 = height+AugButton::getStaticHeight()+verticalSpacing;
-	int row3 = row2+AugButton::getStaticHeight()+verticalSpacing+20;
-	int row4 = row3+AugButton::getStaticHeight()+verticalSpacing;
+	inventoryMenu.addTitle((WINDOW_WIDTH-inventoryMenuTitle.getWidth())/2, scaleUI(30), inventoryMenuTitle);
 
 	if(player.shotgun.getPrimaryAugment() != nullptr) {
 		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row3,player.shotgun.getPrimaryAugment(), &selectAugmentToMove,shotgun, 0 ,&removeAugment, shotgun,0), -1, -1,-1,-1);
@@ -261,14 +328,7 @@ void RunMenu::initBaseInventoryMenu() {
 void RunMenu::initMoveInventoryMenu() {
 	inventoryMenu.reset();
 
-	int verticalSpacing = scaleUI(20);
-	int column1 = scaleUI(110);
-	int column2 = scaleUI(110*2)+AugButton::getStaticWidth();
-
-	int row1 = height;
-	int row2 = height+AugButton::getStaticHeight()+verticalSpacing;
-	int row3 = row2+AugButton::getStaticHeight()+verticalSpacing+20;
-	int row4 = row3+AugButton::getStaticHeight()+verticalSpacing;
+	inventoryMenu.addTitle((WINDOW_WIDTH-moveTitle.getWidth())/2, scaleUI(30), moveTitle);
 
 	if(player.shotgun.getPrimaryAugment() != nullptr) {
 		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row3,player.shotgun.getPrimaryAugment(), &moveAugment,shotgun, 0), -1, -1,-1,-1);
@@ -309,5 +369,54 @@ void RunMenu::initMoveInventoryMenu() {
 		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row2, player.revolver.getSecondaryAugment(), &moveAugment,revolver, 1), -1, -1,-1,-1);
 	} else {
 		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row2, &moveAugment, revolver, 1), -1, -1,-1,-1);
+	}
+}
+
+void RunMenu::initNewInventoryMenu() {
+	inventoryMenu.reset();
+
+	inventoryMenu.addTitle((WINDOW_WIDTH-newTitle.getWidth()-AugButton::getStaticWidth()-scaleUI(30))/2, scaleUI(30), newTitle);
+
+	inventoryMenu.addButton(std::make_unique<AugButton>(ggs,(WINDOW_WIDTH-newTitle.getWidth()-AugButton::getStaticWidth()-scaleUI(30))/2 + newTitle.getWidth() + scaleUI(30),scaleUI(15),ggs.newAugment, &noActionAug), -1, -1,-1,-1);
+
+	if(player.shotgun.getPrimaryAugment() != nullptr) {
+		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row3,player.shotgun.getPrimaryAugment(), &addAugment,shotgun, 0), -1, -1,-1,-1);
+	} else {
+		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row3, &addAugment,shotgun, 0), -1, -1,-1,-1);
+	}
+	if(player.shotgun.getSecondaryAugment() != nullptr) {
+		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row4, player.shotgun.getSecondaryAugment(), &addAugment,shotgun, 1), -1, -1,-1,-1);
+	} else {
+		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row4, &addAugment, shotgun, 1), -1, -1,-1,-1);
+	}
+	if(player.rifle.getPrimaryAugment() != nullptr) {
+		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row1,player.rifle.getPrimaryAugment(), &addAugment,rifle, 0), -1, -1,-1,-1);
+	} else {
+		 inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row1, &addAugment, rifle ,0), -1, -1,-1,-1);
+	}
+	if(player.rifle.getSecondaryAugment() != nullptr) {
+		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row2, player.rifle.getSecondaryAugment(), &addAugment,rifle, 1), -1, -1,-1,-1);
+	} else {
+		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row2, &addAugment, rifle, 1), -1, -1,-1,-1);
+	}
+	if(player.laserPistol.getPrimaryAugment() != nullptr) {
+		 inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row3,player.laserPistol.getPrimaryAugment(), &addAugment,laserPistol, 0), -1, -1,-1,-1);
+	} else {
+		 inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row3, &addAugment, laserPistol, 0), -1, -1,-1,-1);
+	}
+	if(player.laserPistol.getSecondaryAugment() != nullptr) {
+		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row4, player.laserPistol.getSecondaryAugment(), &addAugment,laserPistol, 1), -1, -1,-1,-1);
+	} else {
+		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column2,row4, &addAugment,laserPistol,1), -1, -1,-1,-1);
+	}
+	if(player.revolver.getPrimaryAugment() != nullptr) {
+		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row1,player.revolver.getPrimaryAugment(), &addAugment,revolver, 0), -1, -1,-1,-1);
+	} else {
+		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row1, &addAugment, revolver, 0), -1, -1,-1,-1);
+	}
+	if(player.revolver.getSecondaryAugment() != nullptr) {
+		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row2, player.revolver.getSecondaryAugment(), &addAugment,revolver, 1), -1, -1,-1,-1);
+	} else {
+		inventoryMenu.addButton(std::make_unique<AugButton>(ggs,column1,row2, &addAugment, revolver, 1), -1, -1,-1,-1);
 	}
 }

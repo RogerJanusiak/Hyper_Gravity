@@ -3,6 +3,7 @@
 
 #include "Weapon.h"
 #include "../../includes/TEng/Menu.h"
+#include "../../includes/TEng/Buttons.h"
 #include "../../includes/TEng/Texture.h"
 #include "../../includes/Entities/Player.h"
 
@@ -24,6 +25,8 @@ public:
 
 	void readInput();
 
+	bool newAugment = false;
+
 private:
 
 	GlobalGameState& ggs;
@@ -32,16 +35,30 @@ private:
 	UI_Menu inventoryMenu = UI_Menu(6);
 
 	Texture inventoryMenuTitle;
+	Texture moveTitle;
+	Texture newTitle;
+
+	Texture revolverTexture;
+	Texture shotgunTexture;
+	Texture rifleTexture;
+	Texture laserPistolTexture;
 
 	UI_Menu* currentMenu = nullptr;
 	RunMenus currentMenuState = RunMenus::inventory;
 
 	void initBaseInventoryMenu();
 	void initMoveInventoryMenu();
+	void initNewInventoryMenu();
+
+	int verticalSpacing = scaleUI(20);
+	int column1 = (WINDOW_WIDTH-AugButton::getStaticWidth()*2-scaleUI(20))/2;
+	int column2 = column1+scaleUI(20)+AugButton::getStaticWidth();
 
 	int height = 0;
-	int spacing = 0;
-	int bt1 = 0, bt2 = 0, bt3 = 0, bt4 = 0;
+	int row1;
+	int row2;
+	int row3;
+	int row4;
 
 };
 

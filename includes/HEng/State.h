@@ -84,6 +84,7 @@ struct GlobalGameState {
     bool augmentRemoved = false;
     bool startMoveAugment = false;
     bool moveAugment = false;
+    bool addedAugment = false;
 
     Augment* newAugment = nullptr;
 
@@ -115,7 +116,6 @@ struct GlobalGameState {
     Augment reload1 = {"Reload Speed 1", "Passive | All Weapons. Decrease the","time it takes to reload be 25%.","Explosion-5.png",AID::reload1,false,{true,true,true,true}};
     Augment reload2 = {"Reload Speed 2", "Passive | All Weapons. Decrease the","time it takes to reload be 50%.","Explosion-5.png",AID::reload2,false,{true,true,true,true}};
     Augment reload3 = {"Reload Speed 3", "Passive | All Weapons. Decrease the","time it takes to reload be 75%.","Explosion-5.png",AID::reload3,false,{true,true,true,true}};
-
 
 };
 

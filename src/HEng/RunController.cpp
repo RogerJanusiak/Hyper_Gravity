@@ -28,6 +28,8 @@ void RunController::run() {
 	if(waveController->hasAugmentBeenFound()) {
 		waveController->setAugmentBeenFound();
 		ggs.currentRunState = RunState::inMenu;
+		runMenu->changeMenu(RunMenus::inventory);
+		runMenu->newAugment = true;
 		selectAugmentFound();
 	}
 
