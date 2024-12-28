@@ -28,7 +28,7 @@ private:
 
 	void updateTimeToShoot(double width);
 
-	bool augmentFound = true;
+	bool augmentFound = false;
 
 	GlobalGameState& ggs;
 

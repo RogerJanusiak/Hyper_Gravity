@@ -2,8 +2,41 @@
 #include "../../includes/Utils/GlobalConstants.h"
 #include "../../includes/HEng/State.h"
 
-Weapon::Weapon(GlobalGameState& ggs, const Weapon_Type type, SDL_Renderer* renderer) : ggs(ggs), renderer(renderer), type(type) {
+void Weapon::setDefaultProperties() {
+  switch (type) {
+      default: {
+          clipSize = 4;
+          reloadSpeed = 3;
+          bulletDurability = 1;
+          bulletStrength = 1;
+          bulletDamage = 1;
+      } break;
+      case rifle: {
+          clipSize = 2;
+          reloadSpeed = 3;
+          bulletDurability = 1;
+          bulletStrength = 1;
+          bulletDamage = 2;
+      }break;
+      case shotgun: {
+          clipSize = 1;
+          reloadSpeed = 2;
+          bulletDurability = 1;
+          bulletStrength = 1;
+          bulletDamage = 1;
+          bulletsPerShot = 3;
+      }break;
+      case laserPistol: {
+          clipSize = 2;
+          reloadSpeed = 3;
+          coolFireRate = 0.5;
+          bulletsInClip = 0;
+      } break;
+  }
+}
 
+Weapon::Weapon(GlobalGameState& ggs, const Weapon_Type type, SDL_Renderer* renderer) : ggs(ggs), renderer(renderer), type(type) {
+  setDefaultProperties();
   switch (type) {
       default: {
           texture.setup(scale(42),scale(21),renderer);
@@ -18,12 +51,6 @@ Weapon::Weapon(GlobalGameState& ggs, const Weapon_Type type, SDL_Renderer* rende
           bulletRelXRight = scale(19);
           bulletRelXLeft = 0;
           bulletRelY = scale(19);
-
-          clipSize = 4;
-          reloadSpeed = 3;
-          bulletDurability = 1;
-          bulletStrength = 1;
-          bulletDamage = 1;
 
           fireSound.init("resources/sounds/revolver-shoot.wav",0,-1);
           reloadSound.init("resources/sounds/revolver-reload.wav", 0,-1);
@@ -43,12 +70,6 @@ Weapon::Weapon(GlobalGameState& ggs, const Weapon_Type type, SDL_Renderer* rende
           bulletRelXLeft = 0;
           bulletRelY = scale(19);
 
-          clipSize = 2;
-          reloadSpeed = 3;
-          bulletDurability = 1;
-          bulletStrength = 1;
-          bulletDamage = 2;
-
           //TODO: Add unique sounds
           fireSound.init("resources/sounds/revolver-shoot.wav",0,-1);
           reloadSound.init("resources/sounds/revolver-reload.wav", 0,-1);
@@ -67,13 +88,6 @@ Weapon::Weapon(GlobalGameState& ggs, const Weapon_Type type, SDL_Renderer* rende
           bulletRelXRight = scale(19);
           bulletRelXLeft = 0;
           bulletRelY = scale(19);
-
-          clipSize = 1;
-          reloadSpeed = 2;
-          bulletDurability = 1;
-          bulletStrength = 1;
-          bulletDamage = 1;
-          bulletsPerShot = 3;
 
           //TODO: Add unique sounds
           fireSound.init("resources/sounds/revolver-shoot.wav",0,-1);
@@ -95,12 +109,6 @@ Weapon::Weapon(GlobalGameState& ggs, const Weapon_Type type, SDL_Renderer* rende
           bulletRelY = scale(17);
           bulletType = laser;
 
-          clipSize = 2;
-          reloadSpeed = 3;
-          coolFireRate = 0.5;
-          bulletsInClip = 0;
-
-          reloadSpeed = 3;
           timeSinceShot = reloadSpeed;
           fireSound.init("resources/sounds/laserPistol-shoot.wav",0,-1);
           reloadSound.init("resources/sounds/laserPistol-reload.wav", 0,-1);
@@ -199,5 +207,35 @@ void Weapon::reset() {
     bulletsInClip = 0;
   } else {
     bulletsInClip = clipSize;
+  }
+}
+
+void Weapon::applyUpgrade(Augment* augment) {
+    switch(augment->id) {
+      case damage:
+        bulletDamage += augment->level;
+        break;
+      case clipIncrease:
+        clipSize += augment->level;
+        break;
+      case AID::reload:
+        reloadSpeed = reloadSpeed*(1-0.25*augment->level);
+        break;
+      case strength:
+        bulletStrength += augment->level;
+        break;
+      case durability:
+        bulletDurability += augment->level;
+        break;
+    }
+}
+
+void Weapon::upgrade() {
+  setDefaultProperties();
+  if(primaryAugment != nullptr) {
+    applyUpgrade(primaryAugment);
+  }
+  if(secondaryAugment != nullptr) {
+    applyUpgrade(secondaryAugment);
   }
 }

@@ -24,15 +24,11 @@ enum Menu {
 };
 
 enum AID {
-    damage1,
-    damage2,
-    damage3,
-    clipIncrease1,
-    clipIncrease2,
-    clipIncrease3,
-    reload1,
-    reload2,
-    reload3,
+    damage,
+    clipIncrease,
+    reload,
+    strength,
+    durability,
   };
 
 struct Augment {
@@ -45,6 +41,8 @@ struct Augment {
 
     bool active;
     bool compadableWith[4];
+
+    int level = 0;
 
 };
 
@@ -104,18 +102,27 @@ struct GlobalGameState {
     TTF_Font *augDescription{};
 
     //Augments
-    Augment damage1 = {"Damage 1", "Passive | All Weapons. Increase the ","damage of the weapon by 1.","Explosion-5.png",AID::damage1,false,{true,true,true,true}};
-    Augment damage2 = {"Damage 2", "Passive | All Weapons. Increase the ","damage of the weapon by 2.","Explosion-5.png",AID::damage2,false,{true,true,true,true}};
-    Augment damage3 = {"Damage 3", "Passive | All Weapons. Increase the ","damage of the weapon by 3.","Explosion-5.png",AID::damage3,false,{true,true,true,true}};
+    Augment damage1 = {"Damage 1", "Passive | All Weapons. Increase the ","damage of the weapon by 1.","Explosion-5.png",AID::damage,false,{true,true,true,true},1};
+    Augment damage2 = {"Damage 2", "Passive | All Weapons. Increase the ","damage of the weapon by 2.","Explosion-5.png",AID::damage,false,{true,true,true,true},2};
+    Augment damage3 = {"Damage 3", "Passive | All Weapons. Increase the ","damage of the weapon by 3.","Explosion-5.png",AID::damage,false,{true,true,true,true},3};
 
 
-    Augment clipIncrease1 = {"Clip Increase 1", "Passive | All Weapons. Increase the","amount of ammo in clip by 1.","Explosion-5.png",AID::clipIncrease1,false,{true,true,true,true}};
-    Augment clipIncrease2 = {"Clip Increase 2", "Passive | All Weapons. Increase the","amount of ammo in clip by 2.","Explosion-5.png",AID::clipIncrease2,false,{true,true,true,true}};
-    Augment clipIncrease3 = {"Clip Increase 3", "Passive | All Weapons. Increase the","amount of ammo in clip by 3.","Explosion-5.png",AID::clipIncrease3,false,{true,true,true,true}};
+    Augment clipIncrease1 = {"Clip Increase 1", "Passive | All Weapons. Increase the","amount of ammo in clip by 1.","Explosion-5.png",AID::clipIncrease,false,{true,true,true,true},1};
+    Augment clipIncrease2 = {"Clip Increase 2", "Passive | All Weapons. Increase the","amount of ammo in clip by 2.","Explosion-5.png",AID::clipIncrease,false,{true,true,true,true},2};
+    Augment clipIncrease3 = {"Clip Increase 3", "Passive | All Weapons. Increase the","amount of ammo in clip by 3.","Explosion-5.png",AID::clipIncrease,false,{true,true,true,true},3};
 
-    Augment reload1 = {"Reload Speed 1", "Passive | All Weapons. Decrease the","time it takes to reload be 25%.","Explosion-5.png",AID::reload1,false,{true,true,true,true}};
-    Augment reload2 = {"Reload Speed 2", "Passive | All Weapons. Decrease the","time it takes to reload be 50%.","Explosion-5.png",AID::reload2,false,{true,true,true,true}};
-    Augment reload3 = {"Reload Speed 3", "Passive | All Weapons. Decrease the","time it takes to reload be 75%.","Explosion-5.png",AID::reload3,false,{true,true,true,true}};
+    Augment reload1 = {"Reload Speed 1", "Passive | All Weapons. Decrease the","time it takes to reload be 25%.","Explosion-5.png",AID::reload,false,{true,true,true,true},1};
+    Augment reload2 = {"Reload Speed 2", "Passive | All Weapons. Decrease the","time it takes to reload be 50%.","Explosion-5.png",AID::reload,false,{true,true,true,true},2};
+    Augment reload3 = {"Reload Speed 3", "Passive | All Weapons. Decrease the","time it takes to reload be 75%.","Explosion-5.png",AID::reload,false,{true,true,true,true},3};
+
+    Augment strength1 = {"Strength 1", "Passive | All Weapons. Bullets continue","through 1 addition enemy.","Explosion-5.png",AID::strength,false,{true,true,true,true},1};
+    Augment strength2 = {"Strength 2", "Passive | All Weapons. Bullets continue","through 2 addition enemies.","Explosion-5.png",AID::strength,false,{true,true,true,true},2};
+    Augment strength3 = {"Strength 3", "Passive | All Weapons. Bullets continue","through 3 addition enemies.","Explosion-5.png",AID::strength,false,{true,true,true,true},3};
+
+    Augment durability1 = {"Bullet Durability 1", "Passive | All Weapons. Bullets can","slide along 1 addition platform.","Explosion-5.png",AID::durability,false,{true,true,true,true},1};
+    Augment durability2 = {"Bullet Durability 2", "Passive | All Weapons. Bullets can","slide along 3 addition platform2.","Explosion-5.png",AID::durability,false,{true,true,true,true},2};
+    Augment durability3 = {"Bullet Durability 3", "Passive | All Weapons. Bullets can","slide along 4 addition platform2.","Explosion-5.png",AID::durability,false,{true,true,true,true},3};
+
 
 };
 

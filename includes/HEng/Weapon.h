@@ -50,9 +50,14 @@ public:
   void changePrimaryAugment(Augment* augment) { primaryAugment = augment; }
   void changeSecondaryAugment(Augment* augment) { secondaryAugment = augment; }
 
-  void reset();
+  void upgrade();
 
 private:
+
+  void setDefaultProperties();
+  void applyUpgrade(Augment* augment);
+  void reset();
+
   GlobalGameState& ggs;
 
   SDL_Renderer* renderer;

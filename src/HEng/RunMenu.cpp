@@ -51,9 +51,6 @@ RunMenu::RunMenu(GlobalGameState& ggs, Player& player) : ggs(ggs), player(player
 	row3 = row2+AugButton::getStaticHeight()+verticalSpacing+20;
 	row4 = row3+AugButton::getStaticHeight()+verticalSpacing;
 
-	player.revolver.changePrimaryAugment(&ggs.damage1);
-	player.shotgun.changeSecondaryAugment(&ggs.reload3);
-
 	revolverTexture.setup(scaleUI(64),scaleUI(34), ggs.renderer);
 	revolverTexture.loadFromFile("revolver.png");
 
@@ -201,6 +198,10 @@ void RunMenu::readInput() {
         	if(e.key.keysym.sym == SDLK_ESCAPE && currentMenuState == RunMenus::inventory) {
         		currentMenu = nullptr;
         		ggs.currentRunState = RunState::inWave;
+        		player.revolver.upgrade();
+        		player.shotgun.upgrade();
+        		player.rifle.upgrade();
+        		player.laserPistol.upgrade();
         	}
         } else if( e.type == SDL_JOYBUTTONDOWN ) {
             if(SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == 1) {

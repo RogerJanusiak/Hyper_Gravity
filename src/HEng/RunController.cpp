@@ -18,9 +18,9 @@ RunController::RunController(GlobalGameState& ggs) : ggs(ggs) {
 	grave.setup(scale(64*2.5), scale(72*2.5), ggs.renderer);
 	grave.loadFromFile("gravestone.png");
 
-	ggs.currentRunState = RunState::inMenu;
+	//ggs.currentRunState = RunState::inMenu;
 	runMenu = std::make_unique<RunMenu>(ggs, currentRun->getPlayer());
-	runMenu->changeMenu(RunMenus::inventory);
+	//runMenu->changeMenu(RunMenus::inventory);
 
 }
 
