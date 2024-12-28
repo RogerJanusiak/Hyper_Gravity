@@ -1,4 +1,8 @@
 #include "../../includes/HEng/RunController.h"
+
+#include <random>
+#include <__random/random_device.h>
+
 #include "../../includes/Utils/Input.h"
 
 RunController::RunController(GlobalGameState& ggs) : ggs(ggs) {
@@ -94,39 +98,49 @@ void RunController::renderDeathScreen() const {
 
 void RunController::selectAugmentFound() const {
 
-	std::srand(std::time(0));
-	int random_number = std::rand() % 9;
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> distr(0, 14);
+	int random_number = distr(gen);
 
-	if(random_number == 0) {
-		ggs.newAugment = &ggs.damage1;
-	} else if(random_number == 1) {
-		ggs.newAugment = &ggs.damage2;
+	Augment* testAugment = nullptr;
+
+	if(random_number == 1) {
+		testAugment = &ggs.damage2;
 	} else if(random_number == 2) {
-		ggs.newAugment = &ggs.damage3;
+		testAugment = &ggs.damage3;
 	} else if(random_number == 3) {
-		ggs.newAugment = &ggs.clipIncrease1;
+		testAugment = &ggs.clipIncrease1;
 	} else if(random_number == 4) {
-		ggs.newAugment = &ggs.clipIncrease2;
+		testAugment = &ggs.clipIncrease2;
 	} else if(random_number == 5) {
-		ggs.newAugment = &ggs.clipIncrease3;
+		testAugment = &ggs.clipIncrease3;
 	} else if(random_number == 6) {
-		ggs.newAugment = &ggs.reload1;
+		testAugment = &ggs.reload1;
 	} else if(random_number == 7) {
-		ggs.newAugment = &ggs.reload2;
+		testAugment = &ggs.reload2;
 	} else if(random_number == 8) {
-		ggs.newAugment = &ggs.reload3;
+		testAugment = &ggs.reload3;
 	} else if(random_number == 9) {
-		ggs.newAugment = &ggs.strength1;
+		testAugment = &ggs.strength1;
 	} else if(random_number == 10) {
-		ggs.newAugment = &ggs.strength2;
+		testAugment = &ggs.strength2;
 	} else if(random_number == 11) {
-		ggs.newAugment = &ggs.strength3;
+		testAugment = &ggs.strength3;
 	} else if(random_number == 12) {
-		ggs.newAugment = &ggs.durability1;
+		testAugment = &ggs.durability1;
 	} else if(random_number == 13) {
-		ggs.newAugment = &ggs.durability2;
+		testAugment = &ggs.durability2;
 	} else if(random_number == 14) {
-		ggs.newAugment = &ggs.durability3;
+		testAugment = &ggs.durability3;
+	} else {
+		testAugment = &ggs.damage1;
+	}
+
+	if(testAugment->waveUnlocked > currentRun->getWaveNumber()) {
+		selectAugmentFound();
+	} else {
+		ggs.newAugment = testAugment;
 	}
 
 }
