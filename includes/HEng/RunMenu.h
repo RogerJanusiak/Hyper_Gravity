@@ -18,7 +18,7 @@ public:
 
 	explicit RunMenu(GlobalGameState& ggs, Player& player);
 
-	void render();
+	void render() const;
 	void run();
 	void changeMenu(RunMenus menu);
 
@@ -37,6 +37,7 @@ private:
 	RunMenus currentMenuState = RunMenus::inventory;
 
 	void initBaseInventoryMenu();
+	void initMoveInventoryMenu();
 
 	int height = 0;
 	int spacing = 0;

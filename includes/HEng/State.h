@@ -78,7 +78,12 @@ struct GlobalGameState {
     int weaponChanged = 0;
     int slotChanged = 0;
 
+    int weaponMovedTo = 0;
+    int slotMovedTo = 0;
+
     bool augmentRemoved = false;
+    bool startMoveAugment = false;
+    bool moveAugment = false;
 
     Augment* newAugment = nullptr;
 
@@ -113,31 +118,5 @@ struct GlobalGameState {
 
 
 };
-
-inline Augment* getAugment(GlobalGameState& ggs, int aid) {
-    switch (aid) {
-        case AID::damage1:
-            return &ggs.damage1;
-        case AID::damage2:
-            return &ggs.damage2;
-        case AID::damage3:
-            return &ggs.damage3;
-        case AID::reload1:
-            return &ggs.reload1;
-        case AID::reload2:
-            return &ggs.reload2;
-        case AID::reload3:
-            return &ggs.reload3;
-        case AID::clipIncrease1:
-            return &ggs.clipIncrease1;
-        case AID::clipIncrease2:
-            return &ggs.clipIncrease2;
-        case AID::clipIncrease3:
-            return &ggs.clipIncrease3;
-        default:
-            return &ggs.damage1;
-    }
-    return nullptr;
-}
 
 #endif //STATE_H
