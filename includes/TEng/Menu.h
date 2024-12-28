@@ -18,6 +18,7 @@ public:
   void reset() { buttons.clear(); };
 
   void loadMenu();
+  void setSelected(int button);
 
   void setup(SDL_Renderer* _renderer) { renderer = _renderer; }
 

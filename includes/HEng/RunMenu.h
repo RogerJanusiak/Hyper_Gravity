@@ -71,6 +71,9 @@ private:
 	int column1 = (WINDOW_WIDTH-AugButton::getStaticWidth()*2-scaleUI(20))/2;
 	int column2 = column1+scaleUI(20)+AugButton::getStaticWidth();
 
+	bool fromAnotherMenu = false;
+	bool fromMoveMenu = false;
+
 	int height = 0;
 	int row1;
 	int row2;

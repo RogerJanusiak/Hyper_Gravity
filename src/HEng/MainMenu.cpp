@@ -21,6 +21,8 @@ void MainMenu::readInput() {
         } else if( e.type == SDL_KEYDOWN ) {
             if(e.key.keysym.sym == SDLK_ESCAPE && currentMenu == &levelSelect) {
                 changeMenu(head);
+            } else if(e.key.keysym.sym == SDLK_ESCAPE && currentMenu == &pauseMenu) {
+                ggs.inPauseMenu = false;
             }
         } else if( e.type == SDL_JOYBUTTONDOWN ) {
             if(SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == 1) {
@@ -28,6 +30,8 @@ void MainMenu::readInput() {
             } else if(SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_B) == 1) {
                 if(currentMenu == &levelSelect) {
                     changeMenu(head);
+                } else if(currentMenu == &pauseMenu) {
+                    ggs.inPauseMenu = false;
                 }
             } else if(SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_DPAD_UP) == 1) {
                 controllerEvent(*currentMenu,MENU_CONTROL::up);
@@ -37,7 +41,12 @@ void MainMenu::readInput() {
                 controllerEvent(*currentMenu,MENU_CONTROL::left);
             } else if(SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == 1) {
                 controllerEvent(*currentMenu,MENU_CONTROL::right);
+            } else if (SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_START) == 1) {
+                if(currentMenu == &pauseMenu) {
+                    ggs.inPauseMenu = false;
+                }
             }
+
         } else if(e.type == SDL_JOYDEVICEADDED ) {
             controllerEvent(*currentMenu,MENU_CONTROL::connect);
             ggs.controller = loadController();

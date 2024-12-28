@@ -115,6 +115,18 @@ void RunController::selectAugmentFound() const {
 		ggs.newAugment = &ggs.reload2;
 	} else if(random_number == 8) {
 		ggs.newAugment = &ggs.reload3;
+	} else if(random_number == 9) {
+		ggs.newAugment = &ggs.strength1;
+	} else if(random_number == 10) {
+		ggs.newAugment = &ggs.strength2;
+	} else if(random_number == 11) {
+		ggs.newAugment = &ggs.strength3;
+	} else if(random_number == 12) {
+		ggs.newAugment = &ggs.durability1;
+	} else if(random_number == 13) {
+		ggs.newAugment = &ggs.durability2;
+	} else if(random_number == 14) {
+		ggs.newAugment = &ggs.durability3;
 	}
 
 }

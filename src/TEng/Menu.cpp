@@ -35,3 +35,11 @@ void UI_Menu::loadMenu() {
     buttons[0]->select();
     currentButton = buttons[0].get();
 }
+
+void UI_Menu::setSelected(int button) {
+    for(auto& butt : buttons) {
+        butt->deselect();
+    }
+    buttons[button]->select();
+    currentButton = buttons[button].get();
+}
