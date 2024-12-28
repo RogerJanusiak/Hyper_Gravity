@@ -208,7 +208,7 @@ void RunMenu::readInput() {
         if( e.type == SDL_QUIT ) {
             ggs.quit = true;
         } else if( e.type == SDL_KEYDOWN ) {
-        	if(e.key.keysym.sym == SDLK_ESCAPE && currentMenuState == RunMenus::inventory) {
+        	if((e.key.keysym.sym == SDLK_ESCAPE || e.key.keysym.sym == SDLK_e) && currentMenuState == RunMenus::inventory) {
         		currentMenu = nullptr;
         		ggs.currentRunState = RunState::inWave;
         		player.revolver.upgrade();

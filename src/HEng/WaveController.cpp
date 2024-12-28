@@ -136,8 +136,11 @@ void WaveController::readInput() {
                 player.changeWeapon();
             } else if(e.key.keysym.sym == SDLK_r) {
                 player.getWeapon()->forceReload();
-            }
-            if(e.key.keysym.sym == SDLK_SPACE) {
+            } else if(e.key.keysym.sym == SDLK_e) {
+                openInventory = true;
+                rightMovement = false;
+                leftMovement = false;
+            } else if(e.key.keysym.sym == SDLK_SPACE) {
                 if(shootingReset && currentWave != nullptr) {
                     player.getWeapon()->shoot(currentWave->getBulletEntities(),currentWave->getBullets(),player.getDirection(),player.getEntity()->getRect().x,player.getEntity()->getRect().y);
                     shootingReset = false;

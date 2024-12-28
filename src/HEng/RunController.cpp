@@ -33,6 +33,12 @@ void RunController::run() {
 		selectAugmentFound();
 	}
 
+	if(waveController->doesInventoryNeedToOpen()) {
+		waveController->setInventoryNeedToOpen();
+		ggs.currentRunState = RunState::inMenu;
+		runMenu->changeMenu(RunMenus::inventory);
+	}
+
 	switch (ggs.currentRunState) {
 		case RunState::deathScreen: {
 			renderDeathScreen();

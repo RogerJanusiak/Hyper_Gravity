@@ -15,6 +15,9 @@ public:
 	[[nodiscard]] bool hasAugmentBeenFound() const { return augmentFound; }
 	void setAugmentBeenFound() { augmentFound = false; }
 
+	[[nodiscard]] bool doesInventoryNeedToOpen() const { return openInventory; }
+	void setInventoryNeedToOpen() { openInventory = false; }
+
 private:
 
 	void startWave();
@@ -29,6 +32,7 @@ private:
 	void updateTimeToShoot(double width);
 
 	bool augmentFound = false;
+	bool openInventory = false;
 
 	GlobalGameState& ggs;
 
