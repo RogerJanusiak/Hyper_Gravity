@@ -6,11 +6,12 @@
 #include "../../includes/TEng/Texture.h"
 #include "../../includes/Entities/Player.h"
 
+// TODO: Move Pause menu
 enum class RunMenus {
 	pause,
 	inventory,
-	moveAugment,
-	newAugment
+	newAugment,
+	moveAugment
 };
 
 class RunMenu {
@@ -26,14 +27,24 @@ public:
 	void readInput();
 
 	void loadWeaponAugments(Weapon_Type weapon);
+	void loadWeaponAugmentsNew(Weapon_Type weapon);
+	void loadWeaponAugmentsMove(Weapon_Type weapon);
+
+	void initNewAugmentMenu();
+	void initMoveAugmentMenu();
 
 private:
 
 	GlobalGameState& ggs;
 	Player& player;
 
-	UI_Menu inventoryMenu = UI_Menu(4);
+	UI_Menu inventoryMenu = UI_Menu(6);
+	UI_Menu newAugmentMenu = UI_Menu(6);
+	UI_Menu moveAugmentMenu = UI_Menu(6);
+
 	Texture inventoryMenuTitle;
+	Texture newAugmentMenuTitle;
+	Texture moveAugmentMenuTitle;
 
 	UI_Menu* currentMenu = nullptr;
 	RunMenus currentMenuState = RunMenus::inventory;

@@ -15,4 +15,6 @@ void quitToDesktop(GlobalGameState& ggs, int attr1, int attr2);
 
 void noAction(GlobalGameState& ggs, int attr1, int attr2);
 
+void menuSecondarySelect(UI_Menu& currentMenu);
+
 #endif //INPUT_H

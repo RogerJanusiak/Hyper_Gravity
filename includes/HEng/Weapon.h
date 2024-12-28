@@ -39,13 +39,16 @@ public:
 
   void removePrimaryAugment() {
     primaryAugment = nullptr;
-    if(secondaryAugment != nullptr) {
-      primaryAugment = secondaryAugment;
-      secondaryAugment = nullptr;
-    }
+    //if(secondaryAugment != nullptr) {
+      //primaryAugment = secondaryAugment;
+      //secondaryAugment = nullptr;
+    //}
   }
 
   void removeSecondaryAugment() { secondaryAugment = nullptr; }
+
+  void changePrimaryAugment(Augment* augment) { primaryAugment = augment; }
+  void changeSecondaryAugment(Augment* augment) { secondaryAugment = augment; }
 
   void reset();
 
@@ -86,8 +89,8 @@ private:
   bool justReloaded = false;
   float timeSinceShot = 0;
 
-  Augment* primaryAugment = &ggs.clipIncrease1;
-  Augment* secondaryAugment = &ggs.damage1;
+  Augment* primaryAugment = nullptr;
+  Augment* secondaryAugment = nullptr;
 
 };
 

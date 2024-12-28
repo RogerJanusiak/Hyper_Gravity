@@ -97,6 +97,11 @@ void WaveController::startLevel() const {
 
 void WaveController::startWave() {
 	inWave = true;
+    if(run.getWaveNumber() % 2 == 0) {
+        augmentFound = true;
+        rightMovement = false;
+        leftMovement = false;
+    }
 	currentWave = std::make_unique<Wave>(ggs,run.getPlayer(), run.getLevel(), run.getWaveNumber());
 	if(run.getWaveNumber() > 1) {
 	    player.increaseShield(10);

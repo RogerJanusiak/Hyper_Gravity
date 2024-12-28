@@ -1,7 +1,7 @@
 #include "../../includes/TEng/Button.h"
 
-Button::Button(GlobalGameState& ggs, int x, int y, const std::string& text, void (*action)(GlobalGameState& ggs, int attr1, int attr2), int attr1, int attr2) :
-x(x), y(y), attribute(attr1), attribute2(attr2), state(ggs), action(action) {
+Button::Button(GlobalGameState& ggs, int x, int y, const std::string& text, void (*action)(GlobalGameState& ggs, int attr1, int attr2), int attr1, int attr2, void (*secondaryAction)(GlobalGameState& ggs, int attr1, int attr2), int secondaryAttr1 , int secodaryAttr2) :
+x(x), y(y), attribute(attr1), attribute2(attr2), state(ggs), action(action), secondaryAction(secondaryAction), secondaryAttr1(secondaryAttr1), secondaryAttr2(secodaryAttr2) {
 
     textTexture.setup(0,0,ggs.renderer);
     textTexture.loadFromRenderedText(text, ggs.white, ggs.buttonFont);
@@ -84,4 +84,11 @@ void Button::link(const RELATIVE_DIRECTION direction, Button* button) {
 void Button::click() {
     action(state, attribute, attribute2);
     buttonClick.play();
+}
+
+void Button::secondaryClick() {
+    if(secondaryAction != nullptr) {
+        secondaryAction(state, secondaryAttr1, secondaryAttr2);
+        buttonClick.play();
+    }
 }

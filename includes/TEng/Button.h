@@ -31,7 +31,7 @@ class Button {
 public:
 	virtual ~Button() = default;
 
-	Button(GlobalGameState& ggs, int x, int y, const std::string& text, void (*action)(GlobalGameState& ggs, int attr1, int attr2), int attr1 = 0, int attr2 = 0);
+	Button(GlobalGameState& ggs, int x, int y, const std::string& text, void (*action)(GlobalGameState& ggs, int attr1, int attr2), int attr1 = 0, int attr2 = 0, void (*secondaryAction)(GlobalGameState& ggs, int attr1, int attr2) = nullptr, int secondaryAttr1 = 0, int secodaryAttr2 = 0);
 
 	virtual void render() const;
 	[[nodiscard]] static int getStaticWidth() { return width; }
@@ -54,6 +54,7 @@ public:
 	static int scaleButton(int x) { return scaleUI(x)*1.5; }
 
 	void click();
+	void secondaryClick();
 
 	[[nodiscard]] bool mouseEvent(int mouseX, int mouseY) const;
 
@@ -68,6 +69,10 @@ protected:
 
 	GlobalGameState& state;
 	void (*action)(GlobalGameState& ggs, int attr1, int attr2);
+
+	void (*secondaryAction)(GlobalGameState& ggs, int attr1, int attr2);
+	int secondaryAttr1;
+	int secondaryAttr2;
 
 	Button* buttonAbove = nullptr;
 	Button* buttonBelow = nullptr;

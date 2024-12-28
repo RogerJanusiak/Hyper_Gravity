@@ -33,6 +33,15 @@ void menuSelect(UI_Menu& currentMenu) {
     }
 }
 
+void menuSecondarySelect(UI_Menu& currentMenu) {
+    std::vector<std::unique_ptr<Button>>* menuButtons = currentMenu.getButtons();
+    for(auto & menuButton : *menuButtons) {
+        if(menuButton->isSelected()) {
+            menuButton->secondaryClick();
+        }
+    }
+}
+
 void controllerEvent(UI_Menu& currentMenu, MENU_CONTROL control) {
     switch(control) {
         case MENU_CONTROL::connect:

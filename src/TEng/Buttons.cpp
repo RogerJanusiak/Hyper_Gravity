@@ -1,7 +1,7 @@
 #include "../../includes/TEng/Buttons.h"
 
-AugButton::AugButton(GlobalGameState& ggs, int x, int y, const Augment* augment, void (*action)(GlobalGameState& ggs, int attr1, int attr2), int attr1, int attr2) :
-Button(ggs, x, y, augment->name, action, attr1, attr2) {
+AugButton::AugButton(GlobalGameState& ggs, int x, int y, const Augment* augment, void (*action)(GlobalGameState& ggs, int attr1, int attr2), int attr1, int attr2, void (*secondaryAction)(GlobalGameState& ggs, int attr1, int attr2), int sAttr1, int sAttr2) :
+Button(ggs, x, y, augment->name, action, attr1, attr2, secondaryAction,sAttr1,sAttr2) {
 
 	texture.setup(width,height,ggs.renderer);
 	texture.loadFromFile("ui/aug-button.png");
@@ -23,8 +23,8 @@ Button(ggs, x, y, augment->name, action, attr1, attr2) {
 
 }
 
-AugButton::AugButton(GlobalGameState& ggs, int x, int y, void (*action)(GlobalGameState& ggs, int attr1, int attr2), int attr1, int attr2) :
-Button(ggs, x, y, "No Augment Equiped in Slot", action, attr1, attr2) {
+AugButton::AugButton(GlobalGameState& ggs, int x, int y, void (*action)(GlobalGameState& ggs, int attr1, int attr2), int attr1, int attr2, void (*secondaryAction)(GlobalGameState& ggs, int attr1, int attr2), int sAttr1, int sAttr2) :
+Button(ggs, x, y, "No Augment Equiped in Slot", action, attr1, attr2,secondaryAction,sAttr1,sAttr2) {
 
 	texture.setup(width,height,ggs.renderer);
 	texture.loadFromFile("ui/aug-button.png");

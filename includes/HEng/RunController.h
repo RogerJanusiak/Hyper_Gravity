@@ -18,6 +18,8 @@ private:
 	void renderDeathScreen() const;
 	void readInput();
 
+	void selectAugmentFound() const;
+
 	GlobalGameState& ggs;
 
 	std::unique_ptr<Run> currentRun;

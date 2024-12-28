@@ -12,6 +12,9 @@ public:
 	void operate();
 	void readInput();
 
+	[[nodiscard]] bool hasAugmentBeenFound() const { return augmentFound; }
+	void setAugmentBeenFound() { augmentFound = false; }
+
 private:
 
 	void startWave();
@@ -24,6 +27,8 @@ private:
 	void updateWaveText();
 
 	void updateTimeToShoot(double width);
+
+	bool augmentFound = true;
 
 	GlobalGameState& ggs;
 

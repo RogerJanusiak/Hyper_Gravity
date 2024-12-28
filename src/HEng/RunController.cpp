@@ -18,13 +18,21 @@ RunController::RunController(GlobalGameState& ggs) : ggs(ggs) {
 	grave.setup(scale(64*2.5), scale(72*2.5), ggs.renderer);
 	grave.loadFromFile("gravestone.png");
 
-	ggs.currentRunState = RunState::inWave;
+	ggs.currentRunState = RunState::inMenu;
 	runMenu = std::make_unique<RunMenu>(ggs, currentRun->getPlayer());
-	runMenu->changeMenu(RunMenus::inventory);
+	runMenu->changeMenu(RunMenus::newAugment);
 
 }
 
 void RunController::run() {
+	if(waveController->hasAugmentBeenFound()) {
+		waveController->setAugmentBeenFound();
+		ggs.currentRunState = RunState::inMenu;
+		selectAugmentFound();
+		runMenu->initNewAugmentMenu();
+		runMenu->changeMenu(RunMenus::newAugment);
+	}
+
 	switch (ggs.currentRunState) {
 		case RunState::deathScreen: {
 			renderDeathScreen();
@@ -76,4 +84,31 @@ void RunController::renderDeathScreen() const {
 	gameOverText.render((WINDOW_WIDTH-gameOverText.getWidth())/2, scale(150));
 	grave.render((WINDOW_WIDTH-grave.getWidth())/2, scale(220));
 	continueText.render((WINDOW_WIDTH-continueText.getWidth())/2, scale(430));
+}
+
+void RunController::selectAugmentFound() const {
+
+	std::srand(std::time(0));
+	int random_number = std::rand() % 9;
+
+	if(random_number == 0) {
+		ggs.newAugment = &ggs.damage1;
+	} else if(random_number == 1) {
+		ggs.newAugment = &ggs.damage2;
+	} else if(random_number == 2) {
+		ggs.newAugment = &ggs.damage3;
+	} else if(random_number == 3) {
+		ggs.newAugment = &ggs.clipIncrease1;
+	} else if(random_number == 4) {
+		ggs.newAugment = &ggs.clipIncrease2;
+	} else if(random_number == 5) {
+		ggs.newAugment = &ggs.clipIncrease3;
+	} else if(random_number == 6) {
+		ggs.newAugment = &ggs.reload1;
+	} else if(random_number == 7) {
+		ggs.newAugment = &ggs.reload2;
+	} else if(random_number == 8) {
+		ggs.newAugment = &ggs.reload3;
+	}
+
 }
