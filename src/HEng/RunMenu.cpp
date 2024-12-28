@@ -49,7 +49,7 @@ RunMenu::RunMenu(GlobalGameState& ggs, Player& player) : ggs(ggs), player(player
 	moveTitle.loadFromRenderedText("Select New Slot for Augment",ggs.white,ggs.title);
 
 	newTitle.setup(ggs.renderer);
-	newTitle.loadFromRenderedText("Select Slot to Equip: ",ggs.white,ggs.title);
+	newTitle.loadFromRenderedText("Select Slot for: ",ggs.white,ggs.title);
 
 	height = scaleUI(30)*2+inventoryMenuTitle.getHeight();
 
@@ -69,6 +69,23 @@ RunMenu::RunMenu(GlobalGameState& ggs, Player& player) : ggs(ggs), player(player
 
 	laserPistolTexture.setup(scaleUI(60),scaleUI(42), ggs.renderer);
 	laserPistolTexture.loadFromFile("laserPistol.png");
+
+	aButton.setup(scaleUI(24), scaleUI(24), ggs.renderer);
+	aButton.loadFromFile("ui/abutton.png");
+	xButton.setup(scaleUI(24), scaleUI(24), ggs.renderer);
+	xButton.loadFromFile("ui/xbutton.png");
+
+	leftClickText.setup(ggs.renderer);
+	leftClickText.loadFromRenderedText("L Click:", ggs.white, ggs.augTitle);
+	rightClickText.setup(ggs.renderer);
+	rightClickText.loadFromRenderedText("R Click:", ggs.white, ggs.augTitle);
+
+	moveAugText.setup(ggs.renderer);
+	moveAugText.loadFromRenderedText("Move Aug", ggs.white, ggs.augTitle);
+	removeAugText.setup(ggs.renderer);
+	removeAugText.loadFromRenderedText("Remove Aug", ggs.white, ggs.augTitle);
+	selectSlotText.setup(ggs.renderer);
+	selectSlotText.loadFromRenderedText("Equip Aug", ggs.white, ggs.augTitle);
 
 	initBaseInventoryMenu();
 
@@ -188,6 +205,42 @@ void RunMenu::render() const {
 	shotgunTexture.render(shotgunX,shotgunY);
 	rifleTexture.render(rifleX,rifleY);
 	laserPistolTexture.render(laserPistolX,laserPistolY);
+	//TODO: Start to get out of pause menu, maybe escape too
+
+	if(ggs.controller != nullptr) {
+		if(currentScreen == view) {
+			aButton.render(scaleUI(10), scaleUI(10));
+			xButton.render(scaleUI(10), scaleUI(20)+aButton.getHeight());
+			moveAugText.render(scaleUI(15)+aButton.getWidth(),scaleUI(9)+aButton.getHeight()/2-moveAugText.getHeight()/2);
+			removeAugText.render(scaleUI(15)+xButton.getWidth(),scaleUI(19)+aButton.getHeight()+xButton.getHeight()/2-removeAugText.getHeight()/2);
+		} else if(currentScreen == move) {
+			aButton.render(scaleUI(10), scaleUI(10));
+			selectSlotText.render(scaleUI(15)+aButton.getWidth(),scaleUI(9)+aButton.getHeight()/2-selectSlotText.getHeight()/2);
+		} else if(currentScreen == newAug) {
+			aButton.render(scaleUI(10), scaleUI(10));
+			xButton.render(scaleUI(10), scaleUI(20)+aButton.getHeight());
+			selectSlotText.render(scaleUI(15)+aButton.getWidth(),scaleUI(9)+aButton.getHeight()/2-selectSlotText.getHeight()/2);
+			moveAugText.render(scaleUI(15)+xButton.getWidth(),scaleUI(19)+aButton.getHeight()+xButton.getHeight()/2-moveAugText.getHeight()/2);
+		}
+	} else {
+		if(currentScreen == view) {
+			leftClickText.render(scaleUI(10), scaleUI(10));
+			rightClickText.render(scaleUI(10), scaleUI(20)+leftClickText.getHeight());
+			moveAugText.render(scaleUI(15)+leftClickText.getWidth(),scaleUI(10));
+			removeAugText.render(scaleUI(15)+rightClickText.getWidth(),scaleUI(20)+leftClickText.getHeight());
+		} else if(currentScreen == move) {
+			leftClickText.render(scaleUI(10), scaleUI(10));
+			selectSlotText.render(scaleUI(15)+leftClickText.getWidth(),scaleUI(10));
+		} else if(currentScreen == newAug) {
+			leftClickText.render(scaleUI(10), scaleUI(10));
+			rightClickText.render(scaleUI(10), scaleUI(20)+leftClickText.getHeight());
+			selectSlotText.render(scaleUI(15)+leftClickText.getWidth(),scaleUI(10));
+			moveAugText.render(scaleUI(15)+rightClickText.getWidth(),scaleUI(20)+leftClickText.getHeight());
+		}
+	}
+
+
+
 }
 
 void RunMenu::changeMenu(RunMenus menu) {
@@ -316,7 +369,7 @@ void RunMenu::readInput() {
 
 void RunMenu::initBaseInventoryMenu() {
 	inventoryMenu.reset();
-
+	currentScreen = view;
 	inventoryMenu.addTitle((WINDOW_WIDTH-inventoryMenuTitle.getWidth())/2, scaleUI(30), inventoryMenuTitle);
 
 	int rp, rs, sp, ss, rip, ris, lp;
@@ -369,7 +422,7 @@ void RunMenu::initBaseInventoryMenu() {
 
 void RunMenu::initMoveInventoryMenu() {
 	inventoryMenu.reset();
-
+	currentScreen = move;
 	int rp, rs, sp, ss, rip, ris, lp;
 
 	inventoryMenu.addTitle((WINDOW_WIDTH-moveTitle.getWidth())/2, scaleUI(30), moveTitle);
@@ -423,7 +476,7 @@ void RunMenu::initMoveInventoryMenu() {
 
 void RunMenu::initNewInventoryMenu() {
 	inventoryMenu.reset();
-
+	currentScreen = newAug;
 	int rp, rs, sp, ss, rip, ris, lp;
 
 	inventoryMenu.addTitle((WINDOW_WIDTH-newTitle.getWidth()-AugButton::getStaticWidth()-scaleUI(30))/2, scaleUI(30), newTitle);

@@ -13,6 +13,12 @@ enum class RunMenus {
 	inventory
 };
 
+enum inventoryScreen {
+	move,
+	newAug,
+	view,
+};
+
 class RunMenu {
 
 public:
@@ -43,8 +49,19 @@ private:
 	Texture rifleTexture;
 	Texture laserPistolTexture;
 
+	Texture aButton;
+	Texture xButton;
+
+	Texture leftClickText;
+	Texture rightClickText;
+
+	Texture moveAugText;
+	Texture removeAugText;
+	Texture selectSlotText;
+
 	UI_Menu* currentMenu = nullptr;
 	RunMenus currentMenuState = RunMenus::inventory;
+	inventoryScreen currentScreen;
 
 	void initBaseInventoryMenu();
 	void initMoveInventoryMenu();
