@@ -83,7 +83,9 @@ struct GlobalGameState {
     bool startMoveAugment = false;
     bool moveAugment = false;
     bool addedAugment = false;
+    bool fromNew = false;
 
+    Augment* augmentToMove = nullptr;
     Augment* newAugment = nullptr;
 
     //Developer Options
