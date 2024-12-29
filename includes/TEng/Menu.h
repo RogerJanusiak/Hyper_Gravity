@@ -1,6 +1,8 @@
 #ifndef MENU_H
 #define MENU_H
 
+#include <memory>
+
 #include "Sound.h"
 #include "../HEng/State.h"
 #include "Texture.h"

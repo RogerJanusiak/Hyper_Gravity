@@ -1,5 +1,6 @@
 #include <list>
 #include <vector>
+#include <cmath>
 
 #include "../../includes/Entities/Entity.h"
 #include "../../includes/Entities/Robor.h"

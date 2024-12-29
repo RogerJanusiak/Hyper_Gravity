@@ -1,6 +1,8 @@
 #ifndef WAVE_H
 #define WAVE_H
 
+#include <memory>
+
 #include "../Utils/Animations.h"
 #include "../Entities/Enemy.h"
 #include "Level.h"

@@ -97,7 +97,7 @@ void WaveController::startLevel() const {
 
 void WaveController::startWave() {
 	inWave = true;
-    if(run.getWaveNumber() % 2 == 0) {
+    if(run.getWaveNumber() % 5 == 0) {
         augmentFound = true;
         stopMovement();
         rightMovement = false;
@@ -214,6 +214,8 @@ void WaveController::readInput() {
             } else if(SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_BACK) == 1) {
                 openInventory = true;
                 stopMovement();
+            } else if(SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == 1) {
+                player.getEntity()->setYVelocity(player.getEntity()->getYVelocity()-scale(1000));
             }
         }
     }

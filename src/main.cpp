@@ -7,6 +7,7 @@
 #include "../includes/Utils/GlobalConstants.h"
 #include "../includes/HEng/MainMenu.h"
 #include "../includes/HEng/State.h"
+#include "../includes/TEng/ConfirmPopup.h"
 
 bool init(GlobalGameState& ggs) {
 	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC | SDL_INIT_GAMECONTROLLER | SDL_INIT_AUDIO ) < 0 ) {
@@ -101,6 +102,8 @@ int main( int argc, char* args[] ) {
 
 	//ggs.inMainMenu = true;
 	//ggs.level = 4;
+	std::string test = "test";
+	ConfirmPopup cp(ggs,test,nullptr);
 
 	while(!ggs.quit) {
 		Uint32 frameStart = SDL_GetTicks();
@@ -136,6 +139,8 @@ int main( int argc, char* args[] ) {
 			rc->run();
 		}
 
+		//cp.render();
+
 		SDL_SetRenderDrawColor(ggs.renderer, 26, 26, 26, 255);
 		SDL_RenderPresent(ggs.renderer);
 
@@ -143,6 +148,8 @@ int main( int argc, char* args[] ) {
 		if (frameTime < frameDelay) {
 			SDL_Delay(frameDelay - frameTime);
 		}
+
+
 
 		Uint64 end = SDL_GetPerformanceCounter();
 

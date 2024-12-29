@@ -1,6 +1,9 @@
 #include <SDL_events.h>
 
 #include "../../includes/HEng/MainMenu.h"
+
+#include <memory>
+
 #include "../../includes/Utils/Input.h"
 
 MainMenu::MainMenu(GlobalGameState& ggs) : ggs(ggs) {

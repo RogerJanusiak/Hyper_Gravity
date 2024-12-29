@@ -3,39 +3,57 @@ cmake_minimum_required(VERSION 3.22)
 if(WIN32)
 project(Hyper_Gravity)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 
-add_executable(${PROJECT_NAME} src/Player.cpp
-        src/Texture.cpp
-        src/Platform.cpp
-        includes/Robor.h
-        src/Entity.cpp
-        includes/Entity.h
-        src/Bullet.cpp
-        includes/Bullet.h
-        includes/Spawn.h
-        includes/Bullet.h
+add_executable(${PROJECT_NAME} src/Entities/Player.cpp
+        src/TEng/Texture.cpp
+        src/HEng/Platform.cpp
+        includes/Entities/Robor.h
+        src/Entities/Entity.cpp
+        includes/Entities/Entity.h
+        src/Entities/Bullet.cpp
+        includes/Entities/Bullet.h
+        includes/HEng/Spawn.h
+        includes/Entities/Bullet.h
         src/main.cpp
-        src/UI.cpp
-        includes/UI.h
-        src/main.cpp
-        includes/State.h
-        src/Sound.cpp
-        includes/Sound.h
-        src/Roborto.cpp
-        src/Roborto.cpp
-        includes/Roborto.h
-        src/Animations.cpp
-        includes/Animations.h
-        src/Weapon.cpp
-        includes/Weapon.h
-        src/Menu.cpp
-        includes/Menu.h
-        src/Enemy.cpp
-        includes/Enemy.h
-        includes/Robro.h
-        includes/Romo.h
-        includes/Roo.h)
+        includes/HEng/State.h
+        src/TEng/Sound.cpp
+        includes/TEng/Sound.h
+        src/Entities/Roborto.cpp
+        includes/Entities/Roborto.h
+        src/Utils/Animations.cpp
+        includes/Utils/Animations.h
+        src/HEng/Weapon.cpp
+        includes/HEng/Weapon.h
+        src/TEng/Menu.cpp
+        includes/TEng/Menu.h
+        src/Entities/Enemy.cpp
+        includes/Entities/Enemy.h
+        includes/Entities/Robro.h
+        includes/Entities/Romo.h
+        includes/Entities/Roo.h
+        src/HEng/MainMenu.cpp
+        includes/HEng/MainMenu.h
+        src/Utils/Input.cpp
+        includes/Utils/Input.h
+        src/HEng/Run.cpp
+        includes/HEng/Run.h
+        src/HEng/Wave.cpp
+        includes/HEng/Wave.h
+        src/HEng/Level.cpp
+        includes/HEng/Level.h
+        includes/HEng/WaveController.h
+        src/HEng/WaveController.cpp
+        src/HEng/RunController.cpp
+        includes/HEng/RunController.h
+        includes/TEng/Button.h
+        src/TEng/Button.cpp
+        includes/TEng/Buttons.h
+        src/TEng/Buttons.cpp
+        src/HEng/RunMenu.cpp
+        includes/HEng/RunMenu.h
+        includes/TEng/ConfirmPopup.h
+        src/TEng/ConfirmPopup.cpp)
 
 # --- SDL2 SETUP ---
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMAKE/cmakepc )
@@ -132,7 +150,9 @@ if(APPLE)
             includes/TEng/Buttons.h
             src/TEng/Buttons.cpp
             src/HEng/RunMenu.cpp
-            includes/HEng/RunMenu.h)
+            includes/HEng/RunMenu.h
+            includes/TEng/ConfirmPopup.h
+            src/TEng/ConfirmPopup.cpp)
 
     Message("")
     Message( STATUS "SOURCE entry point : " ${SOURCE_FILES} )
