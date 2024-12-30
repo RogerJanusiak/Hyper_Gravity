@@ -22,4 +22,7 @@ const float TERMINAL_VELOCITY = scale(1000);
 
 constexpr int JOYSTICK_DEAD_ZONE = 18000;
 
+const int groundPoundRadius = scale(100);
+const int maxEnemyHealth = 5;
+
 #endif

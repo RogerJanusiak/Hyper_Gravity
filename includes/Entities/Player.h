@@ -65,6 +65,11 @@ public:
 
     [[nodiscard]] int getAbilityKills() const { return abilitiesKills; }
 
+    [[nodiscard]] bool isOnPlatform() const { return onPlatform; }
+    void startGroundPound();
+    [[nodiscard]] bool hasGroundPounded() const { return groundPounded; }
+    void executedGroundPount();
+
     int abilitiesKills = 0;
 
     Weapon revolver;
@@ -72,7 +77,8 @@ public:
     Weapon shotgun;
     Weapon laserPistol;
 
-    bool shieldActive = true;
+    bool shieldActive = false;
+    bool inShieldJump = false;
     double shieldAngle = 360;
 
 private:
@@ -91,8 +97,6 @@ private:
     Texture playerTexture;
     Texture shieldTexture;
 
-
-
     Weapon* currentWeapon = nullptr;
     Weapon* primaryWeapon = nullptr;
     Weapon* secondaryWeapon = nullptr;
@@ -104,6 +108,11 @@ private:
     const int maxHealth = 200;
     double shield = 0;
     const int maxShield = 200;
+
+    bool onPlatform = true;
+    bool doingGroundPound = false;
+    bool groundPounded = false;
+
 
     int xp = 0;
 
@@ -122,6 +131,7 @@ private:
     SDL_Rect weaponRect;
 
     Sound damageSound;
+    Sound groundPoundEnd;
 
     int numberOfPlayerUpgrades = 4;
 

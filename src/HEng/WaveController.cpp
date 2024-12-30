@@ -238,7 +238,11 @@ void WaveController::readInput() {
                 openInventory = true;
                 stopMovement();
             } else if(SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == 1) {
-                player.getEntity()->setPosition(player.getEntity()->getRect().x, player.getEntity()->getRect().y+TILE_SIZE_SCALED);
+                if(player.isOnPlatform() && ggs.playerTileY < run.getLevel().getMap().size()-1) {
+                    player.getEntity()->setPosition(player.getEntity()->getRect().x, player.getEntity()->getRect().y+TILE_SIZE_SCALED);
+                } else if(!player.isOnPlatform()) {
+                    player.startGroundPound();
+                }
             }
         }
     }

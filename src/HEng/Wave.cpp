@@ -79,6 +79,8 @@ bool Wave::runWave() {
 
     level.updateSpawns(allCharacterEntities);
 
+    // TODO: Clean up this loop
+    // TODO: Entity rect variable | can I put some of the code in functions?
     for (const auto & enemy : enemies) {
         bool firstLoop = false;
         if(!enemy->getEntity()->isSpawned()) {
@@ -143,6 +145,10 @@ bool Wave::runWave() {
 
                             player.getEntity()->setXVelocity(Vx);
                             player.getEntity()->setYVelocity(Vy);
+
+                            if(Vy < -scale(1000)) {
+                                player.inShieldJump = true;
+                            }
                         }
                     }
 
@@ -172,6 +178,14 @@ bool Wave::runWave() {
                 }
                 ++bit;
             }
+            if(player.hasGroundPounded()) {
+                if(enemy->getEntity()->getRect().x < player.getEntity()->getRect().w + player.getEntity()->getRect().x + groundPoundRadius &&
+                    enemy->getEntity()->getRect().x > player.getEntity()->getRect().x - groundPoundRadius &&
+                    enemy->getEntity()->getRect().y < player.getEntity()->getRect().h + player.getEntity()->getRect().y &&
+                    enemy->getEntity()->getRect().y > player.getEntity()->getRect().y) {
+                    enemy->getEntity()->damage(maxEnemyHealth);
+                }
+            }
             if(!enemy->getEntity()->isAlive()) {
                 explosions.emplace_back(enemy->getEntity()->getRect().x+enemy->getEntity()->getRect().w/2,enemy->getEntity()->getRect().y+enemy->getEntity()->getRect().h/2,ggs.renderer);
                 if(!playerDamaged) {
@@ -191,6 +205,10 @@ bool Wave::runWave() {
         if(enemy->getEntity()->isAlive()) {
             enemiesAlive++;
         }
+    }
+
+    if(player.hasGroundPounded()) {
+        player.executedGroundPount();
     }
 
     if(enemiesAlive == 0) {

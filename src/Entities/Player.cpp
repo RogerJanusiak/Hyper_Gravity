@@ -13,6 +13,7 @@ Player::Player(Entity* entity, GlobalGameState& ggs) : ggs(ggs), revolver(ggs, W
     // TODO: Ability to chang weapon and stuff
 
     damageSound.init("resources/sounds/playerDamage.wav",0,-1);
+    groundPoundEnd.init("resources/sounds/ground-pound-end.wav",0,-1);
 
     shieldTexture.setup(scale(82),scale(82),ggs.renderer);
     shieldTexture.loadFromFile("Shield.png");
@@ -65,9 +66,19 @@ int Player::move(GlobalGameState& ggs, const std::list<Platform> &platforms, std
     getEntity()->setXVelocity(xNormalVelocity*defaultXSpeed);
 
     int amountFallen = 0;
-    if(!playerEntity->move(ggs.dt,platforms,&amountFallen,&wheelRect) && invincible && !invicibleFromDeath) {
+    onPlatform = !playerEntity->move(ggs.dt,platforms,&amountFallen,&wheelRect);
+    if(onPlatform && invincible && !invicibleFromDeath && !doingGroundPound) {
         invincible = false;
         charged = false;
+    }
+
+    if(onPlatform && inShieldJump && !doingGroundPound) {
+        inShieldJump = false;
+    }
+
+    if(onPlatform && doingGroundPound) {
+        groundPounded = true;
+        doingGroundPound = false;
     }
 
     if(playerDirection) {
@@ -165,3 +176,18 @@ Weapon& Player::getWeapon(const int weapon) {
             break;
     }
 }
+
+void Player::startGroundPound() {
+    if(inShieldJump) {
+        doingGroundPound = true;
+        invincible = true;
+        getEntity()->setYVelocity(1500);
+    }
+}
+
+void Player::executedGroundPount() {
+    //groundPoundEnd.play();
+    groundPounded = false;
+    invincible = false;
+}
+
