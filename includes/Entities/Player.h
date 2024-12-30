@@ -16,39 +16,39 @@ public:
     int move(GlobalGameState& ggs ,const std::list<Platform> &platforms, std::vector<SDL_Rect>& teleports);
     void render() const;
 
-    const SDL_Rect &getWeaponRect() const { return weaponRect; }
+    [[nodiscard]] const SDL_Rect &getWeaponRect() const { return weaponRect; }
 
     void setDirection (bool direction);
     [[nodiscard]] bool getDirection() const { return playerDirection; }
 
     [[nodiscard]] Entity* getEntity() const { return playerEntity; }
 
-    Weapon* getWeapon() { return currentWeapon; }
+    [[nodiscard]] Weapon* getWeapon() const { return currentWeapon; }
     void setPrimaryWeapon(Weapon* priWeapon) { primaryWeapon = priWeapon; }
     void setSecondaryWeapon(Weapon* secWeapon) { secondaryWeapon = secWeapon; currentWeapon = primaryWeapon; }
-    Weapon* getSecondaryWeapon() { return secondaryWeapon; }
-    Weapon* getPrimaryWeapon() { return primaryWeapon; }
+    [[nodiscard]] Weapon* getSecondaryWeapon() const { return secondaryWeapon; }
+    [[nodiscard]] Weapon* getPrimaryWeapon() const { return primaryWeapon; }
     void changeWeapon();
 
     bool damage();
     [[nodiscard]] int getHealth() const { return health; }
     [[nodiscard]] double getHealthPercentage() const { return health/static_cast<double>(maxHealth); }
-    [[nodiscard]] int getShield() const { return shield; }
-    [[nodiscard]] double getShieldPercentage() const { return shield/static_cast<double>(maxShield); }
+
+    [[nodiscard]] int getPower() const { return power; }
+    [[nodiscard]] double getPowerPercentage() const { return power/static_cast<double>(maxPower); }
+    void changePower(const int change) { power += change; }
 
     void fullHealth() { health = maxHealth; }
-    void fillShield() { shield = maxShield; }
-    void increaseShield(const int increaseAmount) {shield += increaseAmount;}
 
     void killEnemy();
     void zeroCombo() { combo = 0;}
-    int getCombo() const { return combo; }
+    [[nodiscard]] int getCombo() const { return combo; }
 
     Weapon& getWeapon(int weapon);
 
     void changeXP(int _xp) { xp += _xp; }
     void setXP(int _xp ) { xp = _xp; }
-    int getXP() const { return xp; }
+    [[nodiscard]] int getXP() const { return xp; }
 
     [[nodiscard]] bool isInvincible() const { return invincible; }
     void setInvincible(bool _invincible) { invincible = _invincible; }
@@ -56,7 +56,7 @@ public:
 
     void setXNormalV(int vx) { xNormalVelocity = vx; }
 
-    SDL_Rect getHitRect() { return playerHitRect; }
+    [[nodiscard]] SDL_Rect getHitRect() const { return playerHitRect; }
     SDL_Rect* getWheelRect() { return &wheelRect; }
     void updateWheelRect() {
         wheelRect.x = getEntity()->getRect().x+((getEntity()->getRect().w-20)/2);
@@ -70,6 +70,11 @@ public:
     [[nodiscard]] bool hasGroundPounded() const { return groundPounded; }
     void executedGroundPount();
 
+    void activateShield();
+    void runShield();
+    void deactivateShield() { shieldActive = false;}
+    [[nodiscard]] bool isShieldActive() const { return shieldActive; }
+
     int abilitiesKills = 0;
 
     Weapon revolver;
@@ -77,13 +82,16 @@ public:
     Weapon shotgun;
     Weapon laserPistol;
 
-    bool shieldActive = false;
+
     bool inShieldJump = false;
     double shieldAngle = 360;
 
 private:
     const int playerWidth = scale(50);
     const int playerHeight = scale(60);
+
+    bool shieldActive = false;
+    float shieldActiveTimer = 0;
 
     GlobalGameState& ggs;
 
@@ -106,8 +114,8 @@ private:
 
     int health = 200;
     const int maxHealth = 200;
-    double shield = 0;
-    const int maxShield = 200;
+    double power = 100;
+    const int maxPower = 200;
 
     bool onPlatform = true;
     bool doingGroundPound = false;

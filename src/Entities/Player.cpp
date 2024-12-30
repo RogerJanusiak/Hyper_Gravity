@@ -113,6 +113,7 @@ void Player::setDirection(bool direction) {
 
 void Player::killEnemy() {
     combo++;
+    power += 10;
 }
 
 void Player::tickInvicibilty(float dt) {
@@ -130,17 +131,9 @@ bool Player::damage() {
     invicibleFromDeath = true;
     postDamageInvincibleTime = 0;
 
-    if(shield <= 0) {
-        shield = 0;
-        health -= 50;
-        if(health <= 0) {
-           ggs.currentRunState = RunState::deathScreen;
-        }
-    } else {
-        shield -= 50;
-        if(shield <= 0) {
-            shield = 0;
-        }
+    health -= 50;
+    if(health <= 0) {
+       ggs.currentRunState = RunState::deathScreen;
     }
 
     damageSound.play();
@@ -178,7 +171,8 @@ Weapon& Player::getWeapon(const int weapon) {
 }
 
 void Player::startGroundPound() {
-    if(inShieldJump) {
+    if(inShieldJump && power >= 25) {
+        power -= 25;
         doingGroundPound = true;
         invincible = true;
         getEntity()->setYVelocity(1500);
@@ -190,4 +184,27 @@ void Player::executedGroundPount() {
     groundPounded = false;
     invincible = false;
 }
+
+void Player::activateShield() {
+    if(getPower() >= 10) {
+        shieldActive = true;
+        shieldActiveTimer = 0;
+        changePower(-10);
+    }
+}
+
+
+void Player::runShield() {
+    if(shieldActive) {
+        shieldActiveTimer += ggs.dt;
+        if(shieldActiveTimer >= 0.1) {
+            shieldActiveTimer = 0;
+            changePower(-1);
+        }
+        if(getPower() <= 0) {
+            deactivateShield();
+        }
+    }
+}
+
 

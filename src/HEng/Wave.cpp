@@ -98,7 +98,7 @@ bool Wave::runWave() {
 
                     bool avoidedAttack = false;
 
-                    if(player.shieldActive) {
+                    if(player.isShieldActive()) {
                         int centerX1 = enemy->getEntity()->getRect().x + enemy->getEntity()->getRect().w / 2;
                         int centerY1 = enemy->getEntity()->getRect().y + enemy->getEntity()->getRect().h / 2;
 
@@ -149,6 +149,8 @@ bool Wave::runWave() {
                             if(Vy < -scale(1000)) {
                                 player.inShieldJump = true;
                             }
+
+                            abilityDamgage = true;
                         }
                     }
 
@@ -184,13 +186,16 @@ bool Wave::runWave() {
                     enemy->getEntity()->getRect().y < player.getEntity()->getRect().h + player.getEntity()->getRect().y &&
                     enemy->getEntity()->getRect().y > player.getEntity()->getRect().y) {
                     enemy->getEntity()->damage(maxEnemyHealth);
+                    abilityDamgage = true;
                 }
             }
             if(!enemy->getEntity()->isAlive()) {
                 explosions.emplace_back(enemy->getEntity()->getRect().x+enemy->getEntity()->getRect().w/2,enemy->getEntity()->getRect().y+enemy->getEntity()->getRect().h/2,ggs.renderer);
                 if(!playerDamaged) {
                     player.changeXP(enemy->getDifficulty());
-                    player.killEnemy();
+                    if(!abilityDamgage) {
+                        player.killEnemy();
+                    }
                 }
                 ggs.updateText = true;
             } else {

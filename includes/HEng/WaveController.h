@@ -58,11 +58,11 @@ private:
 
 	SDL_Rect healthBackRect;
 	SDL_Rect healthRect;
-	SDL_Rect shieldBackRect;
-	SDL_Rect shieldRect;
+
+	SDL_Rect powerBackRect;
+	SDL_Rect powerRect;
 
 	Texture healthText;
-	Texture shieldText;
 
 	Texture waveNumberText;
 	Texture waveNumberTitle;

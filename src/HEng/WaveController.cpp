@@ -23,16 +23,6 @@ WaveController::WaveController(GlobalGameState& ggs, Run& run) : ggs(ggs), run(r
     timeToAbility.w = scalePlayerUI(75);
     timeToAbility.h = scalePlayerUI(15);
 
-    shieldBackRect.x = scalePlayerUI(10);
-    shieldBackRect.y = WINDOW_HEIGHT-scalePlayerUI(40);
-    shieldBackRect.w = scalePlayerUI(75);
-    shieldBackRect.h = scalePlayerUI(15);
-
-    shieldRect.x = scalePlayerUI(10);
-    shieldRect.y = WINDOW_HEIGHT-scalePlayerUI(40);
-    shieldRect.w = scalePlayerUI(75);
-    shieldRect.h = scalePlayerUI(15);
-
     healthBackRect.x = scalePlayerUI(10);
     healthBackRect.y = WINDOW_HEIGHT-scalePlayerUI(20);
     healthBackRect.w = scalePlayerUI(75);
@@ -43,11 +33,18 @@ WaveController::WaveController(GlobalGameState& ggs, Run& run) : ggs(ggs), run(r
     healthRect.w = scalePlayerUI(75);
     healthRect.h = scalePlayerUI(15);
 
+    powerBackRect.w = scalePlayerUI(100);
+    powerBackRect.h = scalePlayerUI(15);
+    powerBackRect.x = (WINDOW_WIDTH-powerBackRect.w)/2;
+    powerBackRect.y = scalePlayerUI(10);
+
+    powerRect.w = scalePlayerUI(0);
+    powerRect.h = powerBackRect.h;
+    powerRect.x = powerBackRect.x;
+    powerRect.y = powerBackRect.y;
+
     healthText.setup(ggs.renderer);
     healthText.loadFromRenderedText("200", ggs.black,ggs.verySmall);
-
-    shieldText.setup(ggs.renderer);
-    shieldText.loadFromRenderedText("0", ggs.black,ggs.verySmall);
 
     waveNumberText.setup(ggs.renderer);
     waveNumberTitle.setup(ggs.renderer);
@@ -80,6 +77,7 @@ void WaveController::operate() {
 
 void WaveController::operatePlayer() {
     player.move(ggs, run.getLevel().getPlatforms(), run.getLevel().getTeleports());
+    player.runShield();
     player.tickInvicibilty(ggs.dt);
     updateTimeToShoot(scalePlayerUI(player.getWeapon()->reload(ggs.dt)));
     player.getWeapon()->wasJustReloaded();
@@ -171,9 +169,11 @@ void WaveController::readInput() {
             }
 
             if(SDL_GameControllerGetAxis(ggs.controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_TRIGGERLEFT) > JOYSTICK_DEAD_ZONE) {
-                player.shieldActive = true;
+                if(player.getPower() > 0 && !player.isShieldActive()) {
+                    player.activateShield();
+                }
             } else {
-                player.shieldActive = false;
+                player.deactivateShield();
             }
 
             Sint16 x = SDL_GameControllerGetAxis(ggs.controller, SDL_CONTROLLER_AXIS_RIGHTX);
@@ -238,7 +238,8 @@ void WaveController::readInput() {
                 openInventory = true;
                 stopMovement();
             } else if(SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == 1) {
-                if(player.isOnPlatform() && ggs.playerTileY < run.getLevel().getMap().size()-1) {
+                if(player.isOnPlatform() && ggs.playerTileY < run.getLevel().getMap().size()-1 && player.getPower() >= 25) {
+                    player.changePower(-25);
                     player.getEntity()->setPosition(player.getEntity()->getRect().x, player.getEntity()->getRect().y+TILE_SIZE_SCALED);
                 } else if(!player.isOnPlatform()) {
                     player.startGroundPound();
@@ -251,7 +252,6 @@ void WaveController::readInput() {
 void WaveController::updatePlayerUIText() {
     updateWaveText();
     healthText.loadFromRenderedText(std::to_string(player.getHealth()), ggs.black, ggs.verySmall);
-    shieldText.loadFromRenderedText(std::to_string(player.getShield()), ggs.black, ggs.verySmall);
 }
 
 void WaveController::renderPlayerUI() {
@@ -262,22 +262,20 @@ void WaveController::renderPlayerUI() {
     SDL_SetRenderDrawColor(ggs.renderer, 255, 0, 0, 255);
     SDL_RenderFillRect(ggs.renderer,&timeToShoot);
 
-    healthRect.w = scalePlayerUI(player.getHealthPercentage()*75);
-
-    shieldRect.w = scalePlayerUI(player.getShieldPercentage()*75);
+    healthRect.w = player.getHealthPercentage()*healthBackRect.w;
+    powerRect.w = player.getPowerPercentage()*powerBackRect.w;
 
     SDL_SetRenderDrawColor(ggs.renderer, 150, 150, 150, 255);
     SDL_RenderFillRect(ggs.renderer,&healthBackRect);
-    SDL_RenderFillRect(ggs.renderer,&shieldBackRect);
+    SDL_RenderFillRect(ggs.renderer, &powerBackRect);
 
     SDL_SetRenderDrawColor(ggs.renderer, 255, 0, 0, 255);
     SDL_RenderFillRect(ggs.renderer,&healthRect);
 
     SDL_SetRenderDrawColor(ggs.renderer, 0, 0, 255, 255);
-    SDL_RenderFillRect(ggs.renderer,&shieldRect);
+    SDL_RenderFillRect(ggs.renderer,&powerRect);
 
     healthText.render(scalePlayerUI(12),WINDOW_HEIGHT-scalePlayerUI(19));
-    shieldText.render(scalePlayerUI(12),WINDOW_HEIGHT-scalePlayerUI(39));
 
     for(int i = 0; i < player.getWeapon()->getClipSize(); i++) {
         if(bulletsInClip>i) {
