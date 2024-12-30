@@ -72,6 +72,9 @@ public:
     Weapon shotgun;
     Weapon laserPistol;
 
+    bool shieldActive = true;
+    double shieldAngle = 360;
+
 private:
     const int playerWidth = scale(50);
     const int playerHeight = scale(60);
@@ -86,6 +89,9 @@ private:
     SDL_Rect wheelRect;
 
     Texture playerTexture;
+    Texture shieldTexture;
+
+
 
     Weapon* currentWeapon = nullptr;
     Weapon* primaryWeapon = nullptr;

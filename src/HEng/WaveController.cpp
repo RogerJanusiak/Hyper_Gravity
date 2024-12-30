@@ -104,9 +104,6 @@ void WaveController::startWave() {
         leftMovement = false;
     }
 	currentWave = std::make_unique<Wave>(ggs,run.getPlayer(), run.getLevel(), run.getWaveNumber());
-	if(run.getWaveNumber() > 1) {
-	    player.increaseShield(10);
-	}
 }
 
 void WaveController::readInput() {
@@ -173,6 +170,32 @@ void WaveController::readInput() {
                 shootingReset = true;
             }
 
+            if(SDL_GameControllerGetAxis(ggs.controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_TRIGGERLEFT) > JOYSTICK_DEAD_ZONE) {
+                player.shieldActive = true;
+            } else {
+                player.shieldActive = false;
+            }
+
+            Sint16 x = SDL_GameControllerGetAxis(ggs.controller, SDL_CONTROLLER_AXIS_RIGHTX);
+            Sint16 y = SDL_GameControllerGetAxis(ggs.controller, SDL_CONTROLLER_AXIS_RIGHTY);
+
+            const float maxAxisValue = 32768.0f; // SDL joystick axis range
+            float normX = x / maxAxisValue;
+            float normY = y / maxAxisValue;
+
+            if (std::abs(normX) > 0.1f || std::abs(normY) > 0.1f) {
+                // Calculate the angle in radians (atan2 handles Y-up coordinate systems)
+                float angleRadians = std::atan2(-normY, -normX); // In SDL, Y-axis is inverted
+                float angleDegrees = angleRadians * 180.0f / M_PI;
+
+                // Convert angle to a 0-360 range (optional)
+                if (angleDegrees < 0) {
+                    angleDegrees += 360.0f;
+                }
+
+                player.shieldAngle = angleDegrees;
+            }
+
             if(SDL_GameControllerGetAxis(ggs.controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_LEFTX) > JOYSTICK_DEAD_ZONE) {
                 rightMovement = true;
             } else {
@@ -215,7 +238,7 @@ void WaveController::readInput() {
                 openInventory = true;
                 stopMovement();
             } else if(SDL_GameControllerGetButton(ggs.controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == 1) {
-                player.getEntity()->setYVelocity(player.getEntity()->getYVelocity()-scale(1000));
+                player.getEntity()->setPosition(player.getEntity()->getRect().x, player.getEntity()->getRect().y+TILE_SIZE_SCALED);
             }
         }
     }

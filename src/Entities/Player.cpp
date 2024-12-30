@@ -14,6 +14,9 @@ Player::Player(Entity* entity, GlobalGameState& ggs) : ggs(ggs), revolver(ggs, W
 
     damageSound.init("resources/sounds/playerDamage.wav",0,-1);
 
+    shieldTexture.setup(scale(82),scale(82),ggs.renderer);
+    shieldTexture.loadFromFile("Shield.png");
+
     wheelRect.w = scale(13);
     wheelRect.h = scale(13);
 
@@ -42,6 +45,10 @@ void Player::render() const {
     }
 
     playerEntity->render(0,0, false, playerDirection);
+
+
+    if(shieldActive)
+        shieldTexture.render(playerEntity->getRect().x-scale(1.875*9), playerEntity->getRect().y-scale(1.875*6),SDL_FLIP_NONE,nullptr,shieldAngle);
 
     currentWeapon->render(playerEntity->getRect().x,playerEntity->getRect().y,playerDirection);
 }

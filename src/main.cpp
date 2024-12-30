@@ -100,8 +100,8 @@ int main( int argc, char* args[] ) {
 
 	std::unique_ptr<RunController> rc;
 
-	//ggs.inMainMenu = true;
-	//ggs.level = 4;
+	ggs.inMainMenu = true;
+	ggs.level = 4;
 	std::string test = "test";
 	ConfirmPopup cp(ggs,test,nullptr);
 

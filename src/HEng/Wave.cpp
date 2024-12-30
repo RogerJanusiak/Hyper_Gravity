@@ -45,6 +45,16 @@ void Wave::render() {
     //wes->render();
 }
 
+float normalizeAngle(float angle) {
+    while (angle < 0) {
+        angle += 360.0f;
+    }
+    while (angle >= 360) {
+        angle -= 360.0f;
+    }
+    return angle;
+}
+
 bool Wave::runWave() {
     bool playerDamaged = false;
     enemiesAlive = 0;
@@ -83,14 +93,69 @@ bool Wave::runWave() {
             }
             if( Entity::isColliding(enemy->getEntity()->getRect(),player.getHitRect())) {
                 if(!player.isInvincible()) {
-                    int randomNumber = rand() % 100;
-                    if(player.damage()) {
-                        //playerAlive = false;
-                        waveNumber = 0;
+
+                    bool avoidedAttack = false;
+
+                    if(player.shieldActive) {
+                        int centerX1 = enemy->getEntity()->getRect().x + enemy->getEntity()->getRect().w / 2;
+                        int centerY1 = enemy->getEntity()->getRect().y + enemy->getEntity()->getRect().h / 2;
+
+                        int centerX2 = player.getEntity()->getRect().x + player.getEntity()->getRect().w / 2;
+                        int centerY2 = player.getEntity()->getRect().y + player.getEntity()->getRect().h / 2;
+
+                        int dx = centerX2 - centerX1;
+                        int dy = centerY2 - centerY1;
+
+                        float angleRadians = std::atan2(dy, dx);
+                        float angleDegrees = angleRadians * 180.0f / M_PI;
+
+                        if (angleDegrees < 0) {
+                            angleDegrees += 360.0f;
+                        }
+
+                        double shieldAngle = player.shieldAngle;
+
+                        angleDegrees = normalizeAngle(angleDegrees);
+                        shieldAngle = normalizeAngle(shieldAngle);
+
+                        float difference = angleDegrees - shieldAngle;
+                        if (difference > 180.0f) {
+                            difference -= 360.0f;
+                        } else if (difference < -180.0f) {
+                            difference += 360.0f;
+                        }
+
+                        if(std::abs(difference) <= 90.0f) {
+                            avoidedAttack = true;
+
+                            angleDegrees += 180;
+                            angleDegrees -= difference;
+
+                            while (angleDegrees < 0) {
+                                angleDegrees += 360.0f;
+                            }
+                            while (angleDegrees >= 360) {
+                                angleDegrees -= 360.0f;
+                            }
+
+                            float Vx = -cos(angleDegrees* M_PI / 180.0)*scale(2000);
+                            float Vy = -sin(angleDegrees* M_PI / 180.0)*scale(2000);
+
+                            player.getEntity()->setXVelocity(Vx);
+                            player.getEntity()->setYVelocity(Vy);
+                        }
                     }
-                    SDL_GameControllerRumble( ggs.controller, 0xFFFF * 3 / 4, 0xFFFF * 3 / 4, 750 );
-                    ggs.updateText = true;
-                    playerDamaged = true;
+
+                    if(!avoidedAttack) {
+                        //TODO: Figure out if I need this:
+                        if(player.damage()) {
+                            //playerAlive = false;
+                            waveNumber = 0;
+                        }
+                        SDL_GameControllerRumble( ggs.controller, 0xFFFF * 3 / 4, 0xFFFF * 3 / 4, 750 );
+                        ggs.updateText = true;
+                        playerDamaged = true;
+                    }
                     enemy->getEntity()->damage(5);
                 }
             }
@@ -136,7 +201,7 @@ bool Wave::runWave() {
 }
 
 void Wave::createEnemies() {
-	int totalDifficulty = -5;
+	int totalDifficulty = -50;
     int (*weights)[5] = level.getSpawnWeights();
     std::vector<Spawn>* spawns = level.getEnemySpawns();
     while(totalDifficulty < waveNumber) {
