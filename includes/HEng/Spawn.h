@@ -34,6 +34,9 @@ public:
         SDL_RenderFillRect(renderer, &rect);
     }
 
+    static constexpr int height = 27;
+    static constexpr int width = 25;
+
 private:
 
     SDL_Rect rect;

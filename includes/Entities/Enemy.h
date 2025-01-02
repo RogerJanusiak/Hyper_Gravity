@@ -28,10 +28,10 @@ public:
 	static int findEdgeRight(int startX, int startY,  Level& level);
 	static int findEdgeLeft(int startX, int startY, Level& level);
 
-	[[nodiscard]] virtual float getXVelocity() const { return scale(250); }
+	[[nodiscard]] virtual float getXVelocity() const { return scale(125); }
 
-	[[nodiscard]] virtual int getWidth() const { return scale(24); }
-	[[nodiscard]] virtual int getHeight() const { return scale(50); }
+	[[nodiscard]] virtual int getWidth() const { return scale(16); }
+	[[nodiscard]] virtual int getHeight() const { return scale(30); }
 
 protected:
 	Entity* entity;

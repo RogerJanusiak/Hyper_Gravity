@@ -72,7 +72,7 @@ private:
   int bulletRelXRight = 0;
   int bulletRelXLeft = 0;
   int bulletRelY = 0;
-  int bulletSpeed = scale(1000);
+  int bulletSpeed = scale(500);
 
   int clipSize = 0;
   int bulletDurability = 1;

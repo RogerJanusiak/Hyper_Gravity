@@ -27,6 +27,9 @@ public:
 	[[nodiscard]] std::vector<std::vector<int>>& getMap() {	return levelMap; }
 	[[nodiscard]] std::vector<SDL_Rect>& getTeleports() { return teleports; }
 
+	void renderForeground() const { foregroundTexture.render(0,0); }
+	[[nodiscard]] bool usingCustomTextures() const { return customTextures; }
+
 private:
 
 	GlobalGameState& ggs;
@@ -48,6 +51,10 @@ private:
 	const int height = 9;
 
 	std::vector<std::vector<int>> levelMap;
+
+	bool customTextures = false;
+	Texture platformsTexture;
+	Texture foregroundTexture;
 
 };
 

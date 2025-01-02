@@ -39,18 +39,18 @@ Weapon::Weapon(GlobalGameState& ggs, const Weapon_Type type, SDL_Renderer* rende
   setDefaultProperties();
   switch (type) {
       default: {
-          texture.setup(scale(42),scale(21),renderer);
-          if(!texture.loadFromFile("Revolver.png")) {
+          texture.setup(scale(14),scale(7),renderer);
+          if(!texture.loadFromFile("revolver.png")) {
             SDL_Log("Could not load revolver texture!");
           }
 
-          relXRight = scale(40);
-          relXLeft = -scale(27);
-          relY = scale(15);
+          relXRight = scale(15);
+          relXLeft = -scale(12);
+          relY = scale(10);
 
-          bulletRelXRight = scale(19);
-          bulletRelXLeft = 0;
-          bulletRelY = scale(19);
+          bulletRelXRight = scale(29);
+          bulletRelXLeft = -scale(13);
+          bulletRelY = scale(10);
 
           fireSound.init("resources/sounds/revolver-shoot.wav",0,-1);
           reloadSound.init("resources/sounds/revolver-reload.wav", 0,-1);
@@ -76,18 +76,18 @@ Weapon::Weapon(GlobalGameState& ggs, const Weapon_Type type, SDL_Renderer* rende
           emptySound.init("resources/sounds/revolver-empty.wav", 0,-1);
       }break;
       case shotgun: {
-          texture.setup(scale(28*1.5),scale(9*1.5),renderer);
+          texture.setup(scale(19),scale(6),renderer);
           if(!texture.loadFromFile("shotgun.png")) {
             SDL_Log("Could not load revolver texture!");
           }
 
-          relXRight = scale(28);
-          relXLeft = -scale(26);
-          relY = scale(18);
+          relXRight = scale(9);
+          relXLeft = -scale(10);
+          relY = scale(12);
 
-          bulletRelXRight = scale(19);
-          bulletRelXLeft = 0;
-          bulletRelY = scale(19);
+          bulletRelXRight = scale(29);
+          bulletRelXLeft = -scale(11);
+          bulletRelY = scale(12);
 
           //TODO: Add unique sounds
           fireSound.init("resources/sounds/revolver-shoot.wav",0,-1);

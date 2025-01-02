@@ -4,8 +4,8 @@ Platform::Platform(const int x, const int y, SDL_Renderer* renderer) : renderer(
     platformRectangle.x = scale(x);
     platformRectangle.y = scale(y);
     platformRectangle.w = width;
-    platformRectangle.h = height;
-    texture.setup(width,height,renderer);
+    platformRectangle.h = scale(height);
+    texture.setup(width,scale(height),renderer);
 
     if(!texture.loadFromFile("platform.png")) {
         SDL_Log("Could not load platform.png texture!");

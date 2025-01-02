@@ -13,9 +13,10 @@ public:
 
     [[nodiscard]] SDL_Rect getPlatformRect() const { return platformRectangle; }
 
+    static constexpr int height = 10;
+
 private:
     const int width = scale(TILE_SIZE);
-    const int height = scale(17);
 
     SDL_Rect platformRectangle;
     Texture texture;

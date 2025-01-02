@@ -15,43 +15,50 @@ Player::Player(Entity* entity, GlobalGameState& ggs) : ggs(ggs), revolver(ggs, W
     damageSound.init("resources/sounds/playerDamage.wav",0,-1);
     groundPoundEnd.init("resources/sounds/ground-pound-end.wav",0,-1);
 
-    shieldTexture.setup(scale(82),scale(82),ggs.renderer);
+    shieldTexture.setup(scale(44),scale(44),ggs.renderer);
     shieldTexture.loadFromFile("Shield.png");
 
-    wheelRect.w = scale(13);
-    wheelRect.h = scale(13);
-
-    weaponRect.x = 0;
-    weaponRect.y = 0;
-    weaponRect.w = scale(42);
-    weaponRect.h = scale(10);
+    wheelRect.w = scale(6);
+    wheelRect.h = scale(6);
 
     playerEntity->setDimensions(playerWidth,playerHeight);
-    playerTexture.setup(playerWidth,playerHeight,playerEntity->getRenderer());
+    playerTexture.setup(playerWidth, playerHeight, ggs.renderer);
 
-    if(!playerTexture.loadFromFile("Timpy.png")) {
+    if(!playerTexture.loadFromFile("timpy.png")) {
         SDL_Log("Could not load Timpy texture!");
     }
 
     playerEntity->setTexture(playerTexture);
-    playerEntity->setSource(26,32);
+    playerEntity->setSource(width,height);
+
+    wheelTexture.setup(scale(8),scale(8),ggs.renderer);
+    wheelTexture.loadFromFile("wheel.png");
 
 }
 
 void Player::render() const {
     if(isInvincible()) {
-        SDL_SetTextureColorMod(getEntity()->getTexture()->getTexture(),0,150,255);
+        SDL_SetTextureColorMod(getEntity()->getTexture()->getTexture(),159,150,255);
     } else {
         SDL_SetTextureColorMod(getEntity()->getTexture()->getTexture(),255,255,255);
     }
 
-    playerEntity->render(0,0, false, playerDirection);
+    int sprite = playerDirection ? 0 : 2;
+    playerEntity->render(sprite,0);
 
 
     if(shieldActive)
         shieldTexture.render(playerEntity->getRect().x-scale(1.875*9), playerEntity->getRect().y-scale(1.875*6),SDL_FLIP_NONE,nullptr,shieldAngle);
 
     currentWeapon->render(playerEntity->getRect().x,playerEntity->getRect().y,playerDirection);
+    SDL_Rect srcRect = {0,0,8,8};
+
+    if(playerDirection) {
+        wheelTexture.render(playerEntity->getRect().x+scale(5), playerEntity->getRect().y+scale(22),SDL_FLIP_NONE,&srcRect);
+    } else {
+        wheelTexture.render(playerEntity->getRect().x+scale(5), playerEntity->getRect().y+scale(22),SDL_FLIP_HORIZONTAL,&srcRect);
+    }
+
 }
 
 int Player::move(GlobalGameState& ggs, const std::list<Platform> &platforms, std::vector<SDL_Rect>& teleports) {
@@ -103,6 +110,13 @@ int Player::move(GlobalGameState& ggs, const std::list<Platform> &platforms, std
     ggs.playerX = playerEntity->getRect().x;
     ggs.playerTileX = ggs.playerX/TILE_SIZE_SCALED;
     ggs.playerTileY = playerEntity->getRect().y/TILE_SIZE_SCALED;
+
+    if(ggs.developerMode) {
+        SDL_SetRenderDrawColor(ggs.renderer,0,255,0,255);
+        SDL_RenderDrawRect(ggs.renderer, &playerHitRect);
+        SDL_RenderDrawRect(ggs.renderer, &wheelRect);
+        SDL_RenderDrawRect(ggs.renderer, &getEntity()->getRect());
+    }
 
     return amountFallen;
 }
@@ -192,7 +206,6 @@ void Player::activateShield() {
         changePower(-10);
     }
 }
-
 
 void Player::runShield() {
     if(shieldActive) {

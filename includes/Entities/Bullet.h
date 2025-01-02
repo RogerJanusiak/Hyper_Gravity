@@ -28,8 +28,8 @@ public:
 
 private:
 
-    const int normalWidth = scale(6);
-    const int normalHeight = scale(6);
+    const int normalWidth = scale(3);
+    const int normalHeight = scale(3);
 
     const int lazerWidth = scale(32);
     const int lazerHeight = scale(4);

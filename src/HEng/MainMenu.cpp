@@ -124,26 +124,26 @@ void MainMenu::initMenus() {
     const int centeredX = (WINDOW_WIDTH-Button::getStaticWidth())/2;
 
     mainMenu.setup(ggs.renderer);
-    const int arcadeModeButton = mainMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(215), "Arcade Mode", &showLevelSelect),-1,-1,-1,-1);
-    const int settingsButton = mainMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(280), "Settings", &noAction),arcadeModeButton,-1,-1,-1);
-    mainMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(345), "Quit To Desktop", &quitToDesktop),settingsButton,-1,-1,-1);
+    const int arcadeModeButton = mainMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(135), "Arcade Mode", &showLevelSelect),-1,-1,-1,-1);
+    const int settingsButton = mainMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(185), "Settings", &noAction),arcadeModeButton,-1,-1,-1);
+    mainMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(235), "Quit To Desktop", &quitToDesktop),settingsButton,-1,-1,-1);
 
     logoTexture.setup(scaleUI(454),scaleUI(92),ggs.renderer);
     logoTexture.loadFromFile("logo.png");
-    mainMenu.addTitle((WINDOW_WIDTH-scaleUI(454))/2,scaleUI(100), logoTexture);
+    mainMenu.addTitle((WINDOW_WIDTH-logoTexture.getWidth())/2,scaleUI(35), logoTexture);
 
     levelSelect.setup(ggs.renderer);
-    const int level1Button = levelSelect.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(215), "The Ducts", &selectLevel,1),-1,-1,-1,-1);
-    const int level2Button = levelSelect.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(280), "Air Port", &selectLevel,2),level1Button,-1,-1,-1);
-    const int level3Button = levelSelect.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(345), "Labratory", &selectLevel,3),level2Button,-1,-1,-1);
-    levelSelect.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(410), "Lobby", &selectLevel,4),level3Button,-1,-1,-1);
-    levelSelect.addTitle((WINDOW_WIDTH-scaleUI(454))/2,scaleUI(100), logoTexture);
+    const int level1Button = levelSelect.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(135), "Warehouse", &selectLevel,3),-1,-1,-1,-1);
+    const int level2Button = levelSelect.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(185), "Lobby", &selectLevel,4),level1Button,-1,-1,-1);
+    const int level3Button = levelSelect.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(235), "The Ducts", &selectLevel,1),level2Button,-1,-1,-1);
+    levelSelect.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(285), "Air Port", &selectLevel,2),level3Button,-1,-1,-1);
+    levelSelect.addTitle((WINDOW_WIDTH-logoTexture.getWidth())/2,scaleUI(35), logoTexture);
 
     pauseMenu.setup(ggs.renderer);
 
-    const int resumeButton = pauseMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(215), "Resume Game", &resumeGame),-1,-1,-1,-1);
-    const int quitToMenuButton = pauseMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(280), "Quit To Menu", &quitToMenu),resumeButton,-1,-1,-1);
-    pauseMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(345), "Quit To Desktop", &quitToDesktop),quitToMenuButton,-1,-1,-1);
-    pauseMenu.addTitle((WINDOW_WIDTH-scaleUI(454))/2,scaleUI(100), logoTexture);
+    const int resumeButton = pauseMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(135), "Resume Game", &resumeGame),-1,-1,-1,-1);
+    const int quitToMenuButton = pauseMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(185), "Quit To Menu", &quitToMenu),resumeButton,-1,-1,-1);
+    pauseMenu.addButton(std::make_unique<Button>(ggs, centeredX,scaleUI(235), "Quit To Desktop", &quitToDesktop),quitToMenuButton,-1,-1,-1);
+    pauseMenu.addTitle((WINDOW_WIDTH-logoTexture.getWidth())/2,scaleUI(35), logoTexture);
 
 }

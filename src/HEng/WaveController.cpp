@@ -95,7 +95,7 @@ void WaveController::startLevel() const {
 
 void WaveController::startWave() {
 	inWave = true;
-    if(run.getWaveNumber() % 5 == 0) {
+    if(run.getWaveNumber() % 1 == 0 || run.getWaveNumber() != 1) {
         augmentFound = true;
         stopMovement();
         rightMovement = false;

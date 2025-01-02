@@ -57,13 +57,14 @@ bool Entity::move(float dt,const std::list<Platform> &platforms, int* amountFall
     if(movementHitBox == nullptr) {
         movementBox.x = entityRect.x;
         movementBox.w = entityRect.w;
+        movementBox.y = entityRect.y;
+        movementBox.h = entityRect.h + (nextYPosition-entityRect.y);
     } else {
         movementBox.x = movementHitBox->x;
         movementBox.w = movementHitBox->w;
+        movementBox.y = entityRect.y;
+        movementBox.h = entityRect.h + movementHitBox->h + (nextYPosition-entityRect.y);
     }
-
-    movementBox.y = entityRect.y;
-    movementBox.h = entityRect.h + (nextYPosition-entityRect.y);
 
     bool foundPlatform = false;
     for(auto& platform : platforms) {
@@ -71,7 +72,12 @@ bool Entity::move(float dt,const std::list<Platform> &platforms, int* amountFall
         if(entityRect.y+entityRect.h <= platformRect.y) {
             if(isColliding(platformRect,movementBox)) {
                 offPlatform = false;
-                entityRect.y = platformRect.y-entityRect.h;
+                if(movementHitBox != nullptr) {
+                    entityRect.y = platformRect.y-entityRect.h-movementHitBox->h;
+                } else {
+                    entityRect.y = platformRect.y-entityRect.h;
+                }
+
                 yVelocity = 0;
                 foundPlatform = true;
             }

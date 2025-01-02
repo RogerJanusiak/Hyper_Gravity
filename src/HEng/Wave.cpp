@@ -29,6 +29,11 @@ void Wave::render() {
     for (const auto & enemy : enemies) {
         if(enemy->getEntity()->isAlive() && enemy->getEntity()->isSpawned()) {
             enemy->render();
+            if(ggs.developerMode) {
+                SDL_SetRenderDrawColor(ggs.renderer,255,0,0,255);
+                SDL_Rect temp = enemy->getEntity()->getRect();
+                SDL_RenderDrawRect(ggs.renderer, &temp);
+            }
         }
     }
 
@@ -165,6 +170,63 @@ bool Wave::runWave() {
                         playerDamaged = true;
                     }
                     enemy->getEntity()->damage(5);
+                } else {
+                    if(player.isShieldActive()) {
+                        int centerX1 = enemy->getEntity()->getRect().x + enemy->getEntity()->getRect().w / 2;
+                        int centerY1 = enemy->getEntity()->getRect().y + enemy->getEntity()->getRect().h / 2;
+
+                        int centerX2 = player.getEntity()->getRect().x + player.getEntity()->getRect().w / 2;
+                        int centerY2 = player.getEntity()->getRect().y + player.getEntity()->getRect().h / 2;
+
+                        int dx = centerX2 - centerX1;
+                        int dy = centerY2 - centerY1;
+
+                        float angleRadians = std::atan2(dy, dx);
+                        float angleDegrees = angleRadians * 180.0f / M_PI;
+
+                        if (angleDegrees < 0) {
+                            angleDegrees += 360.0f;
+                        }
+
+                        double shieldAngle = player.shieldAngle;
+
+                        angleDegrees = normalizeAngle(angleDegrees);
+                        shieldAngle = normalizeAngle(shieldAngle);
+
+                        float difference = angleDegrees - shieldAngle;
+                        if (difference > 180.0f) {
+                            difference -= 360.0f;
+                        } else if (difference < -180.0f) {
+                            difference += 360.0f;
+                        }
+
+                        if(std::abs(difference) <= 90.0f) {
+
+                            angleDegrees += 180;
+                            angleDegrees -= difference;
+
+                            while (angleDegrees < 0) {
+                                angleDegrees += 360.0f;
+                            }
+                            while (angleDegrees >= 360) {
+                                angleDegrees -= 360.0f;
+                            }
+
+                            float Vx = -cos(angleDegrees* M_PI / 180.0)*scale(2000);
+                            float Vy = -sin(angleDegrees* M_PI / 180.0)*scale(2000);
+
+                            player.getEntity()->setXVelocity(Vx);
+                            player.getEntity()->setYVelocity(Vy);
+
+                            if(Vy < -scale(1000)) {
+                                player.inShieldJump = true;
+                            }
+
+                            abilityDamgage = true;
+                            enemy->getEntity()->damage(maxEnemyHealth);
+                        }
+
+                    }
                 }
             }
             for(auto bit = bullets.begin(); bit != bullets.end();) {
@@ -229,7 +291,10 @@ void Wave::createEnemies() {
     std::vector<Spawn>* spawns = level.getEnemySpawns();
     while(totalDifficulty < waveNumber) {
         int enemyType = rand() % 100 + 1;
-        if(enemyType <= (*weights)[0] && totalDifficulty+Robor::difficulty <= waveNumber) {
+        totalDifficulty += Robor::difficulty;
+        entities.emplace_back(std::make_unique<Entity>(spawns, ggs.renderer, Robor::health));
+        enemies.emplace_back(std::unique_ptr<Enemy>(new Robor(entities.back().get())));
+        /*if(enemyType <= (*weights)[0] && totalDifficulty+Robor::difficulty <= waveNumber) {
             totalDifficulty += Robor::difficulty;
             entities.emplace_back(std::make_unique<Entity>(spawns, ggs.renderer, Robor::health));
             enemies.emplace_back(std::unique_ptr<Enemy>(new Robor(entities.back().get())));
@@ -249,6 +314,6 @@ void Wave::createEnemies() {
             totalDifficulty += Roo::difficulty;
             entities.emplace_back(std::make_unique<Entity>(spawns, ggs.renderer, Roo::health));
             enemies.emplace_back(std::unique_ptr<Enemy>(new Roo(entities.back().get())));
-        }
+        }*/
     }
 }

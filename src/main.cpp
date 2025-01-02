@@ -46,7 +46,7 @@ bool init(GlobalGameState& ggs) {
 }
 
 void loadGlobalResources(GlobalGameState& ggs) {
-	ggs.buttonFont = TTF_OpenFont("resources/sans.ttf",scaleUI(18));
+	ggs.buttonFont = TTF_OpenFont("resources/sans.ttf",scaleUI(16));
 	ggs.verySmall = TTF_OpenFont("resources/sans.ttf",scaleUI(10));
 	ggs.title = TTF_OpenFont("resources/Roboto-Regular.ttf",scaleUI(34));
 	ggs.augTitle = TTF_OpenFont("resources/sans.ttf",scaleUI(16));

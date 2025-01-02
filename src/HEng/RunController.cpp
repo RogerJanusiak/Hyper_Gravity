@@ -51,6 +51,9 @@ void RunController::run() {
 		case RunState::inWave: {
 			waveController->readInput();
 			waveController->operate();
+			if(currentRun->getLevel().usingCustomTextures()) {
+				//currentRun->getLevel().renderForeground();
+			}
 			//readInput();
 		} break;
 		case RunState::inMenu: {

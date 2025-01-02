@@ -33,7 +33,12 @@ void Level::loadFromCSV(int level) {
     } else if(level == 2) {
         filePath = currentPath + "resources/levels/airport.csv";
     } else if(level == 3) {
-        filePath = currentPath + "resources/levels/lab.csv";
+        filePath = currentPath + "resources/levels/warehouse.csv";
+        foregroundTexture.setup(WINDOW_WIDTH,WINDOW_HEIGHT,ggs.renderer);
+        foregroundTexture.loadFromFile("levels/warehouse-foreground.png");
+        platformsTexture.setup(WINDOW_WIDTH,WINDOW_HEIGHT,ggs.renderer);
+        platformsTexture.loadFromFile("levels/warehouse-platforms.png");
+        customTextures = true;
     } else if (level == 4) {
         filePath = currentPath + "resources/levels/lobby.csv";
     }
@@ -66,30 +71,30 @@ void Level::loadFromCSV(int level) {
 
     for (int i = 0; i < row; i++) {
         std::vector<int> mapRow;
-        platforms.emplace_back(-TILE_SIZE,i*TILE_SIZE+(TILE_SIZE-17),ggs.renderer);
+        platforms.emplace_back(-TILE_SIZE,i*TILE_SIZE+(TILE_SIZE-Platform::height),ggs.renderer);
         for(int j = 0; j < MAX_COLS; j++) {
             int multiplier = j;
             if(std::stoi(data[i][j]) == 0) {
-                platforms.emplace_back(multiplier*TILE_SIZE,i*TILE_SIZE+(TILE_SIZE-17),ggs.renderer);
+                platforms.emplace_back(multiplier*TILE_SIZE,i*TILE_SIZE+(TILE_SIZE-Platform::height),ggs.renderer);
                 mapRow.push_back(0);
             } else if(std::stoi(data[i][j]) == 3) {
-                playerSpawns.emplace_back(scale(multiplier*TILE_SIZE-25),scale(i*TILE_SIZE+(TILE_SIZE-17-60)),scale(50),scale(60),1);
-                platforms.emplace_back(multiplier*TILE_SIZE,i*TILE_SIZE+(TILE_SIZE-17),ggs.renderer);
+                playerSpawns.emplace_back(scale(multiplier*TILE_SIZE-Spawn::width/2),scale(i*TILE_SIZE+(TILE_SIZE-Platform::height-Spawn::height)),scale(Spawn::width),scale(Spawn::height),1);
+                platforms.emplace_back(multiplier*TILE_SIZE,i*TILE_SIZE+(TILE_SIZE-Platform::height),ggs.renderer);
                 mapRow.push_back(1);
             } else if(std::stoi(data[i][j]) == 2) {
-                enemySpawns.emplace_back(scale(multiplier*TILE_SIZE+(TILE_SIZE-50)/2),scale(i*TILE_SIZE+(TILE_SIZE-17-50)),scale(50),scale(50),2);
-                platforms.emplace_back(multiplier*TILE_SIZE,i*TILE_SIZE+(TILE_SIZE-17),ggs.renderer);
+                enemySpawns.emplace_back(scale(multiplier*TILE_SIZE+(TILE_SIZE-Spawn::width)/2),scale(i*TILE_SIZE+(TILE_SIZE-Platform::height-Spawn::height)),scale(Spawn::width),scale(Spawn::height),2);
+                platforms.emplace_back(multiplier*TILE_SIZE,i*TILE_SIZE+(TILE_SIZE-Platform::height),ggs.renderer);
                 mapRow.push_back(2);
             }else if(std::stoi(data[i][j]) == 4) {
-                SDL_Rect tempRect = {scale(multiplier*TILE_SIZE+(TILE_SIZE-50)/2),scale(i*TILE_SIZE+(TILE_SIZE-17-50)),scale(50),scale(50)};
+                SDL_Rect tempRect = {scale(multiplier*TILE_SIZE+(TILE_SIZE-Spawn::width)/2),scale(i*TILE_SIZE+(TILE_SIZE-Platform::height-Spawn::height)),scale(Spawn::width),scale(Spawn::height)};
                 teleports.emplace_back(tempRect);
-                platforms.emplace_back(multiplier*TILE_SIZE,i*TILE_SIZE+(TILE_SIZE-17),ggs.renderer);
+                platforms.emplace_back(multiplier*TILE_SIZE,i*TILE_SIZE+(TILE_SIZE-Platform::height),ggs.renderer);
                 mapRow.push_back(3);
             } else {
                 mapRow.push_back(-1);
             }
         }
-        platforms.emplace_back(TILE_SIZE*MAX_COLS,i*TILE_SIZE+(TILE_SIZE-17),ggs.renderer);
+        platforms.emplace_back(TILE_SIZE*MAX_COLS,i*TILE_SIZE+(TILE_SIZE-Platform::height),ggs.renderer);
         levelMap.push_back(mapRow);
     }
 }
@@ -114,9 +119,25 @@ void Level::updateSpawns(const std::list<Entity*>& allCharacterEntities) const {
 }
 
 void Level::render() const {
-    for (auto& platform : platforms) {
-        platform.render();
+
+    if(customTextures) {
+        foregroundTexture.render(0,0);
+        platformsTexture.render(0,0);
+    } else {
+        for (auto& platform : platforms) {
+            platform.render();
+        }
     }
+
+    for (auto& platform : platforms) {
+        if(ggs.developerMode) {
+            SDL_SetRenderDrawColor(ggs.renderer,0,0,255,255);
+            SDL_Rect temp = platform.getPlatformRect();
+            SDL_RenderDrawRect(ggs.renderer, &temp);
+        }
+    }
+
+
 
     for(const auto& spawn : allSpawns) {
         spawn->render(ggs.renderer);

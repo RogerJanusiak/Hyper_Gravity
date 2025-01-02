@@ -87,8 +87,11 @@ public:
     double shieldAngle = 360;
 
 private:
-    const int playerWidth = scale(50);
-    const int playerHeight = scale(60);
+    const int width = 18;
+    const int height = 23;
+
+    const int playerWidth = scale(width);
+    const int playerHeight = scale(height);
 
     bool shieldActive = false;
     float shieldActiveTimer = 0;
@@ -126,8 +129,10 @@ private:
 
     int combo = 0;
 
-    const int defaultXSpeed = scale(350);
+    const int defaultXSpeed = scale(175);
     int xNormalVelocity = 0;
+
+    Texture wheelTexture;
 
     bool charged = true;
     bool justCharged = false;
