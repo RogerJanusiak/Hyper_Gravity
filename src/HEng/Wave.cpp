@@ -69,10 +69,6 @@ bool Wave::runWave() {
         waveStarted = true;
     }
 
-    /*for(auto& bullet : bullets) {
-        bullet.move(ggs.dt, level.getPlatforms(), ggs.developerMode);
-    }*/
-
     for (auto it = bullets.begin(); it != bullets.end();) {
         if(it->move(ggs.dt,level.getPlatforms(),ggs.developerMode)) {
             eBullets.erase(it->getIterator());
@@ -145,13 +141,15 @@ bool Wave::runWave() {
                                 angleDegrees -= 360.0f;
                             }
 
-                            float Vx = -cos(angleDegrees* M_PI / 180.0)*scale(2000);
-                            float Vy = -sin(angleDegrees* M_PI / 180.0)*scale(2000);
+                            float Vx = -cos(angleDegrees* M_PI / 180.0)*scale(1000);
+                            float Vy = -sin(angleDegrees* M_PI / 180.0)*scale(1000);
 
                             player.getEntity()->setXVelocity(Vx);
                             player.getEntity()->setYVelocity(Vy);
 
-                            if(Vy < -scale(1000)) {
+                            SDL_Log("Vy: %f", Vy);
+
+                            if(Vy < -scale(500)) {
                                 player.inShieldJump = true;
                             }
 
@@ -212,13 +210,13 @@ bool Wave::runWave() {
                                 angleDegrees -= 360.0f;
                             }
 
-                            float Vx = -cos(angleDegrees* M_PI / 180.0)*scale(2000);
-                            float Vy = -sin(angleDegrees* M_PI / 180.0)*scale(2000);
+                            float Vx = -cos(angleDegrees* M_PI / 180.0)*scale(1000);
+                            float Vy = -sin(angleDegrees* M_PI / 180.0)*scale(1000);
 
                             player.getEntity()->setXVelocity(Vx);
                             player.getEntity()->setYVelocity(Vy);
 
-                            if(Vy < -scale(1000)) {
+                            if(Vy < -scale(500)) {
                                 player.inShieldJump = true;
                             }
 
@@ -245,8 +243,8 @@ bool Wave::runWave() {
             if(player.hasGroundPounded()) {
                 if(enemy->getEntity()->getRect().x < player.getEntity()->getRect().w + player.getEntity()->getRect().x + groundPoundRadius &&
                     enemy->getEntity()->getRect().x > player.getEntity()->getRect().x - groundPoundRadius &&
-                    enemy->getEntity()->getRect().y < player.getEntity()->getRect().h + player.getEntity()->getRect().y &&
-                    enemy->getEntity()->getRect().y > player.getEntity()->getRect().y) {
+                    enemy->getEntity()->getRect().y <= player.getEntity()->getRect().h + player.getEntity()->getRect().y &&
+                    enemy->getEntity()->getRect().y >= player.getEntity()->getRect().y-10) {
                     enemy->getEntity()->damage(maxEnemyHealth);
                     abilityDamgage = true;
                 }

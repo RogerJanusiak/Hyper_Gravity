@@ -70,9 +70,9 @@ RunMenu::RunMenu(GlobalGameState& ggs, Player& player) : ggs(ggs), player(player
 	laserPistolTexture.setup(scaleUI(60),scaleUI(42), ggs.renderer);
 	laserPistolTexture.loadFromFile("laserPistol.png");
 
-	aButton.setup(scaleUI(24), scaleUI(24), ggs.renderer);
+	aButton.setup(scaleUI(18), scaleUI(18), ggs.renderer);
 	aButton.loadFromFile("ui/abutton.png");
-	xButton.setup(scaleUI(24), scaleUI(24), ggs.renderer);
+	xButton.setup(scaleUI(18), scaleUI(18), ggs.renderer);
 	xButton.loadFromFile("ui/xbutton.png");
 
 	leftClickText.setup(ggs.renderer);

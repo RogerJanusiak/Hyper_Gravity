@@ -19,7 +19,7 @@ RunController::RunController(GlobalGameState& ggs) : ggs(ggs) {
 		continueText.loadFromRenderedText("To continue press Space.",ggs.white,ggs.buttonFont);
 	}
 
-	grave.setup(scale(64*2.5), scale(72*2.5), ggs.renderer);
+	grave.setup(scale(64), scale(72), ggs.renderer);
 	grave.loadFromFile("gravestone.png");
 
 	//ggs.currentRunState = RunState::inMenu;
@@ -94,9 +94,9 @@ void RunController::readInput() {
 }
 
 void RunController::renderDeathScreen() const {
-	gameOverText.render((WINDOW_WIDTH-gameOverText.getWidth())/2, scale(150));
-	grave.render((WINDOW_WIDTH-grave.getWidth())/2, scale(220));
-	continueText.render((WINDOW_WIDTH-continueText.getWidth())/2, scale(430));
+	gameOverText.render((WINDOW_WIDTH-gameOverText.getWidth())/2, scale(75));
+	grave.render((WINDOW_WIDTH-grave.getWidth())/2, scale(110));
+	continueText.render((WINDOW_WIDTH-continueText.getWidth())/2, scale(215));
 }
 
 void RunController::selectAugmentFound() const {

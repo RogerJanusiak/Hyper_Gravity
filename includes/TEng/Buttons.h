@@ -18,8 +18,8 @@ public:
 
 private:
 
-	static constexpr int width = 200*1.5*UI_SCALE_FACTOR;
-	static constexpr int height = 48*1.5*UI_SCALE_FACTOR;
+	static constexpr int width = 200*UI_SCALE_FACTOR;
+	static constexpr int height = 48*UI_SCALE_FACTOR;
 
 	Texture texture;
 	Texture hoverTexture;
@@ -51,8 +51,8 @@ private:
 	Texture hoverTexture;
 	Texture activeTexture;
 
-	static constexpr int width = 120*UI_SCALE_FACTOR;
-	static constexpr int height = 120*UI_SCALE_FACTOR;
+	static constexpr int width = 60*UI_SCALE_FACTOR;
+	static constexpr int height = 60*UI_SCALE_FACTOR;
 
 };
 

@@ -68,7 +68,9 @@ public:
     [[nodiscard]] bool isOnPlatform() const { return onPlatform; }
     void startGroundPound();
     [[nodiscard]] bool hasGroundPounded() const { return groundPounded; }
+    [[nodiscard]] bool isDoingGroundPound() const { return doingGroundPound; }
     void executedGroundPount();
+
 
     void activateShield();
     void runShield();

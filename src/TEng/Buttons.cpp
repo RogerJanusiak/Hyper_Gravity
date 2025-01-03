@@ -9,7 +9,7 @@ Button(ggs, x, y, augment->name, action, attr1, attr2, secondaryAction,sAttr1,sA
 	hoverTexture.setup(width, height, ggs.renderer);
 	hoverTexture.loadFromFile("ui/aug-button-selected.png");
 
-	imageTexture.setup(scaleUI(32)*1.5,scaleUI(32)*1.5,ggs.renderer);
+	imageTexture.setup(scaleUI(32),scaleUI(32),ggs.renderer);
 	imageTexture.loadFromFile(augment->image);
 
 	titleTexture.setup(ggs.renderer);
@@ -47,10 +47,10 @@ void AugButton::render() const {
 	}
 
 	if(!isBlank) {
-		imageTexture.render(x+scaleButton(8),y+scaleButton(8));
-		titleTexture.render(x+scaleButton(8+8)+imageTexture.getWidth(),y+scaleButton(6));
-		descriptionLine1.render(x+scaleButton(8+8)+imageTexture.getWidth(),y+scaleButton(6)+titleTexture.getHeight());
-		descriptionLine2.render(x+scaleButton(8+8)+imageTexture.getWidth(),y+scaleButton(6)+titleTexture.getHeight()+descriptionLine1.getHeight());
+		imageTexture.render(x+scaleButton(6),y+scaleButton(6));
+		titleTexture.render(x+scaleButton(8)+imageTexture.getWidth(),y+scaleButton(3));
+		descriptionLine1.render(x+scaleButton(8)+imageTexture.getWidth(),y+scaleButton(3)+titleTexture.getHeight());
+		descriptionLine2.render(x+scaleButton(8)+imageTexture.getWidth(),y+scaleButton(3)+titleTexture.getHeight()+descriptionLine1.getHeight());
 	} else {
 		textTexture.render(x+(width-textTexture.getWidth())/2,y+(height-textTexture.getHeight())/2);
 	}

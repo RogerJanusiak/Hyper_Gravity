@@ -74,6 +74,7 @@ int Player::move(GlobalGameState& ggs, const std::list<Platform> &platforms, std
 
     int amountFallen = 0;
     onPlatform = !playerEntity->move(ggs.dt,platforms,&amountFallen,&wheelRect);
+    //SDL_Log("Boo: %i", doingGroundPound);
     if(onPlatform && invincible && !invicibleFromDeath && !doingGroundPound) {
         invincible = false;
         charged = false;
@@ -189,7 +190,8 @@ void Player::startGroundPound() {
         power -= 25;
         doingGroundPound = true;
         invincible = true;
-        getEntity()->setYVelocity(1500);
+        getEntity()->setYVelocity(scale(750));
+        shieldActive = false;
     }
 }
 

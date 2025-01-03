@@ -169,7 +169,7 @@ void WaveController::readInput() {
             }
 
             if(SDL_GameControllerGetAxis(ggs.controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_TRIGGERLEFT) > JOYSTICK_DEAD_ZONE) {
-                if(player.getPower() > 0 && !player.isShieldActive()) {
+                if(player.getPower() > 0 && !player.isShieldActive() && !player.isDoingGroundPound()) {
                     player.activateShield();
                 }
             } else {
